@@ -1,16 +1,5 @@
-# plutus
+# Plutus - A budget management app (WIP)
 
-A new Flutter project.
+Plutus is a budget management application made for Android using Flutter.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+It allows users manage their expenses in one app. It is primarily useful for families to keep track of various financial transactions including rent, bills, groceries, clothes, and other miscellaneous expenses.
