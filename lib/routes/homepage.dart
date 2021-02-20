@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({Key key}) : super(key: key);
@@ -8,6 +9,20 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  String _selectedDay;
+  String _currentDay;
+
+  @override
+  void initState() {
+    super.initState();
+    _setDefaults();
+  }
+
+  void _setDefaults() {
+    _currentDay = DateFormat.d().format(DateTime.now());
+    _selectedDay = _currentDay;
+  }
+
   @override
   Widget build(BuildContext context) {
     // * renders actual homepage
@@ -83,7 +98,7 @@ class _HomepageState extends State<Homepage> {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, left: 1.0, right: 1.0),
       child: Container(
-        height: 180,
+        height: 200,
         child: Material(
           borderRadius: BorderRadius.circular(15),
           color: Theme.of(context).secondaryHeaderColor,
@@ -108,7 +123,8 @@ class _HomepageState extends State<Homepage> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                for (int i = 0; i < 10; i++) _dataContainer(i),
+                for (int index = 1; index <= int.parse(_currentDay); index++)
+                  _dataContainer(index),
               ],
             ),
           ),
@@ -117,22 +133,37 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Widget _dataContainer(int index) {
-    return Container(
-      width: 80,
-      color: Theme.of(context).secondaryHeaderColor,
-      child: Column(
-        children: [
-          Text(
-            'Month',
-            style: Theme.of(context).textTheme.bodyText1,
+  Widget _dataContainer(int date) {
+    final _month = DateFormat.MMMM().format(DateTime.now());
+    final _style = (date == int.parse(_selectedDay))
+        ? Theme.of(context).textTheme.bodyText1
+        : Theme.of(context)
+            .textTheme
+            .bodyText1
+            .copyWith(color: Colors.grey[600]);
+    return InkWell(
+        child: Container(
+          width: 80,
+          color: Theme.of(context).secondaryHeaderColor,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                _month,
+                style: _style,
+              ),
+              Text(
+                date.toString(),
+                style: _style.copyWith(fontSize: 30),
+              ),
+            ],
           ),
-          Text(
-            index.toString(),
-            style: Theme.of(context).textTheme.headline6.copyWith(fontSize: 30),
-          ),
-        ],
-      ),
-    );
+        ),
+        onTap: () {
+          print('pressed $_month $date');
+          setState(() {
+            _selectedDay = date.toString();
+          });
+        });
   }
 }
