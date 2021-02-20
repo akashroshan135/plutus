@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({Key key}) : super(key: key);
@@ -11,16 +12,26 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   String _selectedDay;
   String _currentDay;
+  ItemScrollController _scrollController = ItemScrollController();
 
   @override
   void initState() {
     super.initState();
+    // * runs these functions as soon as the class is initialized
     _setDefaults();
+    // * runs after building the widgets
+    WidgetsBinding.instance.addPostFrameCallback((_) => _setController());
   }
 
+  // * sets the current date to a variable
   void _setDefaults() {
     _currentDay = DateFormat.d().format(DateTime.now());
     _selectedDay = _currentDay;
+  }
+
+  // * jumps to the current date after widgets are loaded
+  void _setController() {
+    _scrollController.jumpTo(index: int.parse(_currentDay));
   }
 
   @override
@@ -113,26 +124,27 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+  // * creates the scollable date
   Widget _calenderStrip(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 5.0),
       child: Container(
         child: Container(
           height: 80,
-          child: SingleChildScrollView(
+          child: ScrollablePositionedList.builder(
+            itemCount: int.parse(_currentDay) + 1,
             scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                for (int index = 1; index <= int.parse(_currentDay); index++)
-                  _dataContainer(index),
-              ],
-            ),
+            itemBuilder: (BuildContext context, int index) {
+              return _dataContainer(index);
+            },
+            itemScrollController: _scrollController,
           ),
         ),
       ),
     );
   }
 
+  // * creates the individual date containers
   Widget _dataContainer(int date) {
     final _month = DateFormat.MMMM().format(DateTime.now());
     final _style = (date == int.parse(_selectedDay))
@@ -141,7 +153,8 @@ class _HomepageState extends State<Homepage> {
             .textTheme
             .bodyText1
             .copyWith(color: Colors.grey[600]);
-    return InkWell(
+
+    InkWell _dates = InkWell(
         child: Container(
           width: 80,
           color: Theme.of(context).secondaryHeaderColor,
@@ -161,9 +174,37 @@ class _HomepageState extends State<Homepage> {
         ),
         onTap: () {
           print('pressed $_month $date');
+          // ! change to flutter provider
           setState(() {
             _selectedDay = date.toString();
           });
         });
+
+    return date == 0 ? null : _dates;
+
+    // InkWell _empty = InkWell(
+    //   child: Container(
+    //     width: 80,
+    //     color: Theme.of(context).secondaryHeaderColor,
+    //     child: Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         Text(
+    //           'Prev',
+    //           style: _style,
+    //         ),
+    //         Text(
+    //           'Months',
+    //           style: _style,
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    //   onTap: () {
+    //     print('pressed previous months');
+    //   },
+    // );
+
+    // return date == 0 ? _empty : _dates;
   }
 }
