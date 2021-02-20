@@ -10,6 +10,19 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
+    // * renders actual homepage
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      appBar: _appbar(context),
+      body: Column(children: [
+        _dashboard(context),
+        _calenderStrip(context),
+      ]),
+    );
+  }
+
+  // * appbar code
+  Widget _appbar(BuildContext context) {
     // * has the menu button on the left side of the appbar
     final menuBtn = Padding(
       padding: EdgeInsets.all(8),
@@ -20,7 +33,7 @@ class _HomepageState extends State<Homepage> {
           size: Theme.of(context).iconTheme.size,
         ),
         // * Navigator pushes the new screen to stack
-        onPressed: () => setState(() {}),
+        onPressed: () => print('menu page btn is pressed'),
         // Navigator.push(
         //   context,
         //   MaterialPageRoute(builder: (context) => AboutScreen()),
@@ -39,7 +52,7 @@ class _HomepageState extends State<Homepage> {
           size: Theme.of(context).iconTheme.size,
         ),
         // * Navigator pushes the new screen to stack
-        onPressed: () => setState(() {}),
+        onPressed: () => print('about page btn is pressed'),
         // Navigator.push(
         //   context,
         //   MaterialPageRoute(builder: (context) => AboutScreen()),
@@ -47,8 +60,8 @@ class _HomepageState extends State<Homepage> {
       ),
     );
 
-    // * appbar code
-    final appBar = AppBar(
+    // * returns appbar code
+    return AppBar(
       title: Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 6),
@@ -62,11 +75,13 @@ class _HomepageState extends State<Homepage> {
       leading: menuBtn,
       actions: [aboutBtn],
     );
+  }
 
-    // * code for dashboard
-    // todo: actual dasboard implementation
-    final dashboard = Padding(
-      padding: const EdgeInsets.all(16.0),
+  // * code for dashboard
+  // todo: actual dasboard implementation
+  Widget _dashboard(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0, left: 1.0, right: 1.0),
       child: Container(
         height: 180,
         child: Material(
@@ -81,13 +96,42 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
     );
+  }
 
-    // * renders actual homepage
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      appBar: appBar,
-      body: Column(
-        children: [dashboard],
+  Widget _calenderStrip(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 5.0),
+      child: Container(
+        child: Container(
+          height: 80,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                for (int i = 0; i < 10; i++) _dataContainer(i),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _dataContainer(int index) {
+    return Container(
+      width: 80,
+      color: Theme.of(context).secondaryHeaderColor,
+      child: Column(
+        children: [
+          Text(
+            'Month',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          Text(
+            index.toString(),
+            style: Theme.of(context).textTheme.headline6.copyWith(fontSize: 30),
+          ),
+        ],
       ),
     );
   }
