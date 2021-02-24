@@ -10,36 +10,33 @@ class IncomeRoute extends StatefulWidget {
 class _IncomeRouteState extends State<IncomeRoute> {
   @override
   Widget build(BuildContext context) {
-    return _buildIncomeList(context);
-  }
-
-  StreamBuilder<List<Income>> _buildIncomeList(BuildContext context) {
+    // * calling database
     final database = Provider.of<AppDatabase>(context);
-    print('here');
 
+    // * StreamBuilder used to build list of all objects
+    // ! needs an app reload to show new data. Need to check
     return StreamBuilder(
       stream: database.watchAllIncome(),
       builder: (context, AsyncSnapshot<List<Income>> snapshot) {
-        final transactions = snapshot.data ?? List();
+        final incomes = snapshot.data ?? List();
         return ListView.builder(
-          itemCount: transactions.length,
+          itemCount: incomes.length,
           itemBuilder: (_, index) {
-            final itemtransaction = transactions[index];
-            return _buildItem(context, itemtransaction, database);
+            final income = incomes[index];
+            return _buildItem(context, income, database);
           },
         );
       },
     );
   }
 
-  Widget _buildItem(
-      BuildContext context, Income itemtransaction, AppDatabase database) {
-    print(itemtransaction.tags);
-    print('here2');
+  // * one item widget
+  // todo: better design. maybe use slidable
+  Widget _buildItem(BuildContext context, Income income, AppDatabase database) {
     return Padding(
       padding: EdgeInsets.all(8),
       child: Container(
-        //height: 80,
+        // height: 80,
         child: Material(
           borderRadius: BorderRadius.circular(15),
           color: Theme.of(context).secondaryHeaderColor,
@@ -60,13 +57,13 @@ class _IncomeRouteState extends State<IncomeRoute> {
                 ),
                 Center(
                   child: Text(
-                    itemtransaction.tags,
+                    income.tags,
                     style: Theme.of(context).textTheme.button,
                   ),
                 ),
                 Center(
                   child: Text(
-                    itemtransaction.amount.toString(),
+                    income.amount.toString(),
                     style: Theme.of(context).textTheme.button,
                   ),
                 ),

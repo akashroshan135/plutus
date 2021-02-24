@@ -19,7 +19,7 @@ class Incomes extends Table {
 class AppDatabase extends _$AppDatabase {
   AppDatabase()
       : super(FlutterQueryExecutor.inDatabaseFolder(
-          path: 'dbnew.sqlite',
+          path: 'db.sqlite',
           logStatements: true,
         ));
 
@@ -29,9 +29,7 @@ class AppDatabase extends _$AppDatabase {
   Future<List<Income>> getAllIncome() => select(incomes).get();
   Stream<List<Income>> watchAllIncome() => select(incomes).watch();
 
-  Future<int> addIncome(IncomesCompanion entry) {
-    return into(incomes).insert(entry);
-  }
+  Future<int> addIncome(IncomesCompanion entry) => into(incomes).insert(entry);
 
   //Future insertTask(Income entry) => into(incomes).insert(entry);
 

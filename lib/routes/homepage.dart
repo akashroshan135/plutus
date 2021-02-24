@@ -46,10 +46,13 @@ class _HomepageState extends State<Homepage> {
       body: Column(children: [
         _dashboard(context),
         _calenderStrip(context),
+        // * creates new container of income transactions list. height is required to prevent overflow
         Container(height: 350, child: new IncomeRoute()),
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          // * opens new income screen
+          // ! try to make it a backdrop
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => NewIncomeScreen()),
