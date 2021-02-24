@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:plutus/data/moor_database.dart';
+import 'package:provider/provider.dart';
 
 import 'package:plutus/routes/homepage.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
@@ -66,11 +66,14 @@ class MyApp extends StatelessWidget {
     );
 
     // * renders main app
-    return MaterialApp(
-      title: 'Plutus',
-      theme: _lightTheme,
-      darkTheme: _darkTheme,
-      home: Homepage(),
-    );
+    return Provider<AppDatabase>(
+        create: (context) => AppDatabase(),
+        child: MaterialApp(
+          title: 'Plutus',
+          theme: _lightTheme,
+          darkTheme: _darkTheme,
+          home: Homepage(),
+        ),
+        dispose: (context, db) => db.close());
   }
 }

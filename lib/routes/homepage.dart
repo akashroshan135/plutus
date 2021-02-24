@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+import 'package:plutus/routes/income_route.dart';
+import 'package:plutus/routes/new_income.dart';
+
 class Homepage extends StatefulWidget {
   Homepage({Key key}) : super(key: key);
 
@@ -43,7 +46,18 @@ class _HomepageState extends State<Homepage> {
       body: Column(children: [
         _dashboard(context),
         _calenderStrip(context),
+        Container(height: 350, child: new IncomeRoute()),
       ]),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NewIncomeScreen()),
+          );
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
+      ),
     );
   }
 
@@ -174,7 +188,6 @@ class _HomepageState extends State<Homepage> {
         ),
         onTap: () {
           print('pressed $_month $date');
-          // ! change to flutter provider
           setState(() {
             _selectedDay = date.toString();
           });
