@@ -67,13 +67,14 @@ class MyApp extends StatelessWidget {
 
     // * renders main app. Provider is used to initialize the database
     return Provider<AppDatabase>(
-        create: (_) => AppDatabase(),
-        child: MaterialApp(
-          title: 'Plutus',
-          theme: _lightTheme,
-          darkTheme: _darkTheme,
-          home: Homepage(),
-        ),
-        dispose: (context, db) => db.close());
+      create: (context) => AppDatabase(),
+      dispose: (context, db) => db.close(),
+      child: MaterialApp(
+        title: 'Plutus',
+        theme: _lightTheme,
+        darkTheme: _darkTheme,
+        home: Homepage(),
+      ),
+    );
   }
 }

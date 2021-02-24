@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
 import 'package:plutus/data/moor_database.dart';
-import 'package:provider/provider.dart';
 
 const _padding = EdgeInsets.all(16.0);
 
@@ -56,17 +55,13 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
               borderSide: BorderSide(color: Colors.red, width: 1)),
         ),
         onSubmitted: (inputdata) {
-          setState(
-            () {
-              final database = Provider.of<AppDatabase>(context);
-              database.addIncome(
-                IncomesCompanion(
-                  tags: Value('test'),
-                  amount: Value(double.parse(inputdata)),
-                  date: Value(newTaskDate),
-                ),
-              );
-            },
+          //final database = Provider.of<AppDatabase>(context)
+          AppDatabase().addIncome(
+            IncomesCompanion(
+              tags: Value('test'),
+              amount: Value(double.parse(inputdata)),
+              date: Value(newTaskDate),
+            ),
           );
         },
       ),
