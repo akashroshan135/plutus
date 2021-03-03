@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
 import 'package:plutus/data/moor_database.dart';
+import 'package:provider/provider.dart';
 
 const _padding = EdgeInsets.all(16.0);
 
@@ -14,10 +15,12 @@ class NewIncomeScreen extends StatefulWidget {
 
 class _NewIncomeScreenState extends State<NewIncomeScreen> {
   final categoryColor = Colors.cyan;
-  DateTime newTaskDate = DateTime.now();
+  DateTime newIncomeDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
+    final database = Provider.of<AppDatabase>(context);
+
     final appBar = AppBar(
       leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -55,12 +58,11 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
               borderSide: BorderSide(color: Colors.red, width: 1)),
         ),
         onSubmitted: (inputdata) {
-          //final database = Provider.of<AppDatabase>(context)
-          AppDatabase().addIncome(
+          database.addIncome(
             IncomesCompanion(
               tags: Value('test'),
               amount: Value(double.parse(inputdata)),
-              date: Value(newTaskDate),
+              date: Value(newIncomeDate),
             ),
           );
         },

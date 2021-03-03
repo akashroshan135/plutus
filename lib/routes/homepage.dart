@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import 'package:plutus/routes/income_route.dart';
-import 'package:plutus/routes/new_income.dart';
+import 'package:plutus/routes/incomes.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({Key key}) : super(key: key);
@@ -47,20 +46,17 @@ class _HomepageState extends State<Homepage> {
         _dashboard(context),
         _calenderStrip(context),
         // * creates new container of income transactions list. height is required to prevent overflow
-        Container(height: 350, child: new IncomeRoute()),
+        Container(
+          height: 100,
+          child: Center(
+            child: Text(
+              'todo place current day incomes',
+              style: Theme.of(context).textTheme.button,
+            ),
+          ),
+        ),
+        _incomesBtn(context),
       ]),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // * opens new income screen
-          // ! try to make it a backdrop
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => NewIncomeScreen()),
-          );
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.green,
-      ),
     );
   }
 
@@ -152,7 +148,7 @@ class _HomepageState extends State<Homepage> {
             itemCount: int.parse(_currentDay) + 1,
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
-              return _dataContainer(index);
+              return _dateContainer(index);
             },
             itemScrollController: _scrollController,
           ),
@@ -162,7 +158,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   // * creates the individual date containers
-  Widget _dataContainer(int date) {
+  Widget _dateContainer(int date) {
     final _month = DateFormat.MMMM().format(DateTime.now());
     final _style = (date == int.parse(_selectedDay))
         ? Theme.of(context).textTheme.bodyText1
@@ -222,5 +218,29 @@ class _HomepageState extends State<Homepage> {
     // );
 
     // return date == 0 ? _empty : _dates;
+  }
+
+  Widget _incomesBtn(BuildContext context) {
+    return InkWell(
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          height: 75,
+          child: Material(
+            borderRadius: BorderRadius.circular(15),
+            color: Theme.of(context).secondaryHeaderColor,
+            child: Center(
+              child: Text(
+                'Check Incomes',
+                style: Theme.of(context).textTheme.button,
+              ),
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => IncomeRoute()),
+          );
+        });
   }
 }

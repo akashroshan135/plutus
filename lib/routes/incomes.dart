@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:plutus/data/moor_database.dart';
 
+import 'package:plutus/routes/new_income.dart';
+
 class IncomeRoute extends StatefulWidget {
   @override
   _IncomeRouteState createState() => _IncomeRouteState();
@@ -10,11 +12,31 @@ class IncomeRoute extends StatefulWidget {
 class _IncomeRouteState extends State<IncomeRoute> {
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          // * Navigator pops the old screen from stack
+          onPressed: () => Navigator.pop(context)),
+      title: Text(
+        "Income",
+        style: Theme.of(context).textTheme.headline5,
+      ),
+      backgroundColor: Colors.cyan,
+    );
+
+    return Scaffold(
+      appBar: appBar,
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: _buildList(context),
+      floatingActionButton: _newIncomeBtn(context),
+    );
+  }
+
+  Widget _buildList(BuildContext context) {
     // * calling database
     final database = Provider.of<AppDatabase>(context);
 
     // * StreamBuilder used to build list of all objects
-    // ! needs an app reload to show new data. Need to check
     return StreamBuilder(
       stream: database.watchAllIncome(),
       builder: (context, AsyncSnapshot<List<Income>> snapshot) {
@@ -55,23 +77,39 @@ class _IncomeRouteState extends State<IncomeRoute> {
                     size: Theme.of(context).primaryIconTheme.size,
                   ),
                 ),
-                Center(
-                  child: Text(
-                    income.tags,
-                    style: Theme.of(context).textTheme.button,
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    income.amount.toString(),
-                    style: Theme.of(context).textTheme.button,
-                  ),
+                Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      income.tags,
+                      style: Theme.of(context).textTheme.button,
+                    ),
+                    Text(
+                      '₹ ' + income.amount.toString(),
+                      style: Theme.of(context).textTheme.button,
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _newIncomeBtn(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        // * opens new income screen
+        // ! try to make it a backdrop
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => NewIncomeScreen()),
+        );
+      },
+      child: Icon(Icons.add),
+      backgroundColor: Colors.green,
     );
   }
 }
