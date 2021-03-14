@@ -77,18 +77,17 @@ class _IncomeRouteState extends State<IncomeRoute> {
                     size: Theme.of(context).primaryIconTheme.size,
                   ),
                 ),
-                Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      income.tags,
-                      style: Theme.of(context).textTheme.button,
-                    ),
-                    Text(
-                      '₹ ' + income.amount.toString(),
-                      style: Theme.of(context).textTheme.button,
-                    ),
-                  ],
+                Text(
+                  income.tags,
+                  style: Theme.of(context).textTheme.button,
+                ),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    '₹ ' + income.amount.toString(),
+                    style: Theme.of(context).textTheme.button,
+                  ),
                 ),
               ],
             ),
