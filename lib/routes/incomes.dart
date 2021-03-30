@@ -47,7 +47,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
     return StreamBuilder(
       stream: database.watchAllIncome(),
       builder: (context, AsyncSnapshot<List<Income>> snapshot) {
-        final incomes = snapshot.data ?? List();
+        final incomes = snapshot.data ?? [];
         return ListView.builder(
           itemCount: incomes.length,
           itemBuilder: (_, index) {
@@ -60,7 +60,9 @@ class _IncomeRouteState extends State<IncomeRoute> {
   }
 
   // * one item widget
-  // todo: better design. maybe use slidable
+  // todo: add functionality to edit button
+  // todo: add pop up for delete
+  // todo: improve design
   Widget _buildItem(BuildContext context, Income income, AppDatabase database) {
     return Slidable(
       actionPane: SlidableDrawerActionPane(),

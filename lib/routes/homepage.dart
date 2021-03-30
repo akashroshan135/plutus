@@ -50,7 +50,8 @@ class _HomepageState extends State<Homepage> {
           height: 100,
           child: Center(
             child: Text(
-              'todo place current day incomes',
+              // todo: add cureent day transactions
+              'todo: place current day incomes',
               style: Theme.of(context).textTheme.button,
             ),
           ),
@@ -61,6 +62,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   // * appbar code
+  // todo: add menu
   Widget _appbar(BuildContext context) {
     // * has the menu button on the left side of the appbar
     final menuBtn = Padding(
