@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:plutus/data/moor_database.dart';
 
 import 'package:plutus/routes/new_income.dart';
@@ -55,41 +56,52 @@ class _IncomeRouteState extends State<IncomeRoute> {
   // * one item widget
   // todo: better design. maybe use slidable
   Widget _buildItem(BuildContext context, Income income, AppDatabase database) {
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: Container(
-        // height: 80,
-        child: Material(
-          borderRadius: BorderRadius.circular(15),
-          color: Theme.of(context).secondaryHeaderColor,
-          child: InkWell(
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      secondaryActions: <Widget>[
+        IconSlideAction(
+          caption: 'Delete',
+          color: Colors.red,
+          icon: Icons.delete,
+          onTap: () => database.deleteIncome(income),
+        )
+      ],
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child: Container(
+          // height: 80,
+          child: Material(
             borderRadius: BorderRadius.circular(15),
-            highlightColor: Colors.pink[400],
-            splashColor: Colors.pink,
-            onTap: () {},
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Icon(
-                    Icons.ac_unit,
-                    color: Theme.of(context).primaryIconTheme.color,
-                    size: Theme.of(context).primaryIconTheme.size,
+            color: Theme.of(context).secondaryHeaderColor,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(15),
+              highlightColor: Colors.pink[400],
+              splashColor: Colors.pink,
+              onTap: () {},
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Icon(
+                      Icons.ac_unit,
+                      color: Theme.of(context).primaryIconTheme.color,
+                      size: Theme.of(context).primaryIconTheme.size,
+                    ),
                   ),
-                ),
-                Text(
-                  income.tags,
-                  style: Theme.of(context).textTheme.button,
-                ),
-                Spacer(),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    '₹ ' + income.amount.toString(),
+                  Text(
+                    income.tags,
                     style: Theme.of(context).textTheme.button,
                   ),
-                ),
-              ],
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      '₹ ' + income.amount.toString(),
+                      style: Theme.of(context).textTheme.button,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -112,25 +124,3 @@ class _IncomeRouteState extends State<IncomeRoute> {
     );
   }
 }
-
-/*
-    return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
-          icon: Icons.delete,
-          onTap: () => database.deleteTask(itemTask),
-        )
-      ],
-      child: CheckboxListTile(
-        title: Text(itemTask.name),
-        subtitle: Text(itemTask.dueDate?.toString() ?? 'No date'),
-        value: itemTask.completed,
-        onChanged: (newValue) {
-          database.updateTask(itemTask.copyWith(completed: newValue));
-        },
-      ),
-    );
-  }*/

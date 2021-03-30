@@ -29,12 +29,12 @@ class AppDatabase extends _$AppDatabase {
   Future<List<Income>> getAllIncome() => select(incomes).get();
   Stream<List<Income>> watchAllIncome() => select(incomes).watch();
 
+  // * add an income transaction
   Future<int> addIncome(IncomesCompanion entry) => into(incomes).insert(entry);
 
-  //Future insertTask(Income entry) => into(incomes).insert(entry);
+  // * updates an income transaction with a matching primary key
+  // Future updateIncome(Income entry) => update(incomes).replace(entry);
 
-  // Updates a Task with a matching primary key
-  // Future updateTask(Income entry) => update(incomes).replace(entry);
-
-  // Future deleteTask(Income entry) => delete(incomes).delete(entry);
+  // * deletes an income transaction with a matching primary key
+  Future deleteIncome(Income entry) => delete(incomes).delete(entry);
 }
