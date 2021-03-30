@@ -1,39 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:moor_flutter/moor_flutter.dart';
-
-import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
+import 'package:moor_flutter/moor_flutter.dart';
+import 'package:plutus/data/moor_database.dart';
 
 const _padding = EdgeInsets.all(16.0);
 
 class NewIncomeScreen extends StatefulWidget {
-  NewIncomeScreen({Key key}) : super(key: key);
+  final accentColor;
+
+  NewIncomeScreen({Key key, @required this.accentColor}) : super(key: key);
 
   @override
   _NewIncomeScreenState createState() => _NewIncomeScreenState();
 }
 
 class _NewIncomeScreenState extends State<NewIncomeScreen> {
-  final accentColor = Colors.cyan;
+  var accentColor;
   final controllerTags = TextEditingController();
   final controllerAmount = TextEditingController();
   DateTime newIncomeDate = DateTime.now();
 
   @override
+  void initState() {
+    super.initState();
+    accentColor = widget.accentColor;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final database = Provider.of<AppDatabase>(context);
-
-    final appBar = AppBar(
-      leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          // * Navigator pops the old screen from stack
-          onPressed: () => Navigator.pop(context)),
-      title: Text(
-        "New Income",
-        style: Theme.of(context).textTheme.headline5,
-      ),
-      backgroundColor: accentColor,
-    );
 
     // * input field for tags
     final inputTags = Padding(
@@ -95,23 +90,12 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
       ),
     );
 
-    return MaterialApp(
-      title: 'Material App',
-      home: Scaffold(
-        appBar: appBar,
-        body: Container(
-          // height: MediaQuery.of(context).size.height,
-          color: Theme.of(context).scaffoldBackgroundColor,
-          padding: _padding,
-          child: ListView(
-            children: [
-              inputTags,
-              inputAmt,
-              submit,
-            ],
-          ),
-        ),
-      ),
+    return ListView(
+      children: [
+        inputTags,
+        inputAmt,
+        submit,
+      ],
     );
   }
 

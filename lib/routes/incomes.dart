@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:plutus/data/moor_database.dart';
 
-import 'package:plutus/routes/new_income.dart';
+import 'package:plutus/widgets/new_income.dart';
+
+const _padding = EdgeInsets.all(16.0);
 
 class IncomeRoute extends StatefulWidget {
   @override
@@ -11,8 +14,11 @@ class IncomeRoute extends StatefulWidget {
 }
 
 class _IncomeRouteState extends State<IncomeRoute> {
+  final accentColor = Colors.cyan;
+
   @override
   Widget build(BuildContext context) {
+    // * code for appbar
     final appBar = AppBar(
       leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -22,7 +28,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
         "Income",
         style: Theme.of(context).textTheme.headline5,
       ),
-      backgroundColor: Colors.cyan,
+      backgroundColor: accentColor,
     );
 
     return Scaffold(
@@ -58,13 +64,20 @@ class _IncomeRouteState extends State<IncomeRoute> {
   Widget _buildItem(BuildContext context, Income income, AppDatabase database) {
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
+      actionExtentRatio: 0.25,
       secondaryActions: <Widget>[
+        IconSlideAction(
+          caption: 'Edit',
+          color: Colors.grey[400],
+          icon: Icons.edit,
+          onTap: () => print('updates'),
+        ),
         IconSlideAction(
           caption: 'Delete',
           color: Colors.red,
           icon: Icons.delete,
           onTap: () => database.deleteIncome(income),
-        )
+        ),
       ],
       child: Padding(
         padding: EdgeInsets.all(8),
@@ -81,7 +94,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
               child: Row(
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.all(16),
+                    padding: _padding,
                     child: Icon(
                       Icons.ac_unit,
                       color: Theme.of(context).primaryIconTheme.color,
@@ -94,7 +107,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                   ),
                   Spacer(),
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: _padding,
                     child: Text(
                       '₹ ' + income.amount.toString(),
                       style: Theme.of(context).textTheme.button,
@@ -112,15 +125,43 @@ class _IncomeRouteState extends State<IncomeRoute> {
   Widget _newIncomeBtn(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        // * opens new income screen
-        // ! try to make it a backdrop
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => NewIncomeScreen()),
-        );
+        showNewIncomeSceen();
       },
       child: Icon(Icons.add),
       backgroundColor: Colors.green,
     );
+  }
+
+  // * opens new income screen as a sliding sheet
+  void showNewIncomeSceen() async {
+    final result = await showSlidingBottomSheet(context, builder: (context) {
+      return SlidingSheetDialog(
+        elevation: 10,
+        cornerRadius: 16,
+        snapSpec: const SnapSpec(
+          snap: true,
+          snappings: [0.5, 0.7, 1.0],
+          positioning: SnapPositioning.relativeToAvailableSpace,
+        ),
+        builder: (context, state) {
+          return Container(
+            height: 400,
+            child: Center(
+              child: Material(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: InkWell(
+                  onTap: () => Navigator.pop(context),
+                  child: Padding(
+                    padding: _padding,
+                    child: NewIncomeScreen(accentColor: accentColor),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    });
+    print(result); // This is the result.
   }
 }
