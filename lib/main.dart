@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
         headline5: TextStyle(
             color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
         bodyText1: TextStyle(fontSize: 15.0, color: Colors.white),
+        bodyText2: TextStyle(fontSize: 30.0, color: Colors.white),
         button: TextStyle(fontSize: 20.0, color: Colors.white),
       ),
     );
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
         headline5: TextStyle(
             color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
         bodyText1: TextStyle(fontSize: 15.0, color: Colors.black),
+        bodyText2: TextStyle(fontSize: 30.0, color: Colors.black),
         button: TextStyle(fontSize: 20.0, color: Colors.black),
       ),
     );

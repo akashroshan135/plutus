@@ -31,13 +31,54 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
     final database = Provider.of<AppDatabase>(context);
 
     // * input field for tags
+    final inputCategory = Padding(
+      padding: EdgeInsets.all(8),
+      child: Container(
+        // height: 80,
+        decoration: BoxDecoration(
+            border: Border.all(color: accentColor),
+            borderRadius: BorderRadius.circular(15)),
+        child: Material(
+          borderRadius: BorderRadius.circular(15),
+          color: Theme.of(context).secondaryHeaderColor,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(15),
+            highlightColor: Colors.pink[400],
+            splashColor: Colors.pink,
+            // todo: add option to change category
+            onTap: () {},
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: _padding,
+                  child: Icon(
+                    Icons.ac_unit,
+                    color: Theme.of(context).primaryIconTheme.color,
+                    size: Theme.of(context).primaryIconTheme.size,
+                  ),
+                ),
+                Text(
+                  'cat',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .copyWith(color: accentColor),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // * input field for tags
     final inputTags = Padding(
       padding: _padding,
       child: TextField(
         controller: controllerTags,
         // keyboardType: TextInputType.number,
         cursorColor: accentColor,
-        style: Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 35),
+        style: Theme.of(context).textTheme.bodyText2,
         decoration: decoratorInputWidget('Tags'),
       ),
     );
@@ -49,7 +90,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
         controller: controllerAmount,
         keyboardType: TextInputType.number,
         cursorColor: accentColor,
-        style: Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 35),
+        style: Theme.of(context).textTheme.bodyText2,
         decoration: decoratorInputWidget('Amount'),
       ),
     );
@@ -92,6 +133,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
 
     return ListView(
       children: [
+        inputCategory,
         inputTags,
         inputAmt,
         submit,

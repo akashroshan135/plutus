@@ -142,21 +142,18 @@ class _IncomeRouteState extends State<IncomeRoute> {
         cornerRadius: 16,
         snapSpec: const SnapSpec(
           snap: true,
-          snappings: [0.5, 0.7, 1.0],
+          snappings: [0.58, 0.7, 1.0],
           positioning: SnapPositioning.relativeToAvailableSpace,
         ),
         builder: (context, state) {
           return Container(
-            height: 400,
+            height: 500,
             child: Center(
               child: Material(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                child: InkWell(
-                  onTap: () => Navigator.pop(context),
-                  child: Padding(
-                    padding: _padding,
-                    child: NewIncomeScreen(accentColor: accentColor),
-                  ),
+                child: Padding(
+                  padding: _padding,
+                  child: NewIncomeScreen(accentColor: accentColor),
                 ),
               ),
             ),
