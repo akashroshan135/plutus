@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
-import 'package:plutus/data/moor_database.dart';
 
+import 'package:plutus/data/moor_database.dart';
 import 'package:plutus/widgets/new_income.dart';
 
 const _padding = EdgeInsets.all(16.0);

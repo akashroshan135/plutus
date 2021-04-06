@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:plutus/data/moor_database.dart';
 
+import 'package:plutus/data/moor_database.dart';
 import 'package:plutus/routes/homepage.dart';
 
 void main() => runApp(MyApp());

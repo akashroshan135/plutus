@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:moor_flutter/moor_flutter.dart';
+
 import 'package:plutus/data/moor_database.dart';
+import 'package:plutus/routes/categoryPage.dart';
 
 const _padding = EdgeInsets.all(16.0);
 
@@ -46,7 +48,29 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
             highlightColor: Colors.pink[400],
             splashColor: Colors.pink,
             // todo: add option to change category
-            onTap: () {},
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  contentPadding: EdgeInsets.all(5.0),
+                  content: Builder(
+                    builder: (context) {
+                      var height = MediaQuery.of(context).size.height;
+                      var width = MediaQuery.of(context).size.width;
+                      return Container(
+                        height: height - 100,
+                        width: width - 50,
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        child: CategoryPage(),
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
             child: Row(
               children: <Widget>[
                 Padding(
