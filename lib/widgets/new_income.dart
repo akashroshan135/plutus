@@ -21,6 +21,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
   final controllerTags = TextEditingController();
   final controllerAmount = TextEditingController();
   DateTime newIncomeDate = DateTime.now();
+  var categoryText = 'Select a Category';
 
   @override
   void initState() {
@@ -32,7 +33,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
   Widget build(BuildContext context) {
     final database = Provider.of<AppDatabase>(context);
 
-    // * input field for tags
+    // * field for category. shows a dialog box
     final inputCategory = Padding(
       padding: EdgeInsets.all(8),
       child: Container(
@@ -49,27 +50,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
             splashColor: Colors.pink,
             // todo: add option to change category
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  contentPadding: EdgeInsets.all(5.0),
-                  content: Builder(
-                    builder: (context) {
-                      var height = MediaQuery.of(context).size.height;
-                      var width = MediaQuery.of(context).size.width;
-                      return Container(
-                        height: height - 100,
-                        width: width - 50,
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        child: CategoryPage(),
-                      );
-                    },
-                  ),
-                ),
-              );
+              showCategories();
             },
             child: Row(
               children: <Widget>[
@@ -82,10 +63,10 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
                   ),
                 ),
                 Text(
-                  'cat',
+                  categoryText,
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText2
+                      .button
                       .copyWith(color: accentColor),
                 ),
               ],
@@ -182,5 +163,32 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Colors.red, width: 1)),
     );
+  }
+
+  void showCategories() async {
+    var result = await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        contentPadding: EdgeInsets.all(5.0),
+        content: Builder(
+          builder: (context) {
+            var height = MediaQuery.of(context).size.height;
+            var width = MediaQuery.of(context).size.width;
+            return Container(
+              height: height - 100,
+              width: width - 50,
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: CategoryPage(),
+            );
+          },
+        ),
+      ),
+    );
+    setState(() {
+      categoryText = '$result';
+    });
   }
 }

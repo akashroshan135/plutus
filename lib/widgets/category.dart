@@ -28,7 +28,7 @@ class Category extends StatelessWidget {
             highlightColor: categoryColor[400],
             splashColor: categoryColor,
             onTap: () {
-              Navigator.pop(context);
+              Navigator.pop(context, categoryName.toString());
             },
             child: Row(
               children: <Widget>[
