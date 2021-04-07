@@ -81,7 +81,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
             onTap: () {
               return showDialog(
                 context: context,
-                builder: (BuildContext context) {
+                builder: (_) {
                   return AlertDialog(
                     title: Text('Alert',
                         style: Theme.of(context).textTheme.button),
@@ -141,18 +141,11 @@ class _IncomeRouteState extends State<IncomeRoute> {
                     padding: _padding,
                     child: Column(
                       children: <Widget>[
-                        Text(
-                          IncomeCategory.categoryNames[income.categoryIndex],
-                          textAlign: TextAlign.left,
-                          style: Theme.of(context)
-                              .textTheme
-                              .button
-                              .copyWith(fontSize: 25),
-                        ),
+                        Text(IncomeCategory.categoryNames[income.categoryIndex],
+                            style: Theme.of(context).textTheme.button),
                         Spacer(),
                         Text(
                           'Tags: ' + income.tags,
-                          textAlign: TextAlign.left,
                           style: Theme.of(context)
                               .textTheme
                               .button

@@ -116,16 +116,44 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
             highlightColor: Colors.pink[400],
             splashColor: Colors.pink,
             onTap: () {
-              print(controllerTags.text);
-              print(controllerAmount.text);
-              database.addIncome(
-                IncomesCompanion(
-                  tags: Value(controllerTags.text),
-                  amount: Value(double.parse(controllerAmount.text)),
-                  date: Value(newIncomeDate),
-                  categoryIndex: Value(categoryIndex),
-                ),
-              );
+              if (controllerTags.text == '' ||
+                  controllerAmount.text == '' ||
+                  categoryIndex == null) {
+                return showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text('Warning',
+                            style: Theme.of(context).textTheme.button),
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        content: Text(
+                          'Please enter all the fields',
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'OK',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                        ],
+                      );
+                    });
+              } else {
+                database.addIncome(
+                  IncomesCompanion(
+                    tags: Value(controllerTags.text),
+                    amount: Value(double.parse(controllerAmount.text)),
+                    date: Value(newIncomeDate),
+                    categoryIndex: Value(categoryIndex),
+                  ),
+                );
+              }
               Navigator.pop(context);
             },
             child: Center(
@@ -182,7 +210,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
             var height = MediaQuery.of(context).size.height;
             var width = MediaQuery.of(context).size.width;
             return Container(
-              height: height - 100,
+              height: 580,
               width: width - 50,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: CategoryPage(),
@@ -192,9 +220,11 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
       ),
     );
     setState(() {
-      categoryIndex = result;
-      categoryIcon = IncomeCategory.categoryIcon[result];
-      categoryText = IncomeCategory.categoryNames[result];
+      if (result != null) {
+        categoryIndex = result;
+        categoryIcon = IncomeCategory.categoryIcon[result];
+        categoryText = IncomeCategory.categoryNames[result];
+      }
     });
   }
 }
