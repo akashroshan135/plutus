@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:plutus/widgets/category.dart';
+import 'dart:math';
+
+import 'package:plutus/data/incomeCat.dart';
 
 // const _padding = EdgeInsets.all(16.0);
 
@@ -14,29 +17,7 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     // final accentColor = Colors.cyan;
-
-    // test data. will be replaced later
-    const categoryIcon = [
-      Icons.timeline,
-      Icons.landscape,
-      Icons.add_outlined,
-      Icons.add_outlined,
-      Icons.access_time,
-      Icons.sd_storage,
-      Icons.electrical_services,
-      Icons.monetization_on,
-    ];
-
-    const categoryNames = <String>[
-      'Length',
-      'Area',
-      'Volume',
-      'Mass',
-      'Time',
-      'Digital Storage',
-      'Energy',
-      'Currency',
-    ];
+    final _random = new Random();
 
     const baseColors = <Color>[
       Colors.teal,
@@ -50,12 +31,13 @@ class _CategoryPageState extends State<CategoryPage> {
     ];
 
     return ListView.builder(
-      itemCount: categoryNames.length,
+      itemCount: IncomeCategory.categoryNames.length,
       itemBuilder: (BuildContext context, int index) {
         return Category(
-          categoryName: categoryNames[index],
-          categoryIcon: categoryIcon[index],
-          categoryColor: baseColors[index],
+          index: index,
+          categoryName: IncomeCategory.categoryNames[index],
+          categoryIcon: IncomeCategory.categoryIcon[index],
+          categoryColor: baseColors[_random.nextInt(baseColors.length)],
         );
       },
     );

@@ -5,6 +5,7 @@ import 'package:sliding_sheet/sliding_sheet.dart';
 
 import 'package:plutus/data/moor_database.dart';
 import 'package:plutus/widgets/new_income.dart';
+import 'package:plutus/data/incomeCat.dart';
 
 const _padding = EdgeInsets.all(16.0);
 
@@ -61,7 +62,6 @@ class _IncomeRouteState extends State<IncomeRoute> {
 
   // * one item widget
   // todo: add functionality to edit button
-  // todo: add pop up for delete
   // todo: improve design
   Widget _buildItem(BuildContext context, Income income, AppDatabase database) {
     return Slidable(
@@ -75,16 +75,50 @@ class _IncomeRouteState extends State<IncomeRoute> {
           onTap: () => print('updates'),
         ),
         IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
-          icon: Icons.delete,
-          onTap: () => database.deleteIncome(income),
-        ),
+            caption: 'Delete',
+            color: Colors.red,
+            icon: Icons.delete,
+            onTap: () {
+              return showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Alert',
+                        style: Theme.of(context).textTheme.button),
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    content: Text(
+                      'Are you sure want to delete this item?',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'CANCEL',
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            database.deleteIncome(income);
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            'OK',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          )),
+                    ],
+                  );
+                },
+              );
+            }),
       ],
       child: Padding(
         padding: EdgeInsets.all(8),
         child: Container(
-          // height: 80,
+          height: 90,
           child: Material(
             borderRadius: BorderRadius.circular(15),
             color: Theme.of(context).secondaryHeaderColor,
@@ -98,14 +132,34 @@ class _IncomeRouteState extends State<IncomeRoute> {
                   Padding(
                     padding: _padding,
                     child: Icon(
-                      Icons.ac_unit,
+                      IncomeCategory.categoryIcon[income.categoryIndex],
                       color: Theme.of(context).primaryIconTheme.color,
                       size: Theme.of(context).primaryIconTheme.size,
                     ),
                   ),
-                  Text(
-                    income.tags,
-                    style: Theme.of(context).textTheme.button,
+                  Padding(
+                    padding: _padding,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          IncomeCategory.categoryNames[income.categoryIndex],
+                          textAlign: TextAlign.left,
+                          style: Theme.of(context)
+                              .textTheme
+                              .button
+                              .copyWith(fontSize: 25),
+                        ),
+                        Spacer(),
+                        Text(
+                          'Tags: ' + income.tags,
+                          textAlign: TextAlign.left,
+                          style: Theme.of(context)
+                              .textTheme
+                              .button
+                              .copyWith(color: Colors.grey[500]),
+                        ),
+                      ],
+                    ),
                   ),
                   Spacer(),
                   Padding(

@@ -12,11 +12,13 @@ class Income extends DataClass implements Insertable<Income> {
   final String tags;
   final DateTime date;
   final double amount;
+  final int categoryIndex;
   Income(
       {@required this.id,
       @required this.tags,
       @required this.date,
-      @required this.amount});
+      @required this.amount,
+      @required this.categoryIndex});
   factory Income.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -31,6 +33,8 @@ class Income extends DataClass implements Insertable<Income> {
           dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
       amount:
           doubleType.mapFromDatabaseResponse(data['${effectivePrefix}amount']),
+      categoryIndex: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}category_index']),
     );
   }
   @override
@@ -48,6 +52,9 @@ class Income extends DataClass implements Insertable<Income> {
     if (!nullToAbsent || amount != null) {
       map['amount'] = Variable<double>(amount);
     }
+    if (!nullToAbsent || categoryIndex != null) {
+      map['category_index'] = Variable<int>(categoryIndex);
+    }
     return map;
   }
 
@@ -58,6 +65,9 @@ class Income extends DataClass implements Insertable<Income> {
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
       amount:
           amount == null && nullToAbsent ? const Value.absent() : Value(amount),
+      categoryIndex: categoryIndex == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryIndex),
     );
   }
 
@@ -69,6 +79,7 @@ class Income extends DataClass implements Insertable<Income> {
       tags: serializer.fromJson<String>(json['tags']),
       date: serializer.fromJson<DateTime>(json['date']),
       amount: serializer.fromJson<double>(json['amount']),
+      categoryIndex: serializer.fromJson<int>(json['categoryIndex']),
     );
   }
   @override
@@ -79,15 +90,22 @@ class Income extends DataClass implements Insertable<Income> {
       'tags': serializer.toJson<String>(tags),
       'date': serializer.toJson<DateTime>(date),
       'amount': serializer.toJson<double>(amount),
+      'categoryIndex': serializer.toJson<int>(categoryIndex),
     };
   }
 
-  Income copyWith({int id, String tags, DateTime date, double amount}) =>
+  Income copyWith(
+          {int id,
+          String tags,
+          DateTime date,
+          double amount,
+          int categoryIndex}) =>
       Income(
         id: id ?? this.id,
         tags: tags ?? this.tags,
         date: date ?? this.date,
         amount: amount ?? this.amount,
+        categoryIndex: categoryIndex ?? this.categoryIndex,
       );
   @override
   String toString() {
@@ -95,14 +113,19 @@ class Income extends DataClass implements Insertable<Income> {
           ..write('id: $id, ')
           ..write('tags: $tags, ')
           ..write('date: $date, ')
-          ..write('amount: $amount')
+          ..write('amount: $amount, ')
+          ..write('categoryIndex: $categoryIndex')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode,
-      $mrjc(tags.hashCode, $mrjc(date.hashCode, amount.hashCode))));
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          tags.hashCode,
+          $mrjc(
+              date.hashCode, $mrjc(amount.hashCode, categoryIndex.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -110,7 +133,8 @@ class Income extends DataClass implements Insertable<Income> {
           other.id == this.id &&
           other.tags == this.tags &&
           other.date == this.date &&
-          other.amount == this.amount);
+          other.amount == this.amount &&
+          other.categoryIndex == this.categoryIndex);
 }
 
 class IncomesCompanion extends UpdateCompanion<Income> {
@@ -118,31 +142,37 @@ class IncomesCompanion extends UpdateCompanion<Income> {
   final Value<String> tags;
   final Value<DateTime> date;
   final Value<double> amount;
+  final Value<int> categoryIndex;
   const IncomesCompanion({
     this.id = const Value.absent(),
     this.tags = const Value.absent(),
     this.date = const Value.absent(),
     this.amount = const Value.absent(),
+    this.categoryIndex = const Value.absent(),
   });
   IncomesCompanion.insert({
     this.id = const Value.absent(),
     @required String tags,
     @required DateTime date,
     @required double amount,
+    @required int categoryIndex,
   })  : tags = Value(tags),
         date = Value(date),
-        amount = Value(amount);
+        amount = Value(amount),
+        categoryIndex = Value(categoryIndex);
   static Insertable<Income> custom({
     Expression<int> id,
     Expression<String> tags,
     Expression<DateTime> date,
     Expression<double> amount,
+    Expression<int> categoryIndex,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (tags != null) 'tags': tags,
       if (date != null) 'date': date,
       if (amount != null) 'amount': amount,
+      if (categoryIndex != null) 'category_index': categoryIndex,
     });
   }
 
@@ -150,12 +180,14 @@ class IncomesCompanion extends UpdateCompanion<Income> {
       {Value<int> id,
       Value<String> tags,
       Value<DateTime> date,
-      Value<double> amount}) {
+      Value<double> amount,
+      Value<int> categoryIndex}) {
     return IncomesCompanion(
       id: id ?? this.id,
       tags: tags ?? this.tags,
       date: date ?? this.date,
       amount: amount ?? this.amount,
+      categoryIndex: categoryIndex ?? this.categoryIndex,
     );
   }
 
@@ -174,6 +206,9 @@ class IncomesCompanion extends UpdateCompanion<Income> {
     if (amount.present) {
       map['amount'] = Variable<double>(amount.value);
     }
+    if (categoryIndex.present) {
+      map['category_index'] = Variable<int>(categoryIndex.value);
+    }
     return map;
   }
 
@@ -183,7 +218,8 @@ class IncomesCompanion extends UpdateCompanion<Income> {
           ..write('id: $id, ')
           ..write('tags: $tags, ')
           ..write('date: $date, ')
-          ..write('amount: $amount')
+          ..write('amount: $amount, ')
+          ..write('categoryIndex: $categoryIndex')
           ..write(')'))
         .toString();
   }
@@ -235,8 +271,22 @@ class $IncomesTable extends Incomes with TableInfo<$IncomesTable, Income> {
     );
   }
 
+  final VerificationMeta _categoryIndexMeta =
+      const VerificationMeta('categoryIndex');
+  GeneratedIntColumn _categoryIndex;
   @override
-  List<GeneratedColumn> get $columns => [id, tags, date, amount];
+  GeneratedIntColumn get categoryIndex =>
+      _categoryIndex ??= _constructCategoryIndex();
+  GeneratedIntColumn _constructCategoryIndex() {
+    return GeneratedIntColumn(
+      'category_index',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, tags, date, amount, categoryIndex];
   @override
   $IncomesTable get asDslTable => this;
   @override
@@ -268,6 +318,14 @@ class $IncomesTable extends Incomes with TableInfo<$IncomesTable, Income> {
           amount.isAcceptableOrUnknown(data['amount'], _amountMeta));
     } else if (isInserting) {
       context.missing(_amountMeta);
+    }
+    if (data.containsKey('category_index')) {
+      context.handle(
+          _categoryIndexMeta,
+          categoryIndex.isAcceptableOrUnknown(
+              data['category_index'], _categoryIndexMeta));
+    } else if (isInserting) {
+      context.missing(_categoryIndexMeta);
     }
     return context;
   }

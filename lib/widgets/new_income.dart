@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
-import 'package:plutus/data/moor_database.dart';
 import 'package:plutus/routes/categoryPage.dart';
+import 'package:plutus/data/moor_database.dart';
+import 'package:plutus/data/incomeCat.dart';
 
 const _padding = EdgeInsets.all(16.0);
 
@@ -21,7 +22,9 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
   final controllerTags = TextEditingController();
   final controllerAmount = TextEditingController();
   DateTime newIncomeDate = DateTime.now();
+  var categoryIcon = Icons.search;
   var categoryText = 'Select a Category';
+  var categoryIndex;
 
   @override
   void initState() {
@@ -57,7 +60,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
                 Padding(
                   padding: _padding,
                   child: Icon(
-                    Icons.ac_unit,
+                    categoryIcon,
                     color: Theme.of(context).primaryIconTheme.color,
                     size: Theme.of(context).primaryIconTheme.size,
                   ),
@@ -120,6 +123,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
                   tags: Value(controllerTags.text),
                   amount: Value(double.parse(controllerAmount.text)),
                   date: Value(newIncomeDate),
+                  categoryIndex: Value(categoryIndex),
                 ),
               );
               Navigator.pop(context);
@@ -188,7 +192,9 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
       ),
     );
     setState(() {
-      categoryText = '$result';
+      categoryIndex = result;
+      categoryIcon = IncomeCategory.categoryIcon[result];
+      categoryText = IncomeCategory.categoryNames[result];
     });
   }
 }

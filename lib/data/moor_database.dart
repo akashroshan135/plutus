@@ -9,6 +9,7 @@ class Incomes extends Table {
   TextColumn get tags => text().withLength(min: 1, max: 50)();
   DateTimeColumn get date => dateTime()();
   RealColumn get amount => real()();
+  IntColumn get categoryIndex => integer()();
 
   // * used to set primary keys. Not required as autoIncrement() sets key as primary
   // @override

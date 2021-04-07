@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 
 // * renders a category widget
 class Category extends StatelessWidget {
+  final index;
   final categoryName;
   final categoryIcon;
   final categoryColor;
 
   const Category({
+    @required this.index,
     @required this.categoryName,
     @required this.categoryIcon,
     @required this.categoryColor,
-  })  : assert(categoryName != null),
+  })  : assert(index != null),
+        assert(categoryName != null),
         assert(categoryIcon != null),
         assert(categoryColor != null);
 
@@ -28,7 +31,7 @@ class Category extends StatelessWidget {
             highlightColor: categoryColor[400],
             splashColor: categoryColor,
             onTap: () {
-              Navigator.pop(context, categoryName.toString());
+              Navigator.pop(context, index);
             },
             child: Row(
               children: <Widget>[
