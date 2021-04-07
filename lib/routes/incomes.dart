@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
+import 'dart:math';
 
 import 'package:plutus/data/moor_database.dart';
 import 'package:plutus/widgets/new_income.dart';
 import 'package:plutus/data/incomeCat.dart';
+import 'package:plutus/data/colorData.dart';
 
 const _padding = EdgeInsets.all(16.0);
 
@@ -16,6 +18,7 @@ class IncomeRoute extends StatefulWidget {
 
 class _IncomeRouteState extends State<IncomeRoute> {
   final accentColor = Colors.cyan;
+  final _random = new Random();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,10 @@ class _IncomeRouteState extends State<IncomeRoute> {
     return Scaffold(
       appBar: appBar,
       backgroundColor: Theme.of(context).backgroundColor,
-      body: _buildList(context),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: _buildList(context),
+      ),
       floatingActionButton: _newIncomeBtn(context),
     );
   }
@@ -64,59 +70,60 @@ class _IncomeRouteState extends State<IncomeRoute> {
   // todo: add functionality to edit button
   // todo: improve design
   Widget _buildItem(BuildContext context, Income income, AppDatabase database) {
-    return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.25,
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Edit',
-          color: Colors.grey[400],
-          icon: Icons.edit,
-          onTap: () => print('updates'),
-        ),
-        IconSlideAction(
-            caption: 'Delete',
-            color: Colors.red,
-            icon: Icons.delete,
-            onTap: () {
-              return showDialog(
-                context: context,
-                builder: (_) {
-                  return AlertDialog(
-                    title: Text('Alert',
-                        style: Theme.of(context).textTheme.button),
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                    content: Text(
-                      'Are you sure want to delete this item?',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          'CANCEL',
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Slidable(
+        actionPane: SlidableDrawerActionPane(),
+        actionExtentRatio: 0.25,
+        secondaryActions: <Widget>[
+          IconSlideAction(
+            caption: 'Edit',
+            color: Colors.grey[400],
+            icon: Icons.edit,
+            onTap: () => print('updates'),
+          ),
+          IconSlideAction(
+              caption: 'Delete',
+              color: Colors.red,
+              icon: Icons.delete,
+              onTap: () {
+                return showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text('Alert',
+                          style: Theme.of(context).textTheme.button),
+                      backgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
+                      content: Text(
+                        'Are you sure want to delete this item?',
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
-                      TextButton(
+                      actions: <Widget>[
+                        TextButton(
                           onPressed: () {
-                            database.deleteIncome(income);
                             Navigator.of(context).pop();
                           },
                           child: Text(
-                            'OK',
+                            'CANCEL',
                             style: Theme.of(context).textTheme.bodyText1,
-                          )),
-                    ],
-                  );
-                },
-              );
-            }),
-      ],
-      child: Padding(
-        padding: EdgeInsets.all(8),
+                          ),
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              database.deleteIncome(income);
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'OK',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )),
+                      ],
+                    );
+                  },
+                );
+              }),
+        ],
         child: Container(
           height: 90,
           child: Material(
@@ -124,8 +131,10 @@ class _IncomeRouteState extends State<IncomeRoute> {
             color: Theme.of(context).secondaryHeaderColor,
             child: InkWell(
               borderRadius: BorderRadius.circular(15),
-              highlightColor: Colors.pink[400],
-              splashColor: Colors.pink,
+              highlightColor: ColorData
+                  .myColors[_random.nextInt(ColorData.myColors.length)],
+              splashColor: ColorData
+                  .myColors[_random.nextInt(ColorData.myColors.length)],
               onTap: () {},
               child: Row(
                 children: <Widget>[

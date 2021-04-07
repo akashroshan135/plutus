@@ -3,6 +3,7 @@ import 'package:plutus/widgets/category.dart';
 import 'dart:math';
 
 import 'package:plutus/data/incomeCat.dart';
+import 'package:plutus/data/colorData.dart';
 
 // const _padding = EdgeInsets.all(16.0);
 
@@ -19,17 +20,6 @@ class _CategoryPageState extends State<CategoryPage> {
     // final accentColor = Colors.cyan;
     final _random = new Random();
 
-    const baseColors = <Color>[
-      Colors.teal,
-      Colors.orange,
-      Colors.pinkAccent,
-      Colors.blueAccent,
-      Colors.yellow,
-      Colors.greenAccent,
-      Colors.purpleAccent,
-      Colors.red,
-    ];
-
     return ListView.builder(
       itemCount: IncomeCategory.categoryNames.length,
       itemBuilder: (BuildContext context, int index) {
@@ -37,7 +27,8 @@ class _CategoryPageState extends State<CategoryPage> {
           index: index,
           categoryName: IncomeCategory.categoryNames[index],
           categoryIcon: IncomeCategory.categoryIcon[index],
-          categoryColor: baseColors[_random.nextInt(baseColors.length)],
+          categoryColor:
+              ColorData.myColors[_random.nextInt(ColorData.myColors.length)],
         );
       },
     );
