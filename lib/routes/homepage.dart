@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
 
 import 'package:plutus/routes/daily_page.dart';
+import 'package:plutus/widgets/new_income.dart';
 // import 'package:plutus/routes/incomes.dart';
 
 class Homepage extends StatefulWidget {
@@ -27,7 +29,7 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     // * renders actual homepage
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       // appBar: _appbar(context),
       body: getBody(),
       bottomNavigationBar: getFooter(),
@@ -56,18 +58,21 @@ class _HomepageState extends State<Homepage> {
 
     // TODO change colors to use theme data
     return AnimatedBottomNavigationBar(
-      activeColor: Color(0xFF28c2ff),
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
+      activeColor: Theme.of(context).primaryIconTheme.color,
+      inactiveColor: Theme.of(context).accentIconTheme.color,
       splashColor: Color(0xFFFF2278),
-      inactiveColor: Colors.black.withOpacity(0.5),
+      iconSize: Theme.of(context).primaryIconTheme.size,
       icons: iconItems,
       activeIndex: pageIndex,
       gapLocation: GapLocation.center,
       notchSmoothness: NotchSmoothness.softEdge,
       leftCornerRadius: 10,
-      iconSize: 25,
       rightCornerRadius: 10,
       onTap: (index) {
-        selectedTab(index);
+        setState(() {
+          pageIndex = index;
+        });
       },
       //other params
     );
@@ -75,22 +80,16 @@ class _HomepageState extends State<Homepage> {
 
   Widget getFloatingButton() {
     return FloatingActionButton(
-        onPressed: () {
-          // selectedTab(4);
-        },
-        child: Icon(
-          Icons.add,
-          size: 25,
-        ),
-        backgroundColor: Colors.blue
-        //params
-        );
-  }
-
-  selectedTab(index) {
-    setState(() {
-      pageIndex = index;
-    });
+      onPressed: () {
+        showNewIncomeSceen();
+      },
+      child: Icon(
+        Icons.add,
+        size: Theme.of(context).iconTheme.size,
+        color: Theme.of(context).iconTheme.color,
+      ),
+      backgroundColor: Colors.blue,
+    );
   }
 
 /*
@@ -152,4 +151,32 @@ class _HomepageState extends State<Homepage> {
   }
 */
 
+  void showNewIncomeSceen() async {
+    final result = await showSlidingBottomSheet(context, builder: (context) {
+      return SlidingSheetDialog(
+        elevation: 10,
+        cornerRadius: 16,
+        snapSpec: const SnapSpec(
+          snap: true,
+          snappings: [0.58, 0.7, 1.0],
+          positioning: SnapPositioning.relativeToAvailableSpace,
+        ),
+        builder: (context, state) {
+          return Container(
+            height: 500,
+            child: Center(
+              child: Material(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: NewIncomeScreen(),
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    });
+    print(result); // This is the result.
+  }
 }

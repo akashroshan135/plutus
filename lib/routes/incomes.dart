@@ -209,7 +209,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Padding(
                   padding: _padding,
-                  child: NewIncomeScreen(accentColor: accentColor),
+                  child: NewIncomeScreen(),
                 ),
               ),
             ),

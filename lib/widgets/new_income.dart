@@ -9,16 +9,13 @@ import 'package:plutus/data/incomeCat.dart';
 const _padding = EdgeInsets.all(16.0);
 
 class NewIncomeScreen extends StatefulWidget {
-  final accentColor;
-
-  NewIncomeScreen({Key key, @required this.accentColor}) : super(key: key);
+  NewIncomeScreen({Key key}) : super(key: key);
 
   @override
   _NewIncomeScreenState createState() => _NewIncomeScreenState();
 }
 
 class _NewIncomeScreenState extends State<NewIncomeScreen> {
-  var accentColor;
   final controllerTags = TextEditingController();
   final controllerAmount = TextEditingController();
   DateTime newIncomeDate = DateTime.now();
@@ -27,14 +24,9 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
   var categoryIndex;
 
   @override
-  void initState() {
-    super.initState();
-    accentColor = widget.accentColor;
-  }
-
-  @override
   Widget build(BuildContext context) {
     final database = Provider.of<AppDatabase>(context);
+    final accentColor = Theme.of(context).buttonColor;
 
     // * field for category. shows a dialog box
     final inputCategory = Padding(
@@ -124,7 +116,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
                     builder: (_) {
                       return AlertDialog(
                         title: Text('Warning',
-                            style: Theme.of(context).textTheme.button),
+                            style: Theme.of(context).textTheme.headline1),
                         backgroundColor:
                             Theme.of(context).scaffoldBackgroundColor,
                         content: Text(
@@ -160,8 +152,8 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
               child: Text('Submit',
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1
-                      .copyWith(fontSize: 30)),
+                      .headline1
+                      .copyWith(color: Colors.white)),
             ),
           ),
         ),
@@ -181,13 +173,15 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
   InputDecoration decoratorInputWidget(String text) {
     return InputDecoration(
       labelText: text,
-      labelStyle: TextStyle(color: accentColor),
+      labelStyle: TextStyle(color: Theme.of(context).buttonColor),
       focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: accentColor, width: 1)),
+          borderSide:
+              BorderSide(color: Theme.of(context).buttonColor, width: 1)),
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: accentColor, width: 1)),
+          borderSide:
+              BorderSide(color: Theme.of(context).buttonColor, width: 1)),
       errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Colors.red, width: 1)),

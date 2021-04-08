@@ -36,17 +36,32 @@ class Category extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Icon(
-                    categoryIcon,
-                    color: Theme.of(context).primaryIconTheme.color,
-                    size: Theme.of(context).primaryIconTheme.size,
+                  padding: const EdgeInsets.all(15.0),
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey.withOpacity(0.1),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        categoryIcon,
+                        color: Theme.of(context).iconTheme.color,
+                        size: Theme.of(context).iconTheme.size,
+                      ),
+                      // child: Image.asset(
+                      //   'assets/images/bank.png',
+                      //   width: 30,
+                      //   height: 30,
+                      // ),
+                    ),
                   ),
                 ),
                 Center(
                   child: Text(
                     categoryName,
-                    style: Theme.of(context).textTheme.button,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
               ],

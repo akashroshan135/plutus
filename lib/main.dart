@@ -12,58 +12,52 @@ class MyApp extends StatelessWidget {
     // * settings for dark mode theme data
     final _darkTheme = ThemeData(
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      // Used for AppBar and other primary widgets
-      primaryColor: Colors.black,
-      // Used for buttons
-      secondaryHeaderColor: Colors.grey[900],
-      // Used for backgroud color
-      backgroundColor: Colors.black,
-      // Used for scffold backgroud color
+      // used for selected or active stuff
+      primaryColor: Colors.blue,
+      // used for unselected or inactive stuff
+      accentColor: Colors.black,
+      // used for the headers
+      secondaryHeaderColor: Colors.black,
+      // used for scffold backgroud color
       scaffoldBackgroundColor: Color.fromARGB(255, 18, 18, 18),
-      // Used for appBar icons
-      iconTheme: IconThemeData(color: Colors.white, size: 30),
-      // Used for main icons
-      primaryIconTheme: IconThemeData(color: Colors.white, size: 40),
-      // Used for sub icons
-      accentIconTheme: IconThemeData(color: Colors.white, size: 30),
+      // used for icons
+      iconTheme: IconThemeData(color: Colors.white, size: 25),
+      // used for footer icons
+      primaryIconTheme: IconThemeData(color: Colors.blue, size: 25),
+      accentIconTheme: IconThemeData(color: Colors.white, size: 25),
+      // used for buttons
+      buttonColor: Colors.blue,
       textTheme: TextTheme(
-        // Main screen appBar font
-        headline6: TextStyle(color: Colors.white, fontSize: 20.0),
-        // Sub screen appBar font
-        headline5: TextStyle(
+        headline1: TextStyle(
             color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
         bodyText1: TextStyle(fontSize: 15.0, color: Colors.white),
-        bodyText2: TextStyle(fontSize: 30.0, color: Colors.white),
-        button: TextStyle(fontSize: 20.0, color: Colors.white),
+        bodyText2: TextStyle(fontSize: 13.0, color: Colors.white),
       ),
     );
 
     // * settings for light mode theme data
     final _lightTheme = ThemeData(
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      // Used for AppBar and other primary widgets
-      primaryColor: Colors.deepPurple[800],
-      // Used for buttons
+      // used for selected or active stuff
+      primaryColor: Colors.blue,
+      // used for unselected or inactive stuff
+      accentColor: Colors.white,
+      // used for the headers
       secondaryHeaderColor: Colors.white,
-      // Used for backgroud color
-      backgroundColor: Colors.white,
-      // Used for scffold backgroud color
-      scaffoldBackgroundColor: Colors.white,
-      // Used for appBar icons
-      iconTheme: IconThemeData(color: Colors.white, size: 30),
-      // Used for main icons
-      primaryIconTheme: IconThemeData(color: Colors.black, size: 40),
-      // Used for sub icons
-      accentIconTheme: IconThemeData(color: Colors.blue, size: 30),
+      // used for scffold backgroud color
+      scaffoldBackgroundColor: Colors.grey[100],
+      // used for icons
+      iconTheme: IconThemeData(color: Colors.black, size: 25),
+      // used for footer icons
+      primaryIconTheme: IconThemeData(color: Colors.blue, size: 25),
+      accentIconTheme: IconThemeData(color: Colors.black, size: 25),
+      // used for buttons
+      buttonColor: Colors.blue,
       textTheme: TextTheme(
-        // Main screen appBar font
-        headline6: TextStyle(color: Colors.white, fontSize: 20.0),
-        // Sub screen appBar font
-        headline5: TextStyle(
-            color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
+        headline1: TextStyle(
+            color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
         bodyText1: TextStyle(fontSize: 15.0, color: Colors.black),
-        bodyText2: TextStyle(fontSize: 30.0, color: Colors.black),
-        button: TextStyle(fontSize: 20.0, color: Colors.black),
+        bodyText2: TextStyle(fontSize: 13.0, color: Colors.black),
       ),
     );
 
