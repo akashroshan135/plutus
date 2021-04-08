@@ -9,8 +9,9 @@ class DailyPage extends StatefulWidget {
 }
 
 class _DailyPageState extends State<DailyPage> {
-  // * selects the 3rd date which will be the current date
+  // * selects the 3rd date item which will be the current date
   int activeDay = 3;
+  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class _DailyPageState extends State<DailyPage> {
     return ListView(
       children: [
         getHeader(),
-        IncomeRoute(),
+        IncomeRoute(selectedDate: selectedDate),
       ],
     );
   }
@@ -72,7 +73,6 @@ class _DailyPageState extends State<DailyPage> {
   }
 
   // * generates the list of dates. Includes 3 previous days, current day and next 3 days
-  // TODO change colors to use theme data
   List<GestureDetector> _dateItem() {
     var date = DateTime.now().subtract(Duration(days: 3));
     return List.generate(
@@ -82,6 +82,7 @@ class _DailyPageState extends State<DailyPage> {
           onTap: () {
             setState(() {
               activeDay = index;
+              selectedDate = date.add(Duration(days: index));
             });
           },
           child: Container(

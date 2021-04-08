@@ -2,6 +2,24 @@ import 'package:moor_flutter/moor_flutter.dart';
 
 part 'moor_database.g.dart';
 
+/* --------------------------------------------------------------
+  Main App Database
+-------------------------------------------------------------- */
+@UseMoor(tables: [Incomes], daos: [IncomeDao])
+class AppDatabase extends _$AppDatabase {
+  AppDatabase()
+      : super(FlutterQueryExecutor.inDatabaseFolder(
+          path: 'db.sqlite',
+          logStatements: true,
+        ));
+
+  @override
+  int get schemaVersion => 1;
+}
+
+/* --------------------------------------------------------------
+  Tables
+-------------------------------------------------------------- */
 // * used to change the name of the database
 // @DataClassName('Incomes')
 class Incomes extends Table {
@@ -16,26 +34,41 @@ class Incomes extends Table {
   // Set<Column> get primaryKey => {id};
 }
 
-@UseMoor(tables: [Incomes])
-class AppDatabase extends _$AppDatabase {
-  AppDatabase()
-      : super(FlutterQueryExecutor.inDatabaseFolder(
-          path: 'db.sqlite',
-          logStatements: true,
-        ));
+/* --------------------------------------------------------------
+  DAOs
+-------------------------------------------------------------- */
+// TODO learn how to use with multiple tables
+@UseDao(tables: [Incomes])
+class IncomeDao extends DatabaseAccessor<AppDatabase> with _$IncomeDaoMixin {
+  final AppDatabase db;
 
-  @override
-  int get schemaVersion => 1;
+  // * Called by the AppDatabase class
+  IncomeDao(this.db) : super(db);
 
+  /* --------------------------------------------------------------
+    Income Table queries
+  -------------------------------------------------------------- */
   Future<List<Income>> getAllIncome() => select(incomes).get();
+  // * streams all income rows
   Stream<List<Income>> watchAllIncome() => select(incomes).watch();
+  // * streams income rows filtered by seleted date
+  Stream<List<Income>> watchDayIncome(DateTime searchDate) {
+    return (select(incomes)
+          ..where((row) =>
+              row.date.day.equals(searchDate.day) &
+              row.date.month.equals(searchDate.month) &
+              row.date.year.equals(searchDate.year)))
+        .watch();
+  }
 
   // * add an income transaction
-  Future<int> addIncome(IncomesCompanion entry) => into(incomes).insert(entry);
+  Future<int> addIncome(Insertable<Income> entry) =>
+      into(incomes).insert(entry);
 
   // * updates an income transaction with a matching primary key
   // Future updateIncome(Income entry) => update(incomes).replace(entry);
 
   // * deletes an income transaction with a matching primary key
-  Future deleteIncome(Income entry) => delete(incomes).delete(entry);
+  Future deleteIncome(Insertable<Income> entry) =>
+      delete(incomes).delete(entry);
 }

@@ -62,9 +62,9 @@ class MyApp extends StatelessWidget {
     );
 
     // * renders main app. Provider is used to initialize the database
-    return Provider<AppDatabase>(
-      create: (context) => AppDatabase(),
-      dispose: (context, db) => db.close(),
+    return Provider<IncomeDao>(
+      create: (context) => AppDatabase().incomeDao,
+      // dispose: (context, db) => db.close(),
       child: MaterialApp(
         title: 'Plutus',
         theme: _lightTheme,

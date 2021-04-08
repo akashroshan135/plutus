@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
 import 'package:plutus/data/moor_database.dart';
@@ -8,6 +9,10 @@ import 'package:plutus/widgets/new_income.dart';
 import 'package:plutus/data/incomeCat.dart';
 
 class IncomeRoute extends StatefulWidget {
+  final DateTime selectedDate;
+
+  const IncomeRoute({Key key, this.selectedDate}) : super(key: key);
+
   @override
   _IncomeRouteState createState() => _IncomeRouteState();
 }
@@ -16,40 +21,72 @@ class _IncomeRouteState extends State<IncomeRoute> {
   @override
   Widget build(BuildContext context) {
     // * calling database
-    final database = Provider.of<AppDatabase>(context);
+    final incomeDao = Provider.of<IncomeDao>(context);
 
     // * StreamBuilder used to build list of all objects
     return StreamBuilder(
-      stream: database.watchAllIncome(),
+      stream: incomeDao.watchDayIncome(widget.selectedDate),
       builder: (context, AsyncSnapshot<List<Income>> snapshot) {
         final incomes = snapshot.data ?? [];
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: incomes.length,
-                  itemBuilder: (_, index) {
-                    final income = incomes[index];
-                    return _buildItem(context, income, database);
-                  },
+        if (incomes.length <= 0) {
+          // TODO use better empty page
+          return Container(
+            height: MediaQuery.of(context).size.height - 300,
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 70,
+                  height: 70,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Entypo.emoji_sad,
+                      color: Theme.of(context).iconTheme.color,
+                      size: 50,
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
+                Text(
+                  'No Transactions made',
+                  style: Theme.of(context).textTheme.headline1,
+                ),
+              ],
+            ),
+          );
+        } else {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: incomes.length,
+                    itemBuilder: (_, index) {
+                      final income = incomes[index];
+                      return _buildItem(context, income, incomeDao);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
       },
     );
   }
 
   // * code to build one transaction item
-  Widget _buildItem(BuildContext context, Income income, AppDatabase database) {
+  Widget _buildItem(BuildContext context, Income income, IncomeDao incomeDao) {
     var size = MediaQuery.of(context).size;
 
     final editBtn = IconSlideAction(
@@ -87,7 +124,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                 ),
                 TextButton(
                     onPressed: () {
-                      database.deleteIncome(income);
+                      incomeDao.deleteIncome(income);
                       Navigator.of(context).pop();
                     },
                     child: Text(

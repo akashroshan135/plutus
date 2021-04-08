@@ -26,7 +26,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final database = Provider.of<AppDatabase>(context);
+    final incomeDao = Provider.of<IncomeDao>(context);
     final accentColor = Theme.of(context).buttonColor;
 
     // * field for category. shows a dialog box
@@ -137,7 +137,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
                       );
                     });
               } else {
-                database.addIncome(
+                incomeDao.addIncome(
                   IncomesCompanion(
                     tags: Value(controllerTags.text),
                     amount: Value(double.parse(controllerAmount.text)),
