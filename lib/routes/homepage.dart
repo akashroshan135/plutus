@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 
-import 'package:plutus/routes/incomes.dart';
+import 'package:plutus/routes/daily_page.dart';
+// import 'package:plutus/routes/incomes.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({Key key}) : super(key: key);
@@ -12,55 +13,87 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  String _selectedDay;
-  String _currentDay;
-  ItemScrollController _scrollController = ItemScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    // * runs these functions as soon as the class is initialized
-    _setDefaults();
-    // * runs after building the widgets
-    WidgetsBinding.instance.addPostFrameCallback((_) => _setController());
-  }
-
-  // * sets the current date to a variable
-  void _setDefaults() {
-    _currentDay = DateFormat.d().format(DateTime.now());
-    _selectedDay = _currentDay;
-  }
-
-  // * jumps to the current date after widgets are loaded
-  void _setController() {
-    _scrollController.jumpTo(index: int.parse(_currentDay));
-  }
+  // * index for the pages
+  int pageIndex = 0;
+  // * list of the pages
+  List<Widget> pages = [
+    DailyPage(),
+    // BudgetPage(),
+    // CreatBudgetPage(),
+    // ProfilePage()
+  ];
 
   @override
   Widget build(BuildContext context) {
     // * renders actual homepage
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: _appbar(context),
-      body: Column(children: [
-        _dashboard(context),
-        _calenderStrip(context),
-        // * creates new container of income transactions list. height is required to prevent overflow
-        Container(
-          height: 100,
-          child: Center(
-            child: Text(
-              // todo: add cureent day transactions
-              'todo: place current day incomes',
-              style: Theme.of(context).textTheme.button,
-            ),
-          ),
-        ),
-        _incomesBtn(context),
-      ]),
+      // appBar: _appbar(context),
+      body: getBody(),
+      bottomNavigationBar: getFooter(),
+      floatingActionButton: getFloatingButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
+  // * returns one of the pages
+  Widget getBody() {
+    return IndexedStack(
+      index: pageIndex,
+      children: pages,
+    );
+  }
+
+  // * returns the icons for the footer
+  // TODO proper implementation
+  Widget getFooter() {
+    List<IconData> iconItems = [
+      Ionicons.md_calendar,
+      Ionicons.md_stats,
+      Ionicons.md_wallet,
+      Ionicons.ios_person,
+    ];
+
+    // TODO change colors to use theme data
+    return AnimatedBottomNavigationBar(
+      activeColor: Color(0xFF28c2ff),
+      splashColor: Color(0xFFFF2278),
+      inactiveColor: Colors.black.withOpacity(0.5),
+      icons: iconItems,
+      activeIndex: pageIndex,
+      gapLocation: GapLocation.center,
+      notchSmoothness: NotchSmoothness.softEdge,
+      leftCornerRadius: 10,
+      iconSize: 25,
+      rightCornerRadius: 10,
+      onTap: (index) {
+        selectedTab(index);
+      },
+      //other params
+    );
+  }
+
+  Widget getFloatingButton() {
+    return FloatingActionButton(
+        onPressed: () {
+          // selectedTab(4);
+        },
+        child: Icon(
+          Icons.add,
+          size: 25,
+        ),
+        backgroundColor: Colors.blue
+        //params
+        );
+  }
+
+  selectedTab(index) {
+    setState(() {
+      pageIndex = index;
+    });
+  }
+
+/*
   // * appbar code
   // todo: add menu
   Widget _appbar(BuildContext context) {
@@ -117,132 +150,6 @@ class _HomepageState extends State<Homepage> {
       actions: [aboutBtn],
     );
   }
+*/
 
-  // * code for dashboard
-  // todo: actual dasboard implementation
-  Widget _dashboard(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 1.0, right: 1.0),
-      child: Container(
-        height: 200,
-        child: Material(
-          borderRadius: BorderRadius.circular(15),
-          color: Theme.of(context).secondaryHeaderColor,
-          child: Center(
-            child: Text(
-              'todo Dashboard',
-              style: Theme.of(context).textTheme.button,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // * creates the scollable date
-  Widget _calenderStrip(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5.0),
-      child: Container(
-        child: Container(
-          height: 80,
-          child: ScrollablePositionedList.builder(
-            itemCount: int.parse(_currentDay) + 1,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (BuildContext context, int index) {
-              return _dateContainer(index);
-            },
-            itemScrollController: _scrollController,
-          ),
-        ),
-      ),
-    );
-  }
-
-  // * creates the individual date containers
-  Widget _dateContainer(int date) {
-    final _month = DateFormat.MMMM().format(DateTime.now());
-    final _style = (date == int.parse(_selectedDay))
-        ? Theme.of(context).textTheme.bodyText1
-        : Theme.of(context)
-            .textTheme
-            .bodyText1
-            .copyWith(color: Colors.grey[600]);
-
-    InkWell _dates = InkWell(
-        child: Container(
-          width: 80,
-          color: Theme.of(context).secondaryHeaderColor,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                _month,
-                style: _style,
-              ),
-              Text(
-                date.toString(),
-                style: _style.copyWith(fontSize: 30),
-              ),
-            ],
-          ),
-        ),
-        onTap: () {
-          print('pressed $_month $date');
-          setState(() {
-            _selectedDay = date.toString();
-          });
-        });
-
-    return date == 0 ? null : _dates;
-
-    // InkWell _empty = InkWell(
-    //   child: Container(
-    //     width: 80,
-    //     color: Theme.of(context).secondaryHeaderColor,
-    //     child: Column(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       children: [
-    //         Text(
-    //           'Prev',
-    //           style: _style,
-    //         ),
-    //         Text(
-    //           'Months',
-    //           style: _style,
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    //   onTap: () {
-    //     print('pressed previous months');
-    //   },
-    // );
-
-    // return date == 0 ? _empty : _dates;
-  }
-
-  Widget _incomesBtn(BuildContext context) {
-    return InkWell(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          height: 75,
-          child: Material(
-            borderRadius: BorderRadius.circular(15),
-            color: Theme.of(context).secondaryHeaderColor,
-            child: Center(
-              child: Text(
-                'Check Incomes',
-                style: Theme.of(context).textTheme.button,
-              ),
-            ),
-          ),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => IncomeRoute()),
-          );
-        });
-  }
 }

@@ -207,7 +207,6 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
         contentPadding: EdgeInsets.all(5.0),
         content: Builder(
           builder: (context) {
-            var height = MediaQuery.of(context).size.height;
             var width = MediaQuery.of(context).size.width;
             return Container(
               height: 580,
