@@ -5,8 +5,6 @@ import 'dart:math';
 import 'package:plutus/data/incomeCat.dart';
 import 'package:plutus/data/colorData.dart';
 
-// const _padding = EdgeInsets.all(16.0);
-
 class CategoryPage extends StatefulWidget {
   CategoryPage({Key key}) : super(key: key);
 
@@ -17,7 +15,6 @@ class CategoryPage extends StatefulWidget {
 class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
-    // final accentColor = Colors.cyan;
     final _random = new Random();
 
     return ListView.builder(

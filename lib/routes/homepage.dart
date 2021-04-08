@@ -56,7 +56,6 @@ class _HomepageState extends State<Homepage> {
       Ionicons.ios_person,
     ];
 
-    // TODO change colors to use theme data
     return AnimatedBottomNavigationBar(
       backgroundColor: Theme.of(context).secondaryHeaderColor,
       activeColor: Theme.of(context).primaryIconTheme.color,
@@ -74,10 +73,10 @@ class _HomepageState extends State<Homepage> {
           pageIndex = index;
         });
       },
-      //other params
     );
   }
 
+  // * floating button data
   Widget getFloatingButton() {
     return FloatingActionButton(
       onPressed: () {
@@ -92,91 +91,37 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-/*
-  // * appbar code
-  // todo: add menu
-  Widget _appbar(BuildContext context) {
-    // * has the menu button on the left side of the appbar
-    final menuBtn = Padding(
-      padding: EdgeInsets.all(8),
-      child: IconButton(
-        icon: Icon(
-          Icons.menu,
-          color: Theme.of(context).iconTheme.color,
-          size: Theme.of(context).iconTheme.size,
-        ),
-        // * Navigator pushes the new screen to stack
-        onPressed: () => print('menu page btn is pressed'),
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => AboutScreen()),
-        // ),
-      ),
-    );
-
-    // * has about button on the right side of the appbar
-    // ? might change this to options or settings
-    final aboutBtn = Padding(
-      padding: EdgeInsets.all(8),
-      child: IconButton(
-        icon: Icon(
-          Icons.info_outline_rounded,
-          color: Theme.of(context).iconTheme.color,
-          size: Theme.of(context).iconTheme.size,
-        ),
-        // * Navigator pushes the new screen to stack
-        onPressed: () => print('about page btn is pressed'),
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => AboutScreen()),
-        // ),
-      ),
-    );
-
-    // * returns appbar code
-    return AppBar(
-      title: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 6),
-          child: Text(
-            'Plutus',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-        ),
-      ),
-      backgroundColor: Theme.of(context).primaryColor,
-      leading: menuBtn,
-      actions: [aboutBtn],
-    );
-  }
-*/
-
+  // * shows the new income screen
+  // TODO make one for expense
   void showNewIncomeSceen() async {
-    final result = await showSlidingBottomSheet(context, builder: (context) {
-      return SlidingSheetDialog(
-        elevation: 10,
-        cornerRadius: 16,
-        snapSpec: const SnapSpec(
-          snap: true,
-          snappings: [0.58, 0.7, 1.0],
-          positioning: SnapPositioning.relativeToAvailableSpace,
-        ),
-        builder: (context, state) {
-          return Container(
-            height: 500,
-            child: Center(
-              child: Material(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: NewIncomeScreen(),
+    final result = await showSlidingBottomSheet(
+      context,
+      builder: (context) {
+        return SlidingSheetDialog(
+          elevation: 10,
+          cornerRadius: 16,
+          snapSpec: const SnapSpec(
+            snap: true,
+            snappings: [0.58, 0.7, 1.0],
+            positioning: SnapPositioning.relativeToAvailableSpace,
+          ),
+          builder: (context, state) {
+            return Container(
+              height: 500,
+              child: Center(
+                child: Material(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: NewIncomeScreen(),
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-      );
-    });
-    print(result); // This is the result.
+            );
+          },
+        );
+      },
+    );
+    print(result);
   }
 }

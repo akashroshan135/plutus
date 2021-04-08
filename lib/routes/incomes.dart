@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
-import 'dart:math';
 
 import 'package:plutus/data/moor_database.dart';
 import 'package:plutus/widgets/new_income.dart';
 import 'package:plutus/data/incomeCat.dart';
-import 'package:plutus/data/colorData.dart';
-
-const _padding = EdgeInsets.all(16.0);
 
 class IncomeRoute extends StatefulWidget {
   @override
@@ -17,36 +13,8 @@ class IncomeRoute extends StatefulWidget {
 }
 
 class _IncomeRouteState extends State<IncomeRoute> {
-  final accentColor = Colors.cyan;
-  final _random = new Random();
-
   @override
   Widget build(BuildContext context) {
-    // * code for appbar
-    final appBar = AppBar(
-      leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          // * Navigator pops the old screen from stack
-          onPressed: () => Navigator.pop(context)),
-      title: Text(
-        "Income",
-        style: Theme.of(context).textTheme.headline5,
-      ),
-      backgroundColor: accentColor,
-    );
-
-    return Scaffold(
-      appBar: appBar,
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: Padding(
-        padding: const EdgeInsets.only(top: 8),
-        child: _buildList(context),
-      ),
-      floatingActionButton: _newIncomeBtn(context),
-    );
-  }
-
-  Widget _buildList(BuildContext context) {
     // * calling database
     final database = Provider.of<AppDatabase>(context);
 
@@ -55,143 +23,168 @@ class _IncomeRouteState extends State<IncomeRoute> {
       stream: database.watchAllIncome(),
       builder: (context, AsyncSnapshot<List<Income>> snapshot) {
         final incomes = snapshot.data ?? [];
-        return ListView.builder(
-          itemCount: incomes.length,
-          itemBuilder: (_, index) {
-            final income = incomes[index];
-            return _buildItem(context, income, database);
-          },
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: incomes.length,
+                  itemBuilder: (_, index) {
+                    final income = incomes[index];
+                    return _buildItem(context, income, database);
+                  },
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
   }
 
-  // * one item widget
-  // todo: add functionality to edit button
-  // todo: improve design
+  // * code to build one transaction item
   Widget _buildItem(BuildContext context, Income income, AppDatabase database) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Slidable(
-        actionPane: SlidableDrawerActionPane(),
-        actionExtentRatio: 0.25,
-        secondaryActions: <Widget>[
-          IconSlideAction(
-            caption: 'Edit',
-            color: Colors.grey[400],
-            icon: Icons.edit,
-            onTap: () => print('updates'),
-          ),
-          IconSlideAction(
-              caption: 'Delete',
-              color: Colors.red,
-              icon: Icons.delete,
-              onTap: () {
-                return showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: Text('Alert',
-                          style: Theme.of(context).textTheme.button),
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      content: Text(
-                        'Are you sure want to delete this item?',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(
-                            'CANCEL',
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ),
-                        TextButton(
-                            onPressed: () {
-                              database.deleteIncome(income);
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'OK',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            )),
-                      ],
-                    );
+    var size = MediaQuery.of(context).size;
+
+    final editBtn = IconSlideAction(
+      caption: 'Edit',
+      color: Colors.grey[400],
+      icon: Icons.edit,
+      onTap: () => print('updates'),
+    );
+
+    final deleteBtn = IconSlideAction(
+      caption: 'Delete',
+      color: Colors.red,
+      icon: Icons.delete,
+      onTap: () {
+        return showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              title:
+                  Text('Alert', style: Theme.of(context).textTheme.headline1),
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              content: Text(
+                'Are you sure want to delete this item?',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
                   },
-                );
-              }),
-        ],
-        child: Container(
-          height: 90,
-          child: Material(
-            borderRadius: BorderRadius.circular(15),
-            color: Theme.of(context).secondaryHeaderColor,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(15),
-              highlightColor: ColorData
-                  .myColors[_random.nextInt(ColorData.myColors.length)],
-              splashColor: ColorData
-                  .myColors[_random.nextInt(ColorData.myColors.length)],
-              onTap: () {},
+                  child: Text(
+                    'CANCEL',
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ),
+                TextButton(
+                    onPressed: () {
+                      database.deleteIncome(income);
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'OK',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    )),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    return Column(
+      children: [
+        Slidable(
+          actionPane: SlidableDrawerActionPane(),
+          actionExtentRatio: 0.20,
+          secondaryActions: <Widget>[
+            editBtn,
+            deleteBtn,
+          ],
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Container(
+              // height: 80,
+              width: (size.width - 40) * 0.7,
               child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: _padding,
-                    child: Icon(
-                      IncomeCategory.categoryIcon[income.categoryIndex],
-                      color: Theme.of(context).primaryIconTheme.color,
-                      size: Theme.of(context).primaryIconTheme.size,
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey.withOpacity(0.1),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        IncomeCategory.categoryIcon[income.categoryIndex],
+                        color: Theme.of(context).iconTheme.color,
+                        size: Theme.of(context).iconTheme.size,
+                      ),
+                      // child: Image.asset(
+                      //   'assets/images/bank.png',
+                      //   width: 30,
+                      //   height: 30,
+                      // ),
                     ),
                   ),
-                  Padding(
-                    padding: _padding,
+                  SizedBox(width: 15),
+                  Container(
+                    width: (size.width - 90) * 0.5,
                     child: Column(
-                      children: <Widget>[
-                        Text(IncomeCategory.categoryNames[income.categoryIndex],
-                            style: Theme.of(context).textTheme.button),
-                        Spacer(),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          'Tags: ' + income.tags,
-                          style: Theme.of(context)
-                              .textTheme
-                              .button
-                              .copyWith(color: Colors.grey[500]),
+                          IncomeCategory.categoryNames[income.categoryIndex],
+                          style: Theme.of(context).textTheme.bodyText1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          income.tags,
+                          style: Theme.of(context).textTheme.bodyText2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
-                  ),
-                  Spacer(),
-                  Padding(
-                    padding: _padding,
-                    child: Text(
-                      '₹ ' + income.amount.toString(),
-                      style: Theme.of(context).textTheme.button,
-                    ),
-                  ),
+                  )
                 ],
               ),
             ),
-          ),
+            Container(
+              width: (size.width - 40) * 0.3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text("+ ₹" + income.amount.toString() + ' ',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          .copyWith(color: Colors.green)),
+                ],
+              ),
+            )
+          ]),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.only(left: 65, top: 8),
+          child: Divider(thickness: 0.8),
+        ),
+      ],
     );
   }
 
-  Widget _newIncomeBtn(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        showNewIncomeSceen();
-      },
-      child: Icon(Icons.add),
-      backgroundColor: Colors.green,
-    );
-  }
-
-  // * opens new income screen as a sliding sheet
-  void showNewIncomeSceen() async {
+  void showDetailsSceen() async {
     final result = await showSlidingBottomSheet(context, builder: (context) {
       return SlidingSheetDialog(
         elevation: 10,
@@ -208,7 +201,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
               child: Material(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Padding(
-                  padding: _padding,
+                  padding: EdgeInsets.all(16),
                   child: NewIncomeScreen(),
                 ),
               ),
@@ -217,6 +210,6 @@ class _IncomeRouteState extends State<IncomeRoute> {
         },
       );
     });
-    print(result); // This is the result.
+    print(result);
   }
 }

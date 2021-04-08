@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:moor_flutter/moor_flutter.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
-import 'package:plutus/routes/categoryPage.dart';
+import 'package:plutus/widgets/categoriesPage.dart';
 import 'package:plutus/data/moor_database.dart';
 import 'package:plutus/data/incomeCat.dart';
 
@@ -18,8 +19,8 @@ class NewIncomeScreen extends StatefulWidget {
 class _NewIncomeScreenState extends State<NewIncomeScreen> {
   final controllerTags = TextEditingController();
   final controllerAmount = TextEditingController();
-  DateTime newIncomeDate = DateTime.now();
-  var categoryIcon = Icons.search;
+
+  var categoryIcon = AntDesign.search1;
   var categoryText = 'Select a Category';
   var categoryIndex;
 
@@ -43,7 +44,6 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
             borderRadius: BorderRadius.circular(15),
             highlightColor: Colors.pink[400],
             splashColor: Colors.pink,
-            // todo: add option to change category
             onTap: () {
               showCategories();
             },
@@ -141,7 +141,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
                   IncomesCompanion(
                     tags: Value(controllerTags.text),
                     amount: Value(double.parse(controllerAmount.text)),
-                    date: Value(newIncomeDate),
+                    date: Value(DateTime.now()),
                     categoryIndex: Value(categoryIndex),
                   ),
                 );
