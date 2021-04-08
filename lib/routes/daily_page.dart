@@ -100,14 +100,15 @@ class _DailyPageState extends State<DailyPage> {
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                      color: activeDay == index
-                          ? Theme.of(context).primaryColor
-                          : Colors.transparent,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: activeDay == index
-                              ? Theme.of(context).primaryColor
-                              : Colors.grey[500])),
+                    color: activeDay == index
+                        ? Theme.of(context).primaryColor
+                        : Colors.transparent,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                        color: activeDay == index
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey[500]),
+                  ),
                   child: Center(
                     child: Text(
                       DateFormat('d').format(date.add(Duration(days: index))),

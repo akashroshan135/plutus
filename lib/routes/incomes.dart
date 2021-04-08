@@ -149,6 +149,38 @@ class _IncomeRouteState extends State<IncomeRoute> {
           ],
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            /*
+            Container(
+              child: Center(
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  child: Neumorphic(
+                    style: NeumorphicStyle(
+                        shape: NeumorphicShape.concave,
+                        boxShape: NeumorphicBoxShape.circle(),
+                        depth: 3,
+                        intensity: 0.4,
+                        lightSource: LightSource.bottom,
+                        color: Theme.of(context).iconTheme.color),
+                    child: Center(
+                      child: NeumorphicIcon(
+                        IncomeCategory.categoryIcon[income.categoryIndex],
+                        style: NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          depth: 5,
+                          intensity: 0.6,
+                          lightSource: LightSource.top,
+                          color: Theme.of(context).primaryIconTheme.color,
+                        ),
+                        size: Theme.of(context).primaryIconTheme.size,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            */
             Container(
               // height: 80,
               width: (size.width - 40) * 0.7,

@@ -149,11 +149,13 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
               Navigator.pop(context);
             },
             child: Center(
-              child: Text('Submit',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1
-                      .copyWith(color: Colors.white)),
+              child: Text(
+                'Submit',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1
+                    .copyWith(color: Colors.white),
+              ),
             ),
           ),
         ),
