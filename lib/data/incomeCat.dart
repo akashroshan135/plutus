@@ -5,8 +5,8 @@ class IncomeCategory {
     'Salary',
     'Rent',
     'Gift',
-    'Award',
-    'Investment',
+    'Investment Returns',
+    'Insurance',
     'Miscellaneous'
   ];
 

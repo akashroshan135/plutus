@@ -253,8 +253,9 @@ class _IncomeRouteState extends State<IncomeRoute> {
     );
   }
 
+  // TODO implement whatever this is
   void showDetailsSceen() async {
-    final result = await showSlidingBottomSheet(context, builder: (context) {
+    return await showSlidingBottomSheet(context, builder: (context) {
       return SlidingSheetDialog(
         elevation: 10,
         cornerRadius: 16,
@@ -279,6 +280,5 @@ class _IncomeRouteState extends State<IncomeRoute> {
         },
       );
     });
-    print(result);
   }
 }

@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
+import 'dart:math';
 
 import 'package:plutus/routes/daily_page.dart';
+import 'package:plutus/routes/profile_page.dart';
+import 'package:plutus/routes/calendar_page.dart';
 import 'package:plutus/widgets/new_income.dart';
 import 'package:plutus/widgets/category.dart';
+import 'package:plutus/data/colorData.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({Key key}) : super(key: key);
@@ -20,9 +24,9 @@ class _HomepageState extends State<Homepage> {
   // * list of the pages
   List<Widget> pages = [
     DailyPage(),
+    CalendarPage(),
     Container(),
-    Container(),
-    Container(),
+    ProfilePage(),
   ];
 
   @override
@@ -48,6 +52,7 @@ class _HomepageState extends State<Homepage> {
 
   // * returns the icons for the footer
   Widget getFooter() {
+    final _random = new Random();
     List<IconData> iconItems = [
       MaterialCommunityIcons.calendar_week,
       MaterialCommunityIcons.calendar_month,
@@ -59,7 +64,8 @@ class _HomepageState extends State<Homepage> {
       backgroundColor: Theme.of(context).secondaryHeaderColor,
       activeColor: Theme.of(context).primaryIconTheme.color,
       inactiveColor: Theme.of(context).accentIconTheme.color,
-      splashColor: Color(0xFFFF2278),
+      splashColor:
+          ColorData.myColors[_random.nextInt(ColorData.myColors.length)],
       iconSize: Theme.of(context).primaryIconTheme.size,
       icons: iconItems,
       activeIndex: pageIndex,

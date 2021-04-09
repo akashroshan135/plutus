@@ -37,7 +37,6 @@ class _DailyPageState extends State<DailyPage> {
         color: Theme.of(context).secondaryHeaderColor,
         boxShadow: [
           BoxShadow(
-            // changes position of shadow
             color: Colors.grey.withOpacity(0.01),
             spreadRadius: 10,
             blurRadius: 3,
