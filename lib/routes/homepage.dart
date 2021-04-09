@@ -5,7 +5,7 @@ import 'package:sliding_sheet/sliding_sheet.dart';
 
 import 'package:plutus/routes/daily_page.dart';
 import 'package:plutus/widgets/new_income.dart';
-// import 'package:plutus/routes/incomes.dart';
+import 'package:plutus/widgets/category.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({Key key}) : super(key: key);
@@ -20,9 +20,9 @@ class _HomepageState extends State<Homepage> {
   // * list of the pages
   List<Widget> pages = [
     DailyPage(),
-    // BudgetPage(),
-    // CreatBudgetPage(),
-    // ProfilePage()
+    Container(),
+    Container(),
+    Container(),
   ];
 
   @override
@@ -47,12 +47,11 @@ class _HomepageState extends State<Homepage> {
   }
 
   // * returns the icons for the footer
-  // TODO proper implementation
   Widget getFooter() {
     List<IconData> iconItems = [
-      Ionicons.md_calendar,
+      MaterialCommunityIcons.calendar_week,
+      MaterialCommunityIcons.calendar_month,
       Ionicons.md_stats,
-      Ionicons.md_wallet,
       Ionicons.ios_person,
     ];
 
@@ -80,21 +79,63 @@ class _HomepageState extends State<Homepage> {
   Widget getFloatingButton() {
     return FloatingActionButton(
       onPressed: () {
-        showNewIncomeSceen();
+        showInputs();
       },
       child: Icon(
         Icons.add,
         size: Theme.of(context).iconTheme.size,
         color: Theme.of(context).iconTheme.color,
       ),
+      // child: NeumorphicIcon(
+      //   Icons.add_circle,
+      //   size: 50,
+      // ),
       backgroundColor: Colors.blue,
     );
   }
 
-  // * shows the new income screen
-  // TODO make one for expense
-  void showNewIncomeSceen() async {
-    final result = await showSlidingBottomSheet(
+  void showInputs() async {
+    List inputs = ['Income', 'Expense'];
+    var result = await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        contentPadding: EdgeInsets.all(5.0),
+        content: Builder(
+          builder: (context) {
+            var width = MediaQuery.of(context).size.width;
+            return Container(
+              height: 190,
+              width: width - 50,
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: ListView.builder(
+                itemCount: inputs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Category(
+                    index: index,
+                    categoryName: inputs[index],
+                    categoryIcon: FontAwesome5.money_bill_alt,
+                    categoryColor: Colors.pink,
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      ),
+    );
+    setState(() {
+      if (result == 0) showNewInputSceen(NewIncomeScreen());
+      // TODO make one for expense
+      if (result == 1) showNewInputSceen(Text('expense'));
+    });
+  }
+
+  // * shows the new input screen
+  void showNewInputSceen(inputWidget) async {
+    return await showSlidingBottomSheet(
       context,
       builder: (context) {
         return SlidingSheetDialog(
@@ -113,7 +154,7 @@ class _HomepageState extends State<Homepage> {
                   color: Theme.of(context).scaffoldBackgroundColor,
                   child: Padding(
                     padding: EdgeInsets.all(16),
-                    child: NewIncomeScreen(),
+                    child: inputWidget,
                   ),
                 ),
               ),
@@ -122,6 +163,5 @@ class _HomepageState extends State<Homepage> {
         );
       },
     );
-    print(result);
   }
 }
