@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+//* Routes to other pages
 import 'package:plutus/routes/incomes.dart';
+import 'package:plutus/routes/expenses.dart';
 
 class DailyPage extends StatefulWidget {
   @override
@@ -25,6 +27,7 @@ class _DailyPageState extends State<DailyPage> {
     return ListView(
       children: [
         getHeader(),
+        ExpenseRoute(selectedDate: selectedDate),
         IncomeRoute(selectedDate: selectedDate),
       ],
     );

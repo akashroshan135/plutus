@@ -11,20 +11,20 @@ import 'package:plutus/data/moor_database.dart';
 import 'package:plutus/widgets/category.dart';
 
 //* Data Classes
-import 'package:plutus/data/incomeCat.dart';
+import 'package:plutus/data/expenseCat.dart';
 import 'package:plutus/data/colorData.dart';
 
 const _padding = EdgeInsets.all(16.0);
 final _random = new Random();
 
-class NewIncomeScreen extends StatefulWidget {
-  NewIncomeScreen({Key key}) : super(key: key);
+class NewExpenseScreen extends StatefulWidget {
+  NewExpenseScreen({Key key}) : super(key: key);
 
   @override
-  _NewIncomeScreenState createState() => _NewIncomeScreenState();
+  _NewExpenseScreenState createState() => _NewExpenseScreenState();
 }
 
-class _NewIncomeScreenState extends State<NewIncomeScreen> {
+class _NewExpenseScreenState extends State<NewExpenseScreen> {
   final controllerTags = TextEditingController();
   final controllerAmount = TextEditingController();
 
@@ -34,7 +34,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final incomeDao = Provider.of<IncomeDao>(context);
+    final expenseDao = Provider.of<ExpenseDao>(context);
     final accentColor = Theme.of(context).buttonColor;
 
     // * field for category. shows a dialog box
@@ -145,8 +145,8 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
                       );
                     });
               } else {
-                incomeDao.addIncome(
-                  IncomesCompanion(
+                expenseDao.addExpense(
+                  ExpensesCompanion(
                     tags: Value(controllerTags.text),
                     amount: Value(double.parse(controllerAmount.text)),
                     date: Value(DateTime.now()),
@@ -172,7 +172,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
 
     return ListView(
       children: [
-        Text('Add New Income', style: Theme.of(context).textTheme.bodyText1),
+        Text('Add New Expense', style: Theme.of(context).textTheme.bodyText1),
         inputCategory,
         inputTags,
         inputAmt,
@@ -218,12 +218,12 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
               width: width - 50,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: ListView.builder(
-                itemCount: IncomeCategory.categoryNames.length,
+                itemCount: ExpenseCategory.categoryNames.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Category(
                     index: index,
-                    categoryName: IncomeCategory.categoryNames[index],
-                    categoryIcon: IncomeCategory.categoryIcon[index],
+                    categoryName: ExpenseCategory.categoryNames[index],
+                    categoryIcon: ExpenseCategory.categoryIcon[index],
                     categoryColor: ColorData
                         .myColors[_random.nextInt(ColorData.myColors.length)],
                   );
@@ -237,8 +237,8 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
     setState(() {
       if (result != null) {
         categoryIndex = result;
-        categoryIcon = IncomeCategory.categoryIcon[result];
-        categoryText = IncomeCategory.categoryNames[result];
+        categoryIcon = ExpenseCategory.categoryIcon[result];
+        categoryText = ExpenseCategory.categoryNames[result];
       }
     });
   }

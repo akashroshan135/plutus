@@ -4,11 +4,17 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:sliding_sheet/sliding_sheet.dart';
 import 'dart:math';
 
+//* Routes to other pages
 import 'package:plutus/routes/daily_page.dart';
 import 'package:plutus/routes/profile_page.dart';
 import 'package:plutus/routes/calendar_page.dart';
-import 'package:plutus/widgets/new_income.dart';
+
+//* Custom Widgets
 import 'package:plutus/widgets/category.dart';
+import 'package:plutus/widgets/new_income.dart';
+import 'package:plutus/widgets/new_expense.dart';
+
+//* Data Classes
 import 'package:plutus/data/colorData.dart';
 
 class Homepage extends StatefulWidget {
@@ -135,7 +141,7 @@ class _HomepageState extends State<Homepage> {
     setState(() {
       if (result == 0) showNewInputSceen(NewIncomeScreen());
       // TODO make one for expense
-      if (result == 1) showNewInputSceen(Text('expense'));
+      if (result == 1) showNewInputSceen(NewExpenseScreen());
     });
   }
 

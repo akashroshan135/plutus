@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
+// * Database packages
+import 'package:provider/provider.dart';
 import 'package:plutus/data/moor_database.dart';
+
+//* Routes to other pages
 import 'package:plutus/routes/homepage.dart';
 
 void main() => runApp(MyApp());
@@ -61,10 +64,13 @@ class MyApp extends StatelessWidget {
       ),
     );
 
-    // * renders main app. Provider is used to initialize the database
-    return Provider<IncomeDao>(
-      create: (context) => AppDatabase().incomeDao,
-      // dispose: (context, db) => db.close(),
+    // * renders main app. Provider is used to provide DAOs
+    final db = AppDatabase();
+    return MultiProvider(
+      providers: [
+        Provider<IncomeDao>(create: (_) => db.incomeDao),
+        Provider<ExpenseDao>(create: (_) => db.expenseDao),
+      ],
       child: MaterialApp(
         title: 'Plutus',
         theme: _lightTheme,
