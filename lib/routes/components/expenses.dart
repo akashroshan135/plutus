@@ -209,7 +209,7 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      "- ₹" + expense.amount.toString() + ' ',
+                      '- ₹' + expense.amount.toString() + ' ',
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1
@@ -217,7 +217,7 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

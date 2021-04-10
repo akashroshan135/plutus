@@ -48,7 +48,7 @@ class _CalendarPageState extends State<CalendarPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Calendar",
+                  'Calendar',
                   style: Theme.of(context).textTheme.headline1,
                 ),
               ],

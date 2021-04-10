@@ -197,7 +197,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -207,7 +207,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      "+ ₹" + income.amount.toString() + ' ',
+                      '+ ₹' + income.amount.toString() + ' ',
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1
@@ -215,7 +215,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

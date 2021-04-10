@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
+// * Database packages
+import 'package:plutus/data/moor_database.dart';
+import 'package:provider/provider.dart';
+
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key key}) : super(key: key);
 
@@ -17,6 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // * renders the body
   Widget getPage() {
     return ListView(
       children: [
@@ -26,6 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // * renders the header
   Widget getHeader() {
     return Container(
       decoration: BoxDecoration(
@@ -46,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Profile",
+                  'Profile',
                   style: Theme.of(context).textTheme.headline1,
                 ),
                 Icon(Entypo.info_with_circle),
@@ -54,57 +60,46 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 25),
             getHeaderData(),
-            SizedBox(height: 25),
-            getSavingsData(),
           ],
         ),
       ),
     );
   }
 
+  // * gets the profile data from the database
   Widget getHeaderData() {
+    // * calling database
+    final profileDao = Provider.of<ProfileDao>(context);
+
+    // * StreamBuilder used to build list of all objects
+    return StreamBuilder(
+      stream: profileDao.watchAllProfile(),
+      builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
+        final profile = snapshot.data ?? [];
+        return Column(
+          children: [
+            getNameData(context, profile[0]),
+            SizedBox(height: 25),
+            getSavingsData(context, profile[0]),
+          ],
+        );
+      },
+    );
+  }
+
+  // * renders the name widget
+  Widget getNameData(BuildContext context, Profile profile) {
     var size = MediaQuery.of(context).size;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Container(
-        //   width: (size.width - 40) * 0.4,
-        //   child: Container(
-        //     child: Stack(
-        //       children: [
-        //         RotatedBox(
-        //           quarterTurns: -2,
-        //           // child: CircularPercentIndicator(
-        //           //     circularStrokeCap: CircularStrokeCap.round,
-        //           //     backgroundColor: grey.withOpacity(0.3),
-        //           //     radius: 110,
-        //           //     lineWidth: 6,
-        //           //     percent: 0.53,
-        //           //     progressColor: primary),
-        //         ),
-        //         Positioned(
-        //           top: 16,
-        //           left: 13,
-        //           child: Container(
-        //             width: 85,
-        //             height: 85,
-        //             decoration: BoxDecoration(
-        //                 shape: BoxShape.circle,
-        //                 image: DecorationImage(
-        //                     image: NetworkImage(""), fit: BoxFit.cover)),
-        //           ),
-        //         )
-        //       ],
-        //     ),
-        //   ),
-        // ),
         Container(
           width: (size.width - 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Ratandeep Kaur Sodhi",
+                profile.name,
                 style: Theme.of(context)
                     .textTheme
                     .headline1
@@ -112,7 +107,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SizedBox(height: 10),
               Text(
-                "Credit score: 73.50",
+                // TODO put somthing useful here
+                'Credit score: 73.50',
                 style: Theme.of(context).textTheme.bodyText2,
               ),
             ],
@@ -122,7 +118,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget getSavingsData() {
+  // * renders the savings widget
+  Widget getSavingsData(BuildContext context, Profile profile) {
     return Container(
       // width: double.infinity,
       decoration: BoxDecoration(
@@ -145,19 +142,21 @@ class _ProfilePageState extends State<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Total Savings",
+                  'Total Savings',
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 SizedBox(height: 10),
                 Text(
-                  "₹12542.00",
+                  '₹ ' + profile.balance.toString(),
                   style: Theme.of(context).textTheme.headline1,
                 ),
               ],
             ),
             Container(
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  // TODO add option to change balance
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -166,13 +165,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Padding(
                     padding: EdgeInsets.all(13),
                     child: Text(
-                      "Update",
-                      style: Theme.of(context).textTheme.bodyText2,
+                      'Update',
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

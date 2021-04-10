@@ -39,7 +39,7 @@ class Profiles extends Table {
 class ProfileDao extends DatabaseAccessor<AppDatabase> with _$ProfileDaoMixin {
   final AppDatabase db;
 
-  // * Called by the AppDatabase class
+  // * gets database object
   ProfileDao(this.db) : super(db);
 
   // * returns profile rows
@@ -69,12 +69,13 @@ class Incomes extends Table {
 class IncomeDao extends DatabaseAccessor<AppDatabase> with _$IncomeDaoMixin {
   final AppDatabase db;
 
-  // * Called by the AppDatabase class
+  // * gets database object
   IncomeDao(this.db) : super(db);
 
+  // * returns income rows
   Future<List<Income>> getAllIncome() => select(incomes).get();
-  // * streams all income rows
   Stream<List<Income>> watchAllIncome() => select(incomes).watch();
+
   // * streams income rows filtered by seleted date
   Stream<List<Income>> watchDayIncome(DateTime searchDate) {
     return (select(incomes)
@@ -90,7 +91,7 @@ class IncomeDao extends DatabaseAccessor<AppDatabase> with _$IncomeDaoMixin {
       into(incomes).insert(entry);
 
   // * updates an income transaction with a matching primary key
-  // Future updateIncome(Income entry) => update(incomes).replace(entry);
+  Future updateIncome(Income entry) => update(incomes).replace(entry);
 
   // * deletes an income transaction with a matching primary key
   Future deleteIncome(Insertable<Income> entry) =>
@@ -112,12 +113,13 @@ class Expenses extends Table {
 class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
   final AppDatabase db;
 
-  // * Called by the AppDatabase class
+  // * gets database object
   ExpenseDao(this.db) : super(db);
 
+  // * returns expense rows
   Future<List<Expense>> getAllExpense() => select(expenses).get();
-  // * streams all income rows
   Stream<List<Expense>> watchAllExpense() => select(expenses).watch();
+
   // * streams expense rows filtered by seleted date
   Stream<List<Expense>> watchDayExpense(DateTime searchDate) {
     return (select(expenses)
@@ -133,7 +135,7 @@ class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
       into(expenses).insert(entry);
 
   // * updates an expense transaction with a matching primary key
-  // Future updateExpense(Expense entry) => update(expenses).replace(entry);
+  Future updateExpense(Expense entry) => update(expenses).replace(entry);
 
   // * deletes an expense transaction with a matching primary key
   Future deleteExpense(Insertable<Expense> entry) =>

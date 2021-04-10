@@ -54,7 +54,7 @@ class _DailyPageState extends State<DailyPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Daily Transactions",
+                  'Daily Transactions',
                   style: Theme.of(context).textTheme.headline1,
                 ),
                 // Icon(AntDesign.search1)
@@ -112,7 +112,7 @@ class _DailyPageState extends State<DailyPage> {
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

@@ -33,7 +33,10 @@ class MyApp extends StatelessWidget {
       buttonColor: Colors.blue,
       textTheme: TextTheme(
         headline1: TextStyle(
-            color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
+          color: Colors.white,
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+        ),
         bodyText1: TextStyle(fontSize: 15.0, color: Colors.white),
         bodyText2: TextStyle(fontSize: 13.0, color: Colors.white),
       ),
@@ -59,7 +62,10 @@ class MyApp extends StatelessWidget {
       buttonColor: Colors.blue,
       textTheme: TextTheme(
         headline1: TextStyle(
-            color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
+          color: Colors.black,
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+        ),
         bodyText1: TextStyle(fontSize: 15.0, color: Colors.black),
         bodyText2: TextStyle(fontSize: 13.0, color: Colors.black),
       ),
