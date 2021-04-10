@@ -42,7 +42,7 @@ class ProfileDao extends DatabaseAccessor<AppDatabase> with _$ProfileDaoMixin {
   // * Called by the AppDatabase class
   ProfileDao(this.db) : super(db);
 
-  // * streams all profile rows
+  // * returns profile rows
   Stream<List<Profile>> watchAllProfile() => select(profiles).watch();
   Future<List<Profile>> getAllProfile() => select(profiles).get();
 

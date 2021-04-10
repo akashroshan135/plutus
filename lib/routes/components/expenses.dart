@@ -37,14 +37,13 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
             children: [
               SizedBox(height: 30),
               Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
+                padding: EdgeInsets.only(left: 20, right: 20),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: expenses.length,
                   itemBuilder: (_, index) {
-                    final expense = expenses[index];
-                    return _buildItem(context, expense, expenseDao);
+                    return _buildItem(context, expenses[index], expenseDao);
                   },
                 ),
               ),
@@ -76,8 +75,10 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
           context: context,
           builder: (_) {
             return AlertDialog(
-              title:
-                  Text('Alert', style: Theme.of(context).textTheme.headline1),
+              title: Text(
+                'Alert',
+                style: Theme.of(context).textTheme.headline1,
+              ),
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               content: Text(
                 'Are you sure want to delete this item?',
@@ -94,14 +95,15 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                   ),
                 ),
                 TextButton(
-                    onPressed: () {
-                      expenseDao.deleteExpense(expense);
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      'OK',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    )),
+                  onPressed: () {
+                    expenseDao.deleteExpense(expense);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'OK',
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ),
               ],
             );
           },
@@ -118,106 +120,109 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
             editBtn,
             deleteBtn,
           ],
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            /*
-            Container(
-              child: Center(
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  child: Neumorphic(
-                    style: NeumorphicStyle(
-                        shape: NeumorphicShape.concave,
-                        boxShape: NeumorphicBoxShape.circle(),
-                        depth: 3,
-                        intensity: 0.4,
-                        lightSource: LightSource.bottom,
-                        color: Theme.of(context).iconTheme.color),
-                    child: Center(
-                      child: NeumorphicIcon(
-                        ExpenseCategory.categoryIcon[expense.categoryIndex],
-                        style: NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 5,
-                          intensity: 0.6,
-                          lightSource: LightSource.top,
-                          color: Theme.of(context).primaryIconTheme.color,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Container(
+              //   child: Center(
+              //     child: Container(
+              //       width: 50,
+              //       height: 50,
+              //       child: Neumorphic(
+              //         style: NeumorphicStyle(
+              //             shape: NeumorphicShape.concave,
+              //             boxShape: NeumorphicBoxShape.circle(),
+              //             depth: 3,
+              //             intensity: 0.4,
+              //             lightSource: LightSource.bottom,
+              //             color: Theme.of(context).iconTheme.color),
+              //         child: Center(
+              //           child: NeumorphicIcon(
+              //             ExpenseCategory.categoryIcon[expense.categoryIndex],
+              //             style: NeumorphicStyle(
+              //               shape: NeumorphicShape.flat,
+              //               depth: 5,
+              //               intensity: 0.6,
+              //               lightSource: LightSource.top,
+              //               color: Theme.of(context).primaryIconTheme.color,
+              //             ),
+              //             size: Theme.of(context).primaryIconTheme.size,
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              Container(
+                // height: 80,
+                width: (size.width - 40) * 0.7,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey.withOpacity(0.1),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          ExpenseCategory.categoryIcon[expense.categoryIndex],
+                          color: Theme.of(context).iconTheme.color,
+                          size: Theme.of(context).iconTheme.size,
                         ),
-                        size: Theme.of(context).primaryIconTheme.size,
+                        // child: Image.asset(
+                        //   'assets/images/bank.png',
+                        //   width: 30,
+                        //   height: 30,
+                        // ),
                       ),
                     ),
-                  ),
+                    SizedBox(width: 15),
+                    Container(
+                      width: (size.width - 90) * 0.5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            ExpenseCategory
+                                .categoryNames[expense.categoryIndex],
+                            style: Theme.of(context).textTheme.bodyText1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            expense.tags,
+                            style: Theme.of(context).textTheme.bodyText2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            */
-            Container(
-              // height: 80,
-              width: (size.width - 40) * 0.7,
-              child: Row(
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey.withOpacity(0.1),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        ExpenseCategory.categoryIcon[expense.categoryIndex],
-                        color: Theme.of(context).iconTheme.color,
-                        size: Theme.of(context).iconTheme.size,
-                      ),
-                      // child: Image.asset(
-                      //   'assets/images/bank.png',
-                      //   width: 30,
-                      //   height: 30,
-                      // ),
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                  Container(
-                    width: (size.width - 90) * 0.5,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          ExpenseCategory.categoryNames[expense.categoryIndex],
-                          style: Theme.of(context).textTheme.bodyText1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          expense.tags,
-                          style: Theme.of(context).textTheme.bodyText2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: (size.width - 40) * 0.3,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text("- ₹" + expense.amount.toString() + ' ',
+              Container(
+                width: (size.width - 40) * 0.3,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "- ₹" + expense.amount.toString() + ' ',
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1
-                          .copyWith(color: Colors.red)),
-                ],
-              ),
-            )
-          ]),
+                          .copyWith(color: Colors.red),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 65, top: 8),
+          padding: EdgeInsets.only(left: 65, top: 8),
           child: Divider(thickness: 0.8),
         ),
       ],

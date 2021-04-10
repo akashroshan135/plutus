@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-// ignore: implementation_imports
-import 'package:flutter/src/widgets/basic.dart' as basic;
 
 // * Database packages
-import 'package:moor_flutter/moor_flutter.dart';
+import 'package:moor_flutter/moor_flutter.dart' as moor;
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
@@ -22,82 +20,13 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: getBody(context),
+      body: getBody(),
     );
   }
 
-  Widget getBody(BuildContext context) {
+  // * prints the background screen
+  Widget getBody() {
     Size size = MediaQuery.of(context).size;
-    final profileeDao = Provider.of<ProfileDao>(context);
-
-    // * submit button. Submits data to db and goes to previous page
-    final submit = Padding(
-      padding: EdgeInsets.only(top: 16, left: 100, right: 100, bottom: 50),
-      child: Container(
-        height: 50,
-        child: Material(
-          borderRadius: BorderRadius.circular(15),
-          color: Theme.of(context).primaryColor,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(15),
-            highlightColor: Colors.pink[400],
-            splashColor: Colors.pink,
-            onTap: () {
-              if (controllerName.text == '' || controllerAmount.text == '') {
-                return showDialog(
-                    context: context,
-                    builder: (_) {
-                      return AlertDialog(
-                        title: Text('Warning',
-                            style: Theme.of(context).textTheme.headline1),
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        content: Text(
-                          'Please enter all the fields',
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'OK',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
-                        ],
-                      );
-                    });
-              } else {
-                profileeDao.addProfile(
-                  ProfilesCompanion(
-                    name: Value(controllerName.text),
-                    balance: Value(double.parse(controllerAmount.text)),
-                  ),
-                );
-              }
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Homepage(),
-                ),
-              );
-              // Navigator.pop(context);
-            },
-            child: Center(
-              child: Text(
-                'Submit',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1
-                    .copyWith(color: Colors.white),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
 
     return Container(
       width: double.infinity,
@@ -122,56 +51,133 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               width: size.width * 0.4,
             ),
           ),
-          SingleChildScrollView(
-            child: basic.Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'PLUTUS',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1
-                      .copyWith(fontSize: 30),
-                ),
-                SizedBox(height: size.height * 0.03),
-                Text(
-                  'Create a profile',
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                SizedBox(height: size.height * 0.03),
-                Image.asset(
-                  'assets/images/login_center.png',
-                  fit: BoxFit.fitWidth,
-                  width: 220.0,
-                  alignment: Alignment.bottomCenter,
-                ),
-                SizedBox(height: size.height * 0.03),
-                Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: TextField(
-                    controller: controllerName,
-                    // keyboardType: TextInputType.number,
-                    cursorColor: Theme.of(context).buttonColor,
-                    style: Theme.of(context).textTheme.bodyText1,
-                    decoration: decoratorInputWidget(context, 'Name'),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: TextField(
-                    controller: controllerAmount,
-                    keyboardType: TextInputType.number,
-                    cursorColor: Theme.of(context).buttonColor,
-                    style: Theme.of(context).textTheme.bodyText1,
-                    decoration: decoratorInputWidget(context, 'Savings'),
-                  ),
-                ),
-                submit,
-                SizedBox(height: size.height * 0.03),
-              ],
+          getInputScreen(),
+        ],
+      ),
+    );
+  }
+
+  // * renders the input screen
+  // TODO make it look better
+  Widget getInputScreen() {
+    Size size = MediaQuery.of(context).size;
+
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'PLUTUS',
+            style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
+          ),
+          SizedBox(height: size.height * 0.03),
+          Text(
+            'Create a profile',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+          SizedBox(height: size.height * 0.03),
+          Image.asset(
+            'assets/images/login_center.png',
+            fit: BoxFit.fitWidth,
+            width: 220,
+            alignment: Alignment.bottomCenter,
+          ),
+          SizedBox(height: size.height * 0.03),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: TextField(
+              controller: controllerName,
+              cursorColor: Theme.of(context).buttonColor,
+              style: Theme.of(context).textTheme.bodyText1,
+              decoration: decoratorInputWidget(context, 'Name'),
             ),
           ),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: TextField(
+              controller: controllerAmount,
+              keyboardType: TextInputType.number,
+              cursorColor: Theme.of(context).buttonColor,
+              style: Theme.of(context).textTheme.bodyText1,
+              decoration: decoratorInputWidget(context, 'Savings'),
+            ),
+          ),
+          getSubmit(),
+          SizedBox(height: size.height * 0.03),
         ],
+      ),
+    );
+  }
+
+  // * submit button. Submits data to db and opens the homepage again
+  Widget getSubmit() {
+    final profileeDao = Provider.of<ProfileDao>(context);
+
+    return Padding(
+      padding: EdgeInsets.only(top: 16, left: 100, right: 100, bottom: 50),
+      child: Container(
+        height: 50,
+        child: Material(
+          borderRadius: BorderRadius.circular(15),
+          color: Theme.of(context).primaryColor,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(15),
+            highlightColor: Colors.pink[400],
+            splashColor: Colors.pink,
+            onTap: () {
+              if (controllerName.text == '' || controllerAmount.text == '') {
+                return showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text('Warning',
+                          style: Theme.of(context).textTheme.headline1),
+                      backgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
+                      content: Text(
+                        'Please enter all the fields',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            'OK',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              } else {
+                profileeDao.addProfile(
+                  ProfilesCompanion(
+                    name: moor.Value(controllerName.text),
+                    balance: moor.Value(double.parse(controllerAmount.text)),
+                  ),
+                );
+              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Homepage(),
+                ),
+              );
+            },
+            child: Center(
+              child: Text(
+                'Let\'s get started',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1
+                    .copyWith(color: Colors.white),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -181,19 +187,21 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
       labelText: text,
       labelStyle: TextStyle(color: Theme.of(context).buttonColor),
       focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide:
-              BorderSide(color: Theme.of(context).buttonColor, width: 1)),
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Theme.of(context).buttonColor, width: 1),
+      ),
       enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide:
-              BorderSide(color: Theme.of(context).buttonColor, width: 1)),
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Theme.of(context).buttonColor, width: 1),
+      ),
       errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.red, width: 1)),
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Colors.red, width: 1),
+      ),
       focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.red, width: 1)),
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Colors.red, width: 1),
+      ),
     );
   }
 }

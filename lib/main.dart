@@ -7,6 +7,7 @@ import 'package:plutus/data/moor_database.dart';
 //* Routes to other pages
 import 'package:plutus/routes/homepage.dart';
 
+// * renders main app
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -64,8 +65,8 @@ class MyApp extends StatelessWidget {
       ),
     );
 
-    // * renders main app. Provider is used to provide DAOs
     final db = AppDatabase();
+    // * Provider is used to provide DAOs
     return MultiProvider(
       providers: [
         Provider<ProfileDao>(create: (_) => db.profileDao),

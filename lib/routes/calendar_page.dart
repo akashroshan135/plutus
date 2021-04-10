@@ -20,11 +20,14 @@ class _CalendarPageState extends State<CalendarPage> {
     return ListView(
       children: [
         getHeader(),
-        // getBody(),
+        // TODO implement the transactions screen
+        // ExpenseRoute(selectedDate: selectedDate),
+        // IncomeRoute(selectedDate: selectedDate),
       ],
     );
   }
 
+  // TODO implement an interactive calendar
   Widget getHeader() {
     return Container(
       decoration: BoxDecoration(
@@ -38,8 +41,7 @@ class _CalendarPageState extends State<CalendarPage> {
         ],
       ),
       child: Padding(
-        padding:
-            const EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 30),
+        padding: EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 30),
         child: Column(
           children: [
             Row(

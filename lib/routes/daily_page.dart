@@ -47,8 +47,7 @@ class _DailyPageState extends State<DailyPage> {
         ],
       ),
       child: Padding(
-        padding:
-            const EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 30),
+        padding: EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 30),
         child: Column(
           children: [
             Row(
@@ -61,9 +60,7 @@ class _DailyPageState extends State<DailyPage> {
                 // Icon(AntDesign.search1)
               ],
             ),
-            SizedBox(
-              height: 25,
-            ),
+            SizedBox(height: 25),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: _dateItem(),
@@ -95,9 +92,7 @@ class _DailyPageState extends State<DailyPage> {
                   DateFormat('EEE').format(date.add(Duration(days: index))),
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10),
                 Container(
                   width: 32,
                   height: 32,

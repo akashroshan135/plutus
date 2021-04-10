@@ -42,28 +42,30 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return getBody(context);
+    return getBody();
   }
 
   // * returns one of the pages
-  Widget getBody(BuildContext context) {
-    // * calling database
+  Widget getBody() {
+    // * calling the database
     final profileDao = Provider.of<ProfileDao>(context);
 
-    // * FutureBuilder used to check for data
+    // * FutureBuilder used to check for get the data
     return FutureBuilder(
       future: profileDao.getAllProfile(),
       builder: (context, snapshot) {
+        // * checks if the profile table has entries or not
         if (snapshot.hasData == false || snapshot.data.isEmpty) {
+          // * renders new profile creation screen
+          // TODO make a welcome screen which shows how to use the app
           return Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            // appBar: _appbar(context),
             body: NewProfileScreen(),
           );
         } else {
+          // * renders homepage
           return Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            // appBar: _appbar(context),
             body: IndexedStack(
               index: pageIndex,
               children: pages,
@@ -78,9 +80,11 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  // * returns the icons for the footer
+  // * returns bottom navigation bar. Changes page when clicking the icons
   Widget getFooter() {
     final _random = new Random();
+
+    // * list of icon data
     List<IconData> iconItems = [
       MaterialCommunityIcons.calendar_week,
       MaterialCommunityIcons.calendar_month,
@@ -109,9 +113,10 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  // * floating button data
+  // * floating button to show new transaction
   Widget getFloatingButton() {
     return FloatingActionButton(
+      backgroundColor: Colors.blue,
       onPressed: () {
         showInputs();
       },
@@ -124,22 +129,25 @@ class _HomepageState extends State<Homepage> {
       //   Icons.add_circle,
       //   size: 50,
       // ),
-      backgroundColor: Colors.blue,
     );
   }
 
+  // * shows optionto select transaction type
+  // TODO make better one
   void showInputs() async {
+    var width = MediaQuery.of(context).size.width;
     List inputs = ['Income', 'Expense'];
+
     var result = await showDialog(
       context: context,
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        contentPadding: EdgeInsets.all(5.0),
+        contentPadding: EdgeInsets.all(5),
         content: Builder(
           builder: (context) {
-            var width = MediaQuery.of(context).size.width;
             return Container(
               height: 190,
               width: width - 50,
@@ -166,7 +174,7 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
-  // * shows the new input screen
+  // * shows the new input screen, gets new transaction type
   void showNewInputSceen(inputWidget) async {
     return await showSlidingBottomSheet(
       context,

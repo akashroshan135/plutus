@@ -14,9 +14,6 @@ import 'package:plutus/widgets/category.dart';
 import 'package:plutus/data/incomeCat.dart';
 import 'package:plutus/data/colorData.dart';
 
-const _padding = EdgeInsets.all(16.0);
-final _random = new Random();
-
 class NewIncomeScreen extends StatefulWidget {
   NewIncomeScreen({Key key}) : super(key: key);
 
@@ -25,6 +22,9 @@ class NewIncomeScreen extends StatefulWidget {
 }
 
 class _NewIncomeScreenState extends State<NewIncomeScreen> {
+  final _padding = EdgeInsets.all(16);
+  final _random = new Random();
+
   final controllerTags = TextEditingController();
   final controllerAmount = TextEditingController();
 
@@ -43,8 +43,9 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
       child: Container(
         // height: 80,
         decoration: BoxDecoration(
-            border: Border.all(color: accentColor),
-            borderRadius: BorderRadius.circular(15)),
+          border: Border.all(color: accentColor),
+          borderRadius: BorderRadius.circular(15),
+        ),
         child: Material(
           borderRadius: BorderRadius.circular(15),
           color: Theme.of(context).secondaryHeaderColor,
@@ -84,7 +85,6 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
       padding: _padding,
       child: TextField(
         controller: controllerTags,
-        // keyboardType: TextInputType.number,
         cursorColor: accentColor,
         style: Theme.of(context).textTheme.bodyText2,
         decoration: decoratorInputWidget('Tags'),
@@ -120,30 +120,33 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
                   controllerAmount.text == '' ||
                   categoryIndex == null) {
                 return showDialog(
-                    context: context,
-                    builder: (_) {
-                      return AlertDialog(
-                        title: Text('Warning',
-                            style: Theme.of(context).textTheme.headline1),
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        content: Text(
-                          'Please enter all the fields',
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'OK',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text(
+                        'Warning',
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                      backgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
+                      content: Text(
+                        'Please enter all the fields',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            'OK',
+                            style: Theme.of(context).textTheme.bodyText1,
                           ),
-                        ],
-                      );
-                    });
+                        ),
+                      ],
+                    );
+                  },
+                );
               } else {
                 incomeDao.addIncome(
                   IncomesCompanion(
@@ -186,33 +189,37 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
       labelText: text,
       labelStyle: TextStyle(color: Theme.of(context).buttonColor),
       focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide:
-              BorderSide(color: Theme.of(context).buttonColor, width: 1)),
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Theme.of(context).buttonColor, width: 1),
+      ),
       enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide:
-              BorderSide(color: Theme.of(context).buttonColor, width: 1)),
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Theme.of(context).buttonColor, width: 1),
+      ),
       errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.red, width: 1)),
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Colors.red, width: 1),
+      ),
       focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.red, width: 1)),
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Colors.red, width: 1),
+      ),
     );
   }
 
   void showCategories() async {
+    var width = MediaQuery.of(context).size.width;
+
     var result = await showDialog(
       context: context,
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        contentPadding: EdgeInsets.all(5.0),
+        contentPadding: EdgeInsets.all(5),
         content: Builder(
           builder: (context) {
-            var width = MediaQuery.of(context).size.width;
             return Container(
               height: 580,
               width: width - 50,
