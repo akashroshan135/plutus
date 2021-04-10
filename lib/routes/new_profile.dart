@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+// ignore: implementation_imports
 import 'package:flutter/src/widgets/basic.dart' as basic;
 
 // * Database packages
 import 'package:moor_flutter/moor_flutter.dart';
 import 'package:plutus/data/moor_database.dart';
-import 'package:plutus/routes/homepage.dart';
 import 'package:provider/provider.dart';
 
-class NewProfileScreen extends StatelessWidget {
+//* Routes to other pages
+import 'package:plutus/routes/homepage.dart';
+
+class NewProfileScreen extends StatefulWidget {
+  @override
+  _NewProfileScreenState createState() => _NewProfileScreenState();
+}
+
+class _NewProfileScreenState extends State<NewProfileScreen> {
   final controllerName = TextEditingController();
   final controllerAmount = TextEditingController();
 

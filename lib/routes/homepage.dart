@@ -50,11 +50,10 @@ class _HomepageState extends State<Homepage> {
     // * calling database
     final profileDao = Provider.of<ProfileDao>(context);
 
-    // * FutureBuilder used to build list of all objects
+    // * FutureBuilder used to check for data
     return FutureBuilder(
       future: profileDao.getAllProfile(),
       builder: (context, snapshot) {
-        print(snapshot.data);
         if (snapshot.hasData == false || snapshot.data.isEmpty) {
           return Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
