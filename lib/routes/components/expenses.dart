@@ -3,50 +3,48 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
 // * Database packages
-import 'package:provider/provider.dart';
 import 'package:plutus/data/moor_database.dart';
+import 'package:provider/provider.dart';
 
 //* Custom Widgets
-import 'package:plutus/widgets/new_income.dart';
+import 'package:plutus/widgets/new_expense.dart';
 
 //* Data Classes
-import 'package:plutus/data/incomeCat.dart';
+import 'package:plutus/data/expenseCat.dart';
 
-class IncomeRoute extends StatefulWidget {
+class ExpenseRoute extends StatefulWidget {
   final DateTime selectedDate;
 
-  const IncomeRoute({Key key, this.selectedDate}) : super(key: key);
+  const ExpenseRoute({Key key, this.selectedDate}) : super(key: key);
 
   @override
-  _IncomeRouteState createState() => _IncomeRouteState();
+  _ExpenseRouteState createState() => _ExpenseRouteState();
 }
 
-class _IncomeRouteState extends State<IncomeRoute> {
+class _ExpenseRouteState extends State<ExpenseRoute> {
   @override
   Widget build(BuildContext context) {
     // * calling database
-    final incomeDao = Provider.of<IncomeDao>(context);
+    final expenseDao = Provider.of<ExpenseDao>(context);
 
     // * StreamBuilder used to build list of all objects
     return StreamBuilder(
-      stream: incomeDao.watchDayIncome(widget.selectedDate),
-      builder: (context, AsyncSnapshot<List<Income>> snapshot) {
-        final incomes = snapshot.data ?? [];
+      stream: expenseDao.watchDayExpense(widget.selectedDate),
+      builder: (context, AsyncSnapshot<List<Expense>> snapshot) {
+        final expenses = snapshot.data ?? [];
         return SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: 30,
-              ),
+              SizedBox(height: 30),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: incomes.length,
+                  itemCount: expenses.length,
                   itemBuilder: (_, index) {
-                    final income = incomes[index];
-                    return _buildItem(context, income, incomeDao);
+                    final expense = expenses[index];
+                    return _buildItem(context, expense, expenseDao);
                   },
                 ),
               ),
@@ -58,7 +56,8 @@ class _IncomeRouteState extends State<IncomeRoute> {
   }
 
   // * code to build one transaction item
-  Widget _buildItem(BuildContext context, Income income, IncomeDao incomeDao) {
+  Widget _buildItem(
+      BuildContext context, Expense expense, ExpenseDao expenseDao) {
     var size = MediaQuery.of(context).size;
 
     final editBtn = IconSlideAction(
@@ -96,7 +95,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                 ),
                 TextButton(
                     onPressed: () {
-                      incomeDao.deleteIncome(income);
+                      expenseDao.deleteExpense(expense);
                       Navigator.of(context).pop();
                     },
                     child: Text(
@@ -137,7 +136,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                         color: Theme.of(context).iconTheme.color),
                     child: Center(
                       child: NeumorphicIcon(
-                        IncomeCategory.categoryIcon[income.categoryIndex],
+                        ExpenseCategory.categoryIcon[expense.categoryIndex],
                         style: NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 5,
@@ -167,7 +166,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                     ),
                     child: Center(
                       child: Icon(
-                        IncomeCategory.categoryIcon[income.categoryIndex],
+                        ExpenseCategory.categoryIcon[expense.categoryIndex],
                         color: Theme.of(context).iconTheme.color,
                         size: Theme.of(context).iconTheme.size,
                       ),
@@ -186,13 +185,13 @@ class _IncomeRouteState extends State<IncomeRoute> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          IncomeCategory.categoryNames[income.categoryIndex],
+                          ExpenseCategory.categoryNames[expense.categoryIndex],
                           style: Theme.of(context).textTheme.bodyText1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: 5),
                         Text(
-                          income.tags,
+                          expense.tags,
                           style: Theme.of(context).textTheme.bodyText2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -207,11 +206,11 @@ class _IncomeRouteState extends State<IncomeRoute> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text("+ ₹" + income.amount.toString() + ' ',
+                  Text("- ₹" + expense.amount.toString() + ' ',
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1
-                          .copyWith(color: Colors.green)),
+                          .copyWith(color: Colors.red)),
                 ],
               ),
             )
@@ -227,30 +226,33 @@ class _IncomeRouteState extends State<IncomeRoute> {
 
   // TODO implement whatever this is
   void showDetailsSceen() async {
-    return await showSlidingBottomSheet(context, builder: (context) {
-      return SlidingSheetDialog(
-        elevation: 10,
-        cornerRadius: 16,
-        snapSpec: const SnapSpec(
-          snap: true,
-          snappings: [0.58, 0.7, 1.0],
-          positioning: SnapPositioning.relativeToAvailableSpace,
-        ),
-        builder: (context, state) {
-          return Container(
-            height: 500,
-            child: Center(
-              child: Material(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: NewIncomeScreen(),
+    return await showSlidingBottomSheet(
+      context,
+      builder: (context) {
+        return SlidingSheetDialog(
+          elevation: 10,
+          cornerRadius: 16,
+          snapSpec: const SnapSpec(
+            snap: true,
+            snappings: [0.58, 0.7, 1.0],
+            positioning: SnapPositioning.relativeToAvailableSpace,
+          ),
+          builder: (context, state) {
+            return Container(
+              height: 500,
+              child: Center(
+                child: Material(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: NewExpenseScreen(),
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-      );
-    });
+            );
+          },
+        );
+      },
+    );
   }
 }

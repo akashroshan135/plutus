@@ -4,7 +4,12 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:sliding_sheet/sliding_sheet.dart';
 import 'dart:math';
 
+// * Database packages
+import 'package:plutus/data/moor_database.dart';
+import 'package:provider/provider.dart';
+
 //* Routes to other pages
+import 'package:plutus/routes/new_profile.dart';
 import 'package:plutus/routes/daily_page.dart';
 import 'package:plutus/routes/profile_page.dart';
 import 'package:plutus/routes/calendar_page.dart';
@@ -37,22 +42,40 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    // * renders actual homepage
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      // appBar: _appbar(context),
-      body: getBody(),
-      bottomNavigationBar: getFooter(),
-      floatingActionButton: getFloatingButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
+    return getBody(context);
   }
 
   // * returns one of the pages
-  Widget getBody() {
-    return IndexedStack(
-      index: pageIndex,
-      children: pages,
+  Widget getBody(BuildContext context) {
+    // * calling database
+    final profileDao = Provider.of<ProfileDao>(context);
+
+    // * FutureBuilder used to build list of all objects
+    return FutureBuilder(
+      future: profileDao.getAllProfile(),
+      builder: (context, snapshot) {
+        print(snapshot.data);
+        if (snapshot.hasData == false || snapshot.data.isEmpty) {
+          return Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            // appBar: _appbar(context),
+            body: NewProfileScreen(),
+          );
+        } else {
+          return Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            // appBar: _appbar(context),
+            body: IndexedStack(
+              index: pageIndex,
+              children: pages,
+            ),
+            bottomNavigationBar: getFooter(),
+            floatingActionButton: getFloatingButton(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+          );
+        }
+      },
     );
   }
 
@@ -140,7 +163,6 @@ class _HomepageState extends State<Homepage> {
     );
     setState(() {
       if (result == 0) showNewInputSceen(NewIncomeScreen());
-      // TODO make one for expense
       if (result == 1) showNewInputSceen(NewExpenseScreen());
     });
   }

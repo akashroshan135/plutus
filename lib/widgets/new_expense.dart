@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:moor_flutter/moor_flutter.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'dart:math';
 
 // * Database packages
-import 'package:provider/provider.dart';
+import 'package:moor_flutter/moor_flutter.dart';
 import 'package:plutus/data/moor_database.dart';
+import 'package:provider/provider.dart';
 
 //* Custom Widgets
 import 'package:plutus/widgets/category.dart';

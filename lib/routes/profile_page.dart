@@ -7,8 +7,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  TextEditingController _email =
-      TextEditingController(text: "Ratandeep Kaur Sodhi");
+  TextEditingController _email = TextEditingController(text: "test@gmail.com");
   TextEditingController dateOfBirth = TextEditingController(text: "26-05-1999");
   TextEditingController password = TextEditingController(text: "123456");
   @override
@@ -94,33 +93,33 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextField(
-                              controller: _email,
-                              cursorColor: Colors.black,
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                              decoration: InputDecoration(
-                                  hintText: "Email", border: InputBorder.none),
-                            ),
-                            // Text(
-                            //   "Ratandeep Kaur Sodhi",
+                            // TextField(
+                            //   // controller: _email,
+                            //   cursorColor: Colors.black,
                             //   style: TextStyle(
                             //       fontSize: 20,
                             //       fontWeight: FontWeight.bold,
                             //       color: Colors.black),
+                            //   decoration: InputDecoration(
+                            //       hintText: "Email", border: InputBorder.none),
                             // ),
+                            Text(
+                              "Ratandeep Kaur Sodhi",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
                             SizedBox(
                               height: 10,
                             ),
-                            Text(
-                              "Credit score: 73.50",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black.withOpacity(0.4)),
-                            ),
+                            // Text(
+                            //   "Credit score: 73.50",
+                            //   style: TextStyle(
+                            //       fontSize: 14,
+                            //       fontWeight: FontWeight.w500,
+                            //       color: Colors.black.withOpacity(0.4)),
+                            // ),
                           ],
                         ),
                       )
@@ -152,7 +151,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Bank Of India",
+                                "Total Savings",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 12,
@@ -162,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 height: 10,
                               ),
                               Text(
-                                "\₹120000.90",
+                                "₹12542.00",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,

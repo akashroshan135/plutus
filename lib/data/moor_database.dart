@@ -5,7 +5,10 @@ part 'moor_database.g.dart';
 /* --------------------------------------------------------------
   Main App Database
 -------------------------------------------------------------- */
-@UseMoor(tables: [Incomes, Expenses], daos: [IncomeDao, ExpenseDao])
+@UseMoor(
+  tables: [Profiles, Incomes, Expenses],
+  daos: [ProfileDao, IncomeDao, ExpenseDao],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase()
       : super(FlutterQueryExecutor.inDatabaseFolder(
@@ -18,20 +21,48 @@ class AppDatabase extends _$AppDatabase {
 }
 
 /* --------------------------------------------------------------
-  Income Table and DAO
+  Profile Table and DAO
 -------------------------------------------------------------- */
 // * used to change the name of the database
-// @DataClassName('Incomes')
+// @DataClassName('Profiles')
+class Profiles extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text().withLength(min: 1, max: 50)();
+  RealColumn get balance => real()();
+
+  // * used to set primary keys. Not required as autoIncrement() sets key as primary
+  // @override
+  // Set<Column> get primaryKey => {id};
+}
+
+@UseDao(tables: [Profiles])
+class ProfileDao extends DatabaseAccessor<AppDatabase> with _$ProfileDaoMixin {
+  final AppDatabase db;
+
+  // * Called by the AppDatabase class
+  ProfileDao(this.db) : super(db);
+
+  // * streams all profile rows
+  Stream<List<Profile>> watchAllProfile() => select(profiles).watch();
+  Future<List<Profile>> getAllProfile() => select(profiles).get();
+
+  // * adds a new profile
+  Future<int> addProfile(Insertable<Profile> entry) =>
+      into(profiles).insert(entry);
+
+  // * updates profile balance
+  Future updateProfile(Profile entry) => update(profiles).replace(entry);
+}
+
+/* --------------------------------------------------------------
+  Income Table and DAO
+-------------------------------------------------------------- */
 class Incomes extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get tags => text().withLength(min: 1, max: 50)();
   DateTimeColumn get date => dateTime()();
   RealColumn get amount => real()();
   IntColumn get categoryIndex => integer()();
-
-  // * used to set primary keys. Not required as autoIncrement() sets key as primary
-  // @override
-  // Set<Column> get primaryKey => {id};
 }
 
 @UseDao(tables: [Incomes])

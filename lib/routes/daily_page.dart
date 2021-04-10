@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 //* Routes to other pages
-import 'package:plutus/routes/incomes.dart';
-import 'package:plutus/routes/expenses.dart';
+import 'package:plutus/routes/components/incomes.dart';
+import 'package:plutus/routes/components/expenses.dart';
 
 class DailyPage extends StatefulWidget {
   @override

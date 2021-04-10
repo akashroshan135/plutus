@@ -7,6 +7,236 @@ part of 'moor_database.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+class Profile extends DataClass implements Insertable<Profile> {
+  final int id;
+  final String name;
+  final double balance;
+  Profile({@required this.id, @required this.name, @required this.balance});
+  factory Profile.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    final doubleType = db.typeSystem.forDartType<double>();
+    return Profile(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      balance:
+          doubleType.mapFromDatabaseResponse(data['${effectivePrefix}balance']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    if (!nullToAbsent || balance != null) {
+      map['balance'] = Variable<double>(balance);
+    }
+    return map;
+  }
+
+  ProfilesCompanion toCompanion(bool nullToAbsent) {
+    return ProfilesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      balance: balance == null && nullToAbsent
+          ? const Value.absent()
+          : Value(balance),
+    );
+  }
+
+  factory Profile.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Profile(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      balance: serializer.fromJson<double>(json['balance']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'balance': serializer.toJson<double>(balance),
+    };
+  }
+
+  Profile copyWith({int id, String name, double balance}) => Profile(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        balance: balance ?? this.balance,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Profile(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('balance: $balance')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      $mrjf($mrjc(id.hashCode, $mrjc(name.hashCode, balance.hashCode)));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Profile &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.balance == this.balance);
+}
+
+class ProfilesCompanion extends UpdateCompanion<Profile> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<double> balance;
+  const ProfilesCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.balance = const Value.absent(),
+  });
+  ProfilesCompanion.insert({
+    this.id = const Value.absent(),
+    @required String name,
+    @required double balance,
+  })  : name = Value(name),
+        balance = Value(balance);
+  static Insertable<Profile> custom({
+    Expression<int> id,
+    Expression<String> name,
+    Expression<double> balance,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (balance != null) 'balance': balance,
+    });
+  }
+
+  ProfilesCompanion copyWith(
+      {Value<int> id, Value<String> name, Value<double> balance}) {
+    return ProfilesCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      balance: balance ?? this.balance,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (balance.present) {
+      map['balance'] = Variable<double>(balance.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProfilesCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('balance: $balance')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ProfilesTable extends Profiles with TableInfo<$ProfilesTable, Profile> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $ProfilesTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
+  @override
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn('name', $tableName, false,
+        minTextLength: 1, maxTextLength: 50);
+  }
+
+  final VerificationMeta _balanceMeta = const VerificationMeta('balance');
+  GeneratedRealColumn _balance;
+  @override
+  GeneratedRealColumn get balance => _balance ??= _constructBalance();
+  GeneratedRealColumn _constructBalance() {
+    return GeneratedRealColumn(
+      'balance',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, name, balance];
+  @override
+  $ProfilesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'profiles';
+  @override
+  final String actualTableName = 'profiles';
+  @override
+  VerificationContext validateIntegrity(Insertable<Profile> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('balance')) {
+      context.handle(_balanceMeta,
+          balance.isAcceptableOrUnknown(data['balance'], _balanceMeta));
+    } else if (isInserting) {
+      context.missing(_balanceMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Profile map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Profile.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $ProfilesTable createAlias(String alias) {
+    return $ProfilesTable(_db, alias);
+  }
+}
+
 class Income extends DataClass implements Insertable<Income> {
   final int id;
   final String tags;
@@ -683,10 +913,14 @@ class $ExpensesTable extends Expenses with TableInfo<$ExpensesTable, Expense> {
 
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  $ProfilesTable _profiles;
+  $ProfilesTable get profiles => _profiles ??= $ProfilesTable(this);
   $IncomesTable _incomes;
   $IncomesTable get incomes => _incomes ??= $IncomesTable(this);
   $ExpensesTable _expenses;
   $ExpensesTable get expenses => _expenses ??= $ExpensesTable(this);
+  ProfileDao _profileDao;
+  ProfileDao get profileDao => _profileDao ??= ProfileDao(this as AppDatabase);
   IncomeDao _incomeDao;
   IncomeDao get incomeDao => _incomeDao ??= IncomeDao(this as AppDatabase);
   ExpenseDao _expenseDao;
@@ -694,13 +928,17 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [incomes, expenses];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [profiles, incomes, expenses];
 }
 
 // **************************************************************************
 // DaoGenerator
 // **************************************************************************
 
+mixin _$ProfileDaoMixin on DatabaseAccessor<AppDatabase> {
+  $ProfilesTable get profiles => attachedDatabase.profiles;
+}
 mixin _$IncomeDaoMixin on DatabaseAccessor<AppDatabase> {
   $IncomesTable get incomes => attachedDatabase.incomes;
 }
