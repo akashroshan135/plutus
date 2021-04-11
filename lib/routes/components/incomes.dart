@@ -58,6 +58,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
   Widget _buildItem(BuildContext context, Income income, IncomeDao incomeDao) {
     var size = MediaQuery.of(context).size;
 
+    // TODO add ability to edit transactions (only if it has been one week)
     final editBtn = IconSlideAction(
       caption: 'Edit',
       color: Colors.grey[400],

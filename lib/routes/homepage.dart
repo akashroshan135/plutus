@@ -52,31 +52,50 @@ class _HomepageState extends State<Homepage> {
 
     // * FutureBuilder used to check for get the data
     return FutureBuilder(
-      future: profileDao.getAllProfile(),
-      builder: (context, snapshot) {
-        // * checks if the profile table has entries or not
-        if (snapshot.hasData == false || snapshot.data.isEmpty) {
-          // * renders new profile creation screen
-          // TODO make a welcome screen which shows how to use the app
-          return Scaffold(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body: NewProfileScreen(),
-          );
-        } else {
-          // * renders homepage
-          return Scaffold(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body: IndexedStack(
-              index: pageIndex,
-              children: pages,
-            ),
-            bottomNavigationBar: getFooter(),
-            floatingActionButton: getFloatingButton(),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-          );
-        }
-      },
+        future: profileDao.getAllProfile(),
+        builder: (context, snapshot) {
+          // * checks if the connectiion is waiting. returns a splash sceen until connection is done
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return getSplash();
+          } else {
+            // * checks if the profile table has entries or not
+            if (snapshot.hasData == false || snapshot.data.isEmpty) {
+              // * renders new profile creation screen
+              // TODO make a welcome screen which shows how to use the app
+              return Scaffold(
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                body: NewProfileScreen(),
+              );
+            } else {
+              // * renders homepage
+              return Scaffold(
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                body: IndexedStack(
+                  index: pageIndex,
+                  children: pages,
+                ),
+                bottomNavigationBar: getFooter(),
+                floatingActionButton: getFloatingButton(),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerDocked,
+              );
+            }
+          }
+        });
+  }
+
+  // TODO make nice looking splash sceen
+  Widget getSplash() {
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: Container(
+        child: Center(
+          child: new Text(
+            'Plutus',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+        ),
+      ),
     );
   }
 

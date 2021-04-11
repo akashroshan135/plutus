@@ -59,6 +59,7 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
       BuildContext context, Expense expense, ExpenseDao expenseDao) {
     var size = MediaQuery.of(context).size;
 
+    // TODO add ability to edit transactions (only if it has been one week)
     final editBtn = IconSlideAction(
       caption: 'Edit',
       color: Colors.grey[400],

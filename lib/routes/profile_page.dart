@@ -76,12 +76,19 @@ class _ProfilePageState extends State<ProfilePage> {
       stream: profileDao.watchAllProfile(),
       builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
         final profile = snapshot.data ?? [];
-        return Column(
-          children: [
-            getNameData(context, profile[0]),
-            SizedBox(height: 25),
-            getSavingsData(context, profile[0]),
-          ],
+        return ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: profile.length,
+          itemBuilder: (_, index) {
+            return Column(
+              children: [
+                getNameData(context, profile[0]),
+                SizedBox(height: 25),
+                getSavingsData(context, profile[0]),
+              ],
+            );
+          },
         );
       },
     );
@@ -155,7 +162,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Container(
               child: InkWell(
                 onTap: () {
-                  // TODO add option to change balance
+                  // TODO add option to update balance
                 },
                 child: Container(
                   decoration: BoxDecoration(

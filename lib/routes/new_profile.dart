@@ -58,7 +58,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
   }
 
   // * renders the input screen
-  // TODO make it look better
+  // TODO make it look better. maybe?
   Widget getInputScreen() {
     Size size = MediaQuery.of(context).size;
 
