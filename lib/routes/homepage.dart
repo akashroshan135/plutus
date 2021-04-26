@@ -11,8 +11,9 @@ import 'package:provider/provider.dart';
 //* Routes to other pages
 import 'package:plutus/routes/new_profile.dart';
 import 'package:plutus/routes/daily_page.dart';
-import 'package:plutus/routes/profile_page.dart';
+import 'package:plutus/routes/stats_page.dart';
 import 'package:plutus/routes/calendar_page.dart';
+import 'package:plutus/routes/profile_page.dart';
 
 //* Custom Widgets
 import 'package:plutus/widgets/category.dart';
@@ -35,10 +36,12 @@ class _HomepageState extends State<Homepage> {
   // * list of the pages
   List<Widget> pages = [
     DailyPage(),
+    StatsPage(),
     CalendarPage(),
-    Container(),
     ProfilePage(),
   ];
+  // * bool value that ensures the splash screen is shown only once
+  bool firstLoad = true;
 
   @override
   Widget build(BuildContext context) {
@@ -52,36 +55,38 @@ class _HomepageState extends State<Homepage> {
 
     // * FutureBuilder used to check for get the data
     return FutureBuilder(
-        future: profileDao.getAllProfile(),
-        builder: (context, snapshot) {
-          // * checks if the connectiion is waiting. returns a splash sceen until connection is done
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return getSplash();
+      future: profileDao.getAllProfile(),
+      builder: (context, snapshot) {
+        // * checks if the connectiion is waiting. returns a splash sceen until connection is done
+        if (snapshot.connectionState == ConnectionState.waiting && firstLoad) {
+          firstLoad = false;
+          return getSplash();
+        } else {
+          // * checks if the profile table has entries or not
+          if (snapshot.hasData == false || snapshot.data.isEmpty) {
+            // * renders new profile creation screen
+            // TODO make a welcome screen which shows how to use the app
+            return Scaffold(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              body: NewProfileScreen(),
+            );
           } else {
-            // * checks if the profile table has entries or not
-            if (snapshot.hasData == false || snapshot.data.isEmpty) {
-              // * renders new profile creation screen
-              // TODO make a welcome screen which shows how to use the app
-              return Scaffold(
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                body: NewProfileScreen(),
-              );
-            } else {
-              // * renders homepage
-              return Scaffold(
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                body: IndexedStack(
-                  index: pageIndex,
-                  children: pages,
-                ),
-                bottomNavigationBar: getFooter(),
-                floatingActionButton: getFloatingButton(),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerDocked,
-              );
-            }
+            // * renders homepage
+            return Scaffold(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              body: IndexedStack(
+                index: pageIndex,
+                children: pages,
+              ),
+              bottomNavigationBar: getFooter(),
+              floatingActionButton: getFloatingButton(),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+            );
           }
-        });
+        }
+      },
+    );
   }
 
   // TODO make nice looking splash sceen
@@ -106,8 +111,8 @@ class _HomepageState extends State<Homepage> {
     // * list of icon data
     List<IconData> iconItems = [
       MaterialCommunityIcons.calendar_week,
-      MaterialCommunityIcons.calendar_month,
       Ionicons.md_stats,
+      MaterialCommunityIcons.calendar_month,
       Ionicons.ios_person,
     ];
 

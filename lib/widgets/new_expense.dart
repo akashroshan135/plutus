@@ -81,6 +81,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
     );
 
     // * input field for tags
+    // TODO add character limit
     final inputTags = Padding(
       padding: _padding,
       child: TextField(
@@ -92,6 +93,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
     );
 
     // * input field for amount
+    // TODO add amount limit
     final inputAmt = Padding(
       padding: _padding,
       child: TextField(

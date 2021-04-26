@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 
-//* Routes to other pages
-import 'package:plutus/routes/components/incomes.dart';
-import 'package:plutus/routes/components/expenses.dart';
-
-class DailyPage extends StatefulWidget {
+class StatsPage extends StatefulWidget {
   @override
-  _DailyPageState createState() => _DailyPageState();
+  _StatsPageState createState() => _StatsPageState();
 }
 
-class _DailyPageState extends State<DailyPage> {
-  // * selects the 3rd date item which will be the current date
-  int activeDay = 3;
-  DateTime selectedDate = DateTime.now();
+class _StatsPageState extends State<StatsPage> {
+  int activeMonth = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +21,6 @@ class _DailyPageState extends State<DailyPage> {
     return ListView(
       children: [
         getHeader(),
-        ExpenseRoute(selectedDate: selectedDate),
-        IncomeRoute(selectedDate: selectedDate),
       ],
     );
   }
@@ -54,7 +46,7 @@ class _DailyPageState extends State<DailyPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Daily Transactions',
+                  'Monthly Statistics',
                   style: Theme.of(context).textTheme.headline1,
                 ),
                 // Icon(AntDesign.search1)
@@ -63,7 +55,7 @@ class _DailyPageState extends State<DailyPage> {
             SizedBox(height: 25),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: _dateItem(),
+              children: _monthItem(),
             ),
           ],
         ),
@@ -71,44 +63,44 @@ class _DailyPageState extends State<DailyPage> {
     );
   }
 
-  // * generates the list of dates. Includes 3 previous days, current day and next 3 days
-  List<GestureDetector> _dateItem() {
+  List<GestureDetector> _monthItem() {
     return List.generate(
-      7,
+      6,
       (index) {
-        var date = Jiffy().subtract(days: 3);
+        var month = Jiffy().subtract(months: 5);
         return GestureDetector(
           onTap: () {
             setState(() {
-              activeDay = index;
-              selectedDate = date.dateTime;
+              activeMonth = index;
+              // selectedMonth = month.datetime;
+              print(month.format('MMM yyyy'));
             });
           },
           child: Container(
-            width: (MediaQuery.of(context).size.width - 40) / 7,
+            width: (MediaQuery.of(context).size.width - 40) / 6,
             child: Column(
               children: [
                 Text(
-                  date.add(days: index).format('EEE'),
+                  month.add(months: index).format('yyyy'),
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 SizedBox(height: 10),
                 Container(
-                  width: 32,
-                  height: 32,
+                  width: 45,
+                  height: 35,
                   decoration: BoxDecoration(
-                    color: activeDay == index
+                    color: activeMonth == index
                         ? Theme.of(context).primaryColor
                         : Colors.transparent,
-                    shape: BoxShape.circle,
+                    borderRadius: BorderRadius.circular(5),
                     border: Border.all(
-                        color: activeDay == index
+                        color: activeMonth == index
                             ? Theme.of(context).primaryColor
                             : Colors.grey[500]),
                   ),
                   child: Center(
                     child: Text(
-                      date.format('d'),
+                      month.format('MMM'),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
