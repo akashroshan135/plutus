@@ -19,14 +19,14 @@ class _DailyPageState extends State<DailyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: getBody(),
+      body: _getBody(),
     );
   }
 
-  Widget getBody() {
+  Widget _getBody() {
     return ListView(
       children: [
-        getHeader(),
+        _getHeader(),
         ExpenseRoute(selectedDate: selectedDate),
         IncomeRoute(selectedDate: selectedDate),
       ],
@@ -34,7 +34,7 @@ class _DailyPageState extends State<DailyPage> {
   }
 
   // * header consists of date list
-  Widget getHeader() {
+  Widget _getHeader() {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).secondaryHeaderColor,

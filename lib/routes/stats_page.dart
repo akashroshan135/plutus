@@ -13,20 +13,21 @@ class _StatsPageState extends State<StatsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: getBody(),
+      body: _getPage(),
     );
   }
 
-  Widget getBody() {
+  Widget _getPage() {
     return ListView(
       children: [
-        getHeader(),
+        _getHeader(),
+        _getBody(),
       ],
     );
   }
 
   // * header consists of date list
-  Widget getHeader() {
+  Widget _getHeader() {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).secondaryHeaderColor,
@@ -112,4 +113,152 @@ class _StatsPageState extends State<StatsPage> {
       },
     );
   }
+
+  Widget _getBody() {
+    return Padding(
+      padding: EdgeInsets.all(16),
+      child: Container(
+        width: double.infinity,
+        height: 250,
+        decoration: BoxDecoration(
+          color: Theme.of(context).accentColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Expenses for the first week",
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "\₹1000.00",
+                      style: Theme.of(context).textTheme.headline2,
+                    )
+                  ],
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                child: Container(
+                  width: (MediaQuery.of(context).size.width - 20),
+                  height: 150,
+                  child: _lineChart(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _lineChart() {
+    // TODO add chart stuff here
+    return Container();
+  }
+
+  // Widget _lineChart() {
+  //   double maxX = 7;
+  //   double maxY = 10;
+  //   var rng = new Random();
+
+  //   List<FlSpot> spots = List.generate(
+  //     7,
+  //     (index) => FlSpot(
+  //       index.toDouble(),
+  //       rng.nextInt(maxY.toInt()).toDouble(),
+  //     ),
+  //   );
+  //   var date = Jiffy();
+  //   print(date.format('E'));
+  //   return LineChart(
+  //     LineChartData(
+  //       gridData: FlGridData(
+  //         show: true,
+  //         drawHorizontalLine: true,
+  //         getDrawingHorizontalLine: (value) {
+  //           return FlLine(
+  //             color: Theme.of(context).iconTheme.color,
+  //             strokeWidth: 0.1,
+  //           );
+  //         },
+  //       ),
+  //       titlesData: FlTitlesData(
+  //         show: true,
+  //         bottomTitles: SideTitles(
+  //           showTitles: true,
+  //           reservedSize: 22,
+  //           getTextStyles: (value) => Theme.of(context).textTheme.bodyText2,
+  //           getTitles: (value) {
+  //             switch (value.toInt()) {
+  //               case 0:
+  //                 return date.format('E');
+  //               case 1:
+  //                 return date.add(days: 1).format('E');
+  //               case 2:
+  //                 return date.add(days: 1).format('E');
+  //               case 3:
+  //                 return date.add(days: 1).format('E');
+  //               case 4:
+  //                 return date.add(days: 1).format('E');
+  //               case 5:
+  //                 return date.add(days: 1).format('E');
+  //               case 6:
+  //                 return date.add(days: 1).format('E');
+  //             }
+  //             return '';
+  //           },
+  //           margin: 8,
+  //         ),
+  //         leftTitles: SideTitles(
+  //           showTitles: true,
+  //           getTextStyles: (value) => Theme.of(context).textTheme.bodyText2,
+  //           getTitles: (value) {
+  //             switch (value.toInt()) {
+  //               case 1:
+  //                 return '10k';
+  //               case 3:
+  //                 return '50k';
+  //               case 5:
+  //                 return '100k';
+  //             }
+  //             return '';
+  //           },
+  //           reservedSize: 28,
+  //           margin: 12,
+  //         ),
+  //       ),
+  //       borderData: FlBorderData(
+  //         show: true,
+  //       ),
+  //       minX: 0,
+  //       maxX: maxX,
+  //       minY: 0,
+  //       maxY: maxY,
+  //       lineBarsData: [
+  //         LineChartBarData(
+  //           spots: spots,
+  //           isCurved: true,
+  //           colors: gradientColors,
+  //           barWidth: 3,
+  //           isStrokeCapRound: true,
+  //           dotData: FlDotData(
+  //             show: true,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
 }

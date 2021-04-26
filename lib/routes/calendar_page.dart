@@ -12,14 +12,14 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: getPage(),
+      body: _getPage(),
     );
   }
 
-  Widget getPage() {
+  Widget _getPage() {
     return ListView(
       children: [
-        getHeader(),
+        _getHeader(),
         // TODO implement the transactions screen
         // ExpenseRoute(selectedDate: selectedDate),
         // IncomeRoute(selectedDate: selectedDate),
@@ -28,7 +28,7 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   // TODO implement an interactive calendar
-  Widget getHeader() {
+  Widget _getHeader() {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).secondaryHeaderColor,

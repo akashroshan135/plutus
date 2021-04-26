@@ -20,12 +20,12 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: getBody(),
+      body: _getBody(),
     );
   }
 
   // * prints the background screen
-  Widget getBody() {
+  Widget _getBody() {
     Size size = MediaQuery.of(context).size;
 
     return Container(
@@ -51,7 +51,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               width: size.width * 0.4,
             ),
           ),
-          getInputScreen(),
+          _getInputScreen(),
         ],
       ),
     );
@@ -59,7 +59,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
 
   // * renders the input screen
   // TODO make it look better. maybe?
-  Widget getInputScreen() {
+  Widget _getInputScreen() {
     Size size = MediaQuery.of(context).size;
 
     return SingleChildScrollView(
@@ -102,7 +102,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               decoration: decoratorInputWidget(context, 'Savings'),
             ),
           ),
-          getSubmit(),
+          _getSubmit(),
           SizedBox(height: size.height * 0.03),
         ],
       ),
@@ -110,7 +110,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
   }
 
   // * submit button. Submits data to db and opens the homepage again
-  Widget getSubmit() {
+  Widget _getSubmit() {
     final profileeDao = Provider.of<ProfileDao>(context);
 
     return Padding(

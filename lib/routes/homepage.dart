@@ -45,11 +45,11 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return getBody();
+    return _getBody();
   }
 
   // * returns one of the pages
-  Widget getBody() {
+  Widget _getBody() {
     // * calling the database
     final profileDao = Provider.of<ProfileDao>(context);
 
@@ -60,7 +60,7 @@ class _HomepageState extends State<Homepage> {
         // * checks if the connectiion is waiting. returns a splash sceen until connection is done
         if (snapshot.connectionState == ConnectionState.waiting && firstLoad) {
           firstLoad = false;
-          return getSplash();
+          return _getSplash();
         } else {
           // * checks if the profile table has entries or not
           if (snapshot.hasData == false || snapshot.data.isEmpty) {
@@ -78,8 +78,8 @@ class _HomepageState extends State<Homepage> {
                 index: pageIndex,
                 children: pages,
               ),
-              bottomNavigationBar: getFooter(),
-              floatingActionButton: getFloatingButton(),
+              bottomNavigationBar: _getFooter(),
+              floatingActionButton: _getFloatingButton(),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerDocked,
             );
@@ -90,7 +90,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   // TODO make nice looking splash sceen
-  Widget getSplash() {
+  Widget _getSplash() {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Container(
@@ -105,7 +105,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   // * returns bottom navigation bar. Changes page when clicking the icons
-  Widget getFooter() {
+  Widget _getFooter() {
     final _random = new Random();
 
     // * list of icon data
@@ -138,11 +138,11 @@ class _HomepageState extends State<Homepage> {
   }
 
   // * floating button to show new transaction
-  Widget getFloatingButton() {
+  Widget _getFloatingButton() {
     return FloatingActionButton(
       backgroundColor: Colors.blue,
       onPressed: () {
-        showInputs();
+        _showInputs();
       },
       child: Icon(
         Icons.add,
@@ -158,7 +158,7 @@ class _HomepageState extends State<Homepage> {
 
   // * shows optionto select transaction type
   // TODO make better one
-  void showInputs() async {
+  void _showInputs() async {
     var width = MediaQuery.of(context).size.width;
     List inputs = ['Income', 'Expense'];
 
@@ -193,13 +193,13 @@ class _HomepageState extends State<Homepage> {
       ),
     );
     setState(() {
-      if (result == 0) showNewInputSceen(NewIncomeScreen());
-      if (result == 1) showNewInputSceen(NewExpenseScreen());
+      if (result == 0) _showNewInputSceen(NewIncomeScreen());
+      if (result == 1) _showNewInputSceen(NewExpenseScreen());
     });
   }
 
   // * shows the new input screen, gets new transaction type
-  void showNewInputSceen(inputWidget) async {
+  void _showNewInputSceen(inputWidget) async {
     return await showSlidingBottomSheet(
       context,
       builder: (context) {

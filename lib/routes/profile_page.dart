@@ -17,22 +17,22 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: getPage(),
+      body: _getPage(),
     );
   }
 
   // * renders the body
-  Widget getPage() {
+  Widget _getPage() {
     return ListView(
       children: [
-        getHeader(),
-        // getBody(),
+        _getHeader(),
+        // _getBody(),
       ],
     );
   }
 
   // * renders the header
-  Widget getHeader() {
+  Widget _getHeader() {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).secondaryHeaderColor,
@@ -59,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
             SizedBox(height: 25),
-            getHeaderData(),
+            _getHeaderData(),
           ],
         ),
       ),
@@ -67,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   // * gets the profile data from the database
-  Widget getHeaderData() {
+  Widget _getHeaderData() {
     // * calling database
     final profileDao = Provider.of<ProfileDao>(context);
 
@@ -83,9 +83,9 @@ class _ProfilePageState extends State<ProfilePage> {
           itemBuilder: (_, index) {
             return Column(
               children: [
-                getNameData(context, profile[0]),
+                _getNameData(context, profile[0]),
                 SizedBox(height: 25),
-                getSavingsData(context, profile[0]),
+                _getSavingsData(context, profile[0]),
               ],
             );
           },
@@ -95,7 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   // * renders the name widget
-  Widget getNameData(BuildContext context, Profile profile) {
+  Widget _getNameData(BuildContext context, Profile profile) {
     var size = MediaQuery.of(context).size;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,10 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Text(
                 profile.name,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1
-                    .copyWith(fontSize: 25),
+                style: Theme.of(context).textTheme.headline2,
               ),
               SizedBox(height: 10),
               Text(
@@ -126,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   // * renders the savings widget
-  Widget getSavingsData(BuildContext context, Profile profile) {
+  Widget _getSavingsData(BuildContext context, Profile profile) {
     return Container(
       // width: double.infinity,
       decoration: BoxDecoration(
