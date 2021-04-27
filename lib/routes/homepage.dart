@@ -4,12 +4,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:sliding_sheet/sliding_sheet.dart';
 import 'dart:math';
 
-// * Database packages
-import 'package:plutus/data/moor_database.dart';
-import 'package:provider/provider.dart';
-
 //* Routes to other pages
-import 'package:plutus/routes/new_profile.dart';
 import 'package:plutus/routes/daily_page.dart';
 import 'package:plutus/routes/stats_page.dart';
 import 'package:plutus/routes/calendar_page.dart';
@@ -40,8 +35,6 @@ class _HomepageState extends State<Homepage> {
     CalendarPage(),
     ProfilePage(),
   ];
-  // * bool value that ensures the splash screen is shown only once
-  bool firstLoad = true;
 
   @override
   Widget build(BuildContext context) {
@@ -50,57 +43,15 @@ class _HomepageState extends State<Homepage> {
 
   // * returns one of the pages
   Widget _getBody() {
-    // * calling the database
-    final profileDao = Provider.of<ProfileDao>(context);
-
-    // * FutureBuilder used to check for get the data
-    return FutureBuilder(
-      future: profileDao.getAllProfile(),
-      builder: (context, snapshot) {
-        // * checks if the connectiion is waiting. returns a splash sceen until connection is done
-        if (snapshot.connectionState == ConnectionState.waiting && firstLoad) {
-          firstLoad = false;
-          return _getSplash();
-        } else {
-          // * checks if the profile table has entries or not
-          if (snapshot.hasData == false || snapshot.data.isEmpty) {
-            // * renders new profile creation screen
-            // TODO make a welcome screen which shows how to use the app
-            return Scaffold(
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              body: NewProfileScreen(),
-            );
-          } else {
-            // * renders homepage
-            return Scaffold(
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              body: IndexedStack(
-                index: pageIndex,
-                children: pages,
-              ),
-              bottomNavigationBar: _getFooter(),
-              floatingActionButton: _getFloatingButton(),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerDocked,
-            );
-          }
-        }
-      },
-    );
-  }
-
-  // TODO make nice looking splash sceen
-  Widget _getSplash() {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Container(
-        child: Center(
-          child: new Text(
-            'Plutus',
-            style: Theme.of(context).textTheme.headline1,
-          ),
-        ),
+      body: IndexedStack(
+        index: pageIndex,
+        children: pages,
       ),
+      bottomNavigationBar: _getFooter(),
+      floatingActionButton: _getFloatingButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
@@ -156,7 +107,7 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  // * shows optionto select transaction type
+  // * shows option to select transaction type
   // TODO make better one
   void _showInputs() async {
     var width = MediaQuery.of(context).size.width;

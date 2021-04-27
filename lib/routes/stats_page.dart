@@ -33,7 +33,7 @@ class _StatsPageState extends State<StatsPage> {
         color: Theme.of(context).secondaryHeaderColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.01),
+            color: Colors.grey.withOpacity(0.05),
             spreadRadius: 10,
             blurRadius: 3,
           ),

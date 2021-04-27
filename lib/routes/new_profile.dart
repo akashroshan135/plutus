@@ -160,7 +160,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
                   ),
                 );
               }
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => Homepage(),

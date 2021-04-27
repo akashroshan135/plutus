@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:plutus/data/moor_database.dart';
 
 //* Routes to other pages
-import 'package:plutus/routes/homepage.dart';
+import 'package:plutus/routes/spash_screen.dart';
 
 // * renders main app
 void main() => runApp(MyApp());
@@ -93,7 +93,7 @@ class MyApp extends StatelessWidget {
         title: 'Plutus',
         theme: _lightTheme,
         darkTheme: _darkTheme,
-        home: Homepage(),
+        home: SplashScreen(),
       ),
     );
   }

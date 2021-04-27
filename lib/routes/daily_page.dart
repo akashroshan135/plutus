@@ -40,7 +40,7 @@ class _DailyPageState extends State<DailyPage> {
         color: Theme.of(context).secondaryHeaderColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.01),
+            color: Colors.grey.withOpacity(0.05),
             spreadRadius: 10,
             blurRadius: 3,
           ),
