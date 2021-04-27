@@ -16,14 +16,12 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   String _versionName = 'V. somewhere-alpha';
-  final _splashDelay = 3;
+  final _splashDelay = 2;
 
   // * Sets a timer of _splashDelay seconds and pushes NewProfileScreen
   _loadNewProfileScreen() async {
     return Timer(
-      Duration(
-        seconds: _splashDelay,
-      ),
+      Duration(seconds: _splashDelay),
       newProfilePage,
     );
   }
@@ -41,9 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
   // * Sets a timer of _splashDelay seconds and pushes Homepage
   _loadHomepage() async {
     return Timer(
-      Duration(
-        seconds: _splashDelay,
-      ),
+      Duration(seconds: _splashDelay),
       newHomepage,
     );
   }

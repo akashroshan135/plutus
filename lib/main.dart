@@ -11,6 +11,9 @@ import 'package:plutus/routes/spash_screen.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  // * creating an AppDatabase instance
+  final db = AppDatabase();
+
   @override
   Widget build(BuildContext context) {
     // * settings for dark mode theme data
@@ -81,7 +84,6 @@ class MyApp extends StatelessWidget {
       ),
     );
 
-    final db = AppDatabase();
     // * Provider is used to provide DAOs
     return MultiProvider(
       providers: [

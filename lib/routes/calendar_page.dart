@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+//* Routes to other pages
+import 'package:plutus/routes/components/expenses.dart';
+import 'package:plutus/routes/components/incomes.dart';
+
 class CalendarPage extends StatefulWidget {
   CalendarPage({Key key}) : super(key: key);
 
@@ -11,7 +15,7 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
-  DateTime _selectedDay;
+  DateTime _selectedDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +29,8 @@ class _CalendarPageState extends State<CalendarPage> {
     return ListView(
       children: [
         _getHeader(),
-        // TODO implement the transactions screen
-        // ExpenseRoute(selectedDate: selectedDate),
-        // IncomeRoute(selectedDate: selectedDate),
+        ExpenseRoute(selectedDate: _selectedDay),
+        IncomeRoute(selectedDate: _selectedDay),
       ],
     );
   }
@@ -42,25 +45,37 @@ class _CalendarPageState extends State<CalendarPage> {
       outsideTextStyle:
           Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.grey),
       defaultDecoration: BoxDecoration(
-        color: Colors.green,
+        color: Theme.of(context).scaffoldBackgroundColor,
         shape: BoxShape.circle,
       ),
       weekendDecoration: BoxDecoration(
-        color: Colors.yellow,
+        color: Theme.of(context).scaffoldBackgroundColor,
         shape: BoxShape.circle,
       ),
       todayDecoration: BoxDecoration(
-        color: Colors.brown,
+        color: Colors.teal[200],
         shape: BoxShape.circle,
       ),
       selectedDecoration: BoxDecoration(
-        color: Colors.pink,
+        color: Theme.of(context).primaryColor,
         shape: BoxShape.circle,
       ),
       outsideDecoration: BoxDecoration(
-        color: Colors.blue,
+        color: Theme.of(context).secondaryHeaderColor,
         shape: BoxShape.circle,
       ),
+    );
+
+    final _headerSytle = HeaderStyle(
+      titleCentered: true,
+      formatButtonVisible: false,
+      titleTextStyle: Theme.of(context).textTheme.headline1,
+      formatButtonTextStyle: Theme.of(context).textTheme.headline1,
+    );
+
+    final _daysSytle = DaysOfWeekStyle(
+      weekdayStyle: Theme.of(context).textTheme.bodyText2,
+      weekendStyle: Theme.of(context).textTheme.bodyText2,
     );
 
     return Container(
@@ -85,6 +100,15 @@ class _CalendarPageState extends State<CalendarPage> {
                   'Calendar',
                   style: Theme.of(context).textTheme.headline1,
                 ),
+                InkWell(
+                  child: Icon(Icons.restore),
+                  onTap: () {
+                    setState(() {
+                      _focusedDay = DateTime.now();
+                      _selectedDay = DateTime.now();
+                    });
+                  },
+                )
               ],
             ),
             // SizedBox(height: 20),
@@ -94,10 +118,11 @@ class _CalendarPageState extends State<CalendarPage> {
                 lastDay: DateTime.utc(2030, 3, 14),
                 focusedDay: _focusedDay,
                 calendarFormat: _calendarFormat,
-                calendarStyle: _calendarSytle,
+                // * functions
                 onFormatChanged: (format) {
                   setState(() {
                     _calendarFormat = format;
+                    print(format);
                   });
                 },
                 selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
@@ -106,12 +131,17 @@ class _CalendarPageState extends State<CalendarPage> {
                     setState(() {
                       _selectedDay = selectedDay;
                       _focusedDay = focusedDay;
+                      print(_selectedDay);
                     });
                   }
                 },
                 onPageChanged: (focusedDay) {
                   _focusedDay = focusedDay;
                 },
+                // * styles
+                calendarStyle: _calendarSytle,
+                headerStyle: _headerSytle,
+                daysOfWeekStyle: _daysSytle,
               ),
             ),
           ],
