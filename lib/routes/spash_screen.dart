@@ -94,10 +94,11 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // TODO insert app logo here
                       // Image.asset(
-                      //   'assets/images/img_splash.png',
-                      //   height: 300,
-                      //   width: 300,
+                      //   'assets/images/app_logo.png',
+                      //   height: 250,
+                      //   width: 250,
                       // ),
                       SizedBox(height: 20),
                       Text(

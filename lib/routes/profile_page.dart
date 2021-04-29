@@ -5,6 +5,9 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
+//* Routes to other pages
+import 'package:plutus/routes/about_page.dart';
+
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key key}) : super(key: key);
 
@@ -55,7 +58,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   'Profile',
                   style: Theme.of(context).textTheme.headline1,
                 ),
-                Icon(Entypo.info_with_circle),
+                IconButton(
+                  icon: Icon(Entypo.info_with_circle),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AboutScreen()),
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 25),
