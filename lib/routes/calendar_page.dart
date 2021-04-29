@@ -52,7 +52,7 @@ class _CalendarPageState extends State<CalendarPage> {
         shape: BoxShape.circle,
       ),
       todayDecoration: BoxDecoration(
-        color: Colors.teal[200],
+        color: Colors.green,
         shape: BoxShape.circle,
       ),
       selectedDecoration: BoxDecoration(
@@ -99,9 +99,9 @@ class _CalendarPageState extends State<CalendarPage> {
                   'Calendar',
                   style: Theme.of(context).textTheme.headline1,
                 ),
-                IconButton(
-                  icon: Icon(Icons.restore),
-                  onPressed: () {
+                InkWell(
+                  child: Icon(Icons.restore),
+                  onTap: () {
                     setState(() {
                       _focusedDay = DateTime.now();
                       _selectedDay = DateTime.now();

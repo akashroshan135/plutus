@@ -94,7 +94,6 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
     );
 
     // * input field for amount
-    // TODO add amount limit
     final inputAmt = Padding(
       padding: _padding,
       child: TextField(
@@ -122,43 +121,21 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
               if (controllerTags.text == '' ||
                   controllerAmount.text == '' ||
                   categoryIndex == null) {
-                return showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: Text(
-                        'Warning',
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      content: Text(
-                        'Please enter all the fields',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(
-                            'OK',
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                );
+                return _getWarning();
               } else {
-                incomeDao.addIncome(
-                  IncomesCompanion(
-                    tags: Value(controllerTags.text),
-                    amount: Value(double.parse(controllerAmount.text)),
-                    date: Value(DateTime.now()),
-                    categoryIndex: Value(categoryIndex),
-                  ),
-                );
+                double amount = double.parse(controllerAmount.text);
+                if (amount > 1000000) {
+                  return _getEasterEgg();
+                } else {
+                  incomeDao.addIncome(
+                    IncomesCompanion(
+                      tags: Value(controllerTags.text),
+                      amount: Value(amount),
+                      date: Value(DateTime.now()),
+                      categoryIndex: Value(categoryIndex),
+                    ),
+                  );
+                }
               }
               Navigator.pop(context);
             },
@@ -260,5 +237,65 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
         categoryText = IncomeCategory.categoryNames[result];
       }
     });
+  }
+
+  Future _getWarning() {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            'Warning',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          content: Text(
+            'Please enter all the fields',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'OK',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future _getEasterEgg() {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            'Get an Accountant',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          content: Text(
+            'If you\'re dealing with so much money then you need an accountant, not an app',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'OK',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

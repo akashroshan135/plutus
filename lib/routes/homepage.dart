@@ -169,7 +169,7 @@ class _HomepageState extends State<Homepage> {
                 child: Material(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   child: Padding(
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.all(8),
                     child: inputWidget,
                   ),
                 ),

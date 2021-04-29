@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
       // used for the headers
       secondaryHeaderColor: Colors.white,
       // used for scffold backgroud color
-      scaffoldBackgroundColor: Colors.grey[100],
+      scaffoldBackgroundColor: Colors.grey[200],
       // used for icons
       iconTheme: IconThemeData(color: Colors.black, size: 25),
       // used for footer icons

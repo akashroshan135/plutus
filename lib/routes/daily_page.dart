@@ -19,11 +19,11 @@ class _DailyPageState extends State<DailyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: _getBody(),
+      body: _getPage(),
     );
   }
 
-  Widget _getBody() {
+  Widget _getPage() {
     return ListView(
       children: [
         _getHeader(),
@@ -94,17 +94,13 @@ class _DailyPageState extends State<DailyPage> {
                 ),
                 SizedBox(height: 10),
                 Container(
-                  width: 32,
-                  height: 32,
+                  width: 38,
+                  height: 40,
                   decoration: BoxDecoration(
+                    shape: BoxShape.circle,
                     color: activeDay == index
                         ? Theme.of(context).primaryColor
-                        : Colors.transparent,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                        color: activeDay == index
-                            ? Theme.of(context).primaryColor
-                            : Colors.grey[500]),
+                        : Theme.of(context).scaffoldBackgroundColor,
                   ),
                   child: Center(
                     child: Text(

@@ -58,9 +58,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   'Profile',
                   style: Theme.of(context).textTheme.headline1,
                 ),
-                IconButton(
-                  icon: Icon(Entypo.info_with_circle),
-                  onPressed: () => Navigator.push(
+                InkWell(
+                  child: Icon(Entypo.info_with_circle),
+                  onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => AboutScreen()),
                   ),
