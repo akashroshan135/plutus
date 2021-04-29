@@ -32,6 +32,17 @@ class _IncomeRouteState extends State<IncomeRoute> {
       stream: incomeDao.watchDayIncome(widget.selectedDate),
       builder: (context, AsyncSnapshot<List<Income>> snapshot) {
         final incomes = snapshot.data ?? [];
+        if (incomes.isEmpty) {
+          // TODO make good empty page
+          return Container(
+            child: Center(
+              child: Text(
+                'No Incomes',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+          );
+        }
         return SingleChildScrollView(
           child: Column(
             children: [

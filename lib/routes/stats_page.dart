@@ -73,8 +73,6 @@ class _StatsPageState extends State<StatsPage> {
           onTap: () {
             setState(() {
               activeMonth = index;
-              // selectedMonth = month.datetime;
-              print(month.format('MMM yyyy'));
             });
           },
           child: Container(

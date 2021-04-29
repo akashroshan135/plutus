@@ -27,13 +27,13 @@ class _AboutScreenState extends State<AboutScreen> {
   Widget getPage() {
     return ListView(
       children: [
-        getHeader(),
-        getBody(),
+        _getHeader(),
+        _getBody(),
       ],
     );
   }
 
-  Widget getHeader() {
+  Widget _getHeader() {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).secondaryHeaderColor,
@@ -91,7 +91,7 @@ class _AboutScreenState extends State<AboutScreen> {
     );
   }
 
-  Widget getBody() {
+  Widget _getBody() {
     final appDescription = Container(
       padding: EdgeInsets.all(20),
       alignment: Alignment.center,
@@ -101,7 +101,7 @@ class _AboutScreenState extends State<AboutScreen> {
       ),
     );
 
-    final appGithub = buttonWidget(
+    final appGithub = _buttonWidget(
       context,
       Icon(AntDesign.github),
       'Github',
@@ -117,13 +117,13 @@ class _AboutScreenState extends State<AboutScreen> {
           style: Theme.of(context).textTheme.headline1,
         ),
       ),
-      buttonWidget(
+      _buttonWidget(
         context,
         Icon(AntDesign.github),
         'Akash Roshan',
         'https://github.com/akashroshan135',
       ),
-      buttonWidget(
+      _buttonWidget(
         context,
         Icon(AntDesign.github),
         'Ratandeep Kaur Sodhi',
@@ -148,7 +148,7 @@ class _AboutScreenState extends State<AboutScreen> {
     );
   }
 
-  Widget buttonWidget(BuildContext context, Icon icon, mainText, subText) {
+  Widget _buttonWidget(BuildContext context, Icon icon, mainText, subText) {
     final _random = new Random();
     var _inkwellColor =
         ColorData.myColors[_random.nextInt(ColorData.myColors.length)];

@@ -32,6 +32,17 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
       stream: expenseDao.watchDayExpense(widget.selectedDate),
       builder: (context, AsyncSnapshot<List<Expense>> snapshot) {
         final expenses = snapshot.data ?? [];
+        if (expenses.isEmpty) {
+          // TODO make good empty page
+          return Container(
+            child: Center(
+              child: Text(
+                'No Expenses',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+          );
+        }
         return SingleChildScrollView(
           child: Column(
             children: [

@@ -32,10 +32,11 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
   var categoryText = 'Select a Category';
   var categoryIndex;
 
+  final accentColor = Colors.green;
+
   @override
   Widget build(BuildContext context) {
     final incomeDao = Provider.of<IncomeDao>(context);
-    final accentColor = Theme.of(context).buttonColor;
 
     // * field for category. shows a dialog box
     final inputCategory = Padding(
@@ -62,7 +63,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
                   padding: _padding,
                   child: Icon(
                     categoryIcon,
-                    color: Theme.of(context).primaryIconTheme.color,
+                    color: accentColor,
                     size: Theme.of(context).primaryIconTheme.size,
                   ),
                 ),
@@ -70,7 +71,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
                   categoryText,
                   style: Theme.of(context)
                       .textTheme
-                      .button
+                      .bodyText1
                       .copyWith(color: accentColor),
                 ),
               ],
@@ -87,7 +88,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
       child: TextField(
         controller: controllerTags,
         cursorColor: accentColor,
-        style: Theme.of(context).textTheme.bodyText2,
+        style: Theme.of(context).textTheme.bodyText1,
         decoration: decoratorInputWidget('Tags'),
       ),
     );
@@ -100,7 +101,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
         controller: controllerAmount,
         keyboardType: TextInputType.number,
         cursorColor: accentColor,
-        style: Theme.of(context).textTheme.bodyText2,
+        style: Theme.of(context).textTheme.bodyText1,
         decoration: decoratorInputWidget('Amount'),
       ),
     );
@@ -177,7 +178,16 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
 
     return ListView(
       children: [
-        Text('Add New Income', style: Theme.of(context).textTheme.bodyText1),
+        Center(
+          child: Text(
+            'Add New Income',
+            style: Theme.of(context)
+                .textTheme
+                .headline1
+                .copyWith(color: accentColor),
+          ),
+        ),
+        SizedBox(height: 10),
         inputCategory,
         inputTags,
         inputAmt,
@@ -189,14 +199,14 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
   InputDecoration decoratorInputWidget(String text) {
     return InputDecoration(
       labelText: text,
-      labelStyle: TextStyle(color: Theme.of(context).buttonColor),
+      labelStyle: TextStyle(color: accentColor),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Theme.of(context).buttonColor, width: 1),
+        borderSide: BorderSide(color: accentColor, width: 1),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Theme.of(context).buttonColor, width: 1),
+        borderSide: BorderSide(color: accentColor, width: 1),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),

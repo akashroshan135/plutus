@@ -35,7 +35,6 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  // TODO implement an interactive calendar
   Widget _getHeader() {
     final _calendarSytle = CalendarStyle(
       defaultTextStyle: Theme.of(context).textTheme.bodyText1,
@@ -100,9 +99,9 @@ class _CalendarPageState extends State<CalendarPage> {
                   'Calendar',
                   style: Theme.of(context).textTheme.headline1,
                 ),
-                InkWell(
-                  child: Icon(Icons.restore),
-                  onTap: () {
+                IconButton(
+                  icon: Icon(Icons.restore),
+                  onPressed: () {
                     setState(() {
                       _focusedDay = DateTime.now();
                       _selectedDay = DateTime.now();
@@ -122,7 +121,6 @@ class _CalendarPageState extends State<CalendarPage> {
                 onFormatChanged: (format) {
                   setState(() {
                     _calendarFormat = format;
-                    print(format);
                   });
                 },
                 selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
@@ -131,7 +129,6 @@ class _CalendarPageState extends State<CalendarPage> {
                     setState(() {
                       _selectedDay = selectedDay;
                       _focusedDay = focusedDay;
-                      print(_selectedDay);
                     });
                   }
                 },

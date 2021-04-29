@@ -32,10 +32,11 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
   var categoryText = 'Select a Category';
   var categoryIndex;
 
+  final accentColor = Colors.pink;
+
   @override
   Widget build(BuildContext context) {
     final expenseDao = Provider.of<ExpenseDao>(context);
-    final accentColor = Theme.of(context).buttonColor;
 
     // * field for category. shows a dialog box
     final inputCategory = Padding(
@@ -62,7 +63,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
                   padding: _padding,
                   child: Icon(
                     categoryIcon,
-                    color: Theme.of(context).primaryIconTheme.color,
+                    color: accentColor,
                     size: Theme.of(context).primaryIconTheme.size,
                   ),
                 ),
@@ -70,7 +71,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
                   categoryText,
                   style: Theme.of(context)
                       .textTheme
-                      .button
+                      .bodyText1
                       .copyWith(color: accentColor),
                 ),
               ],
@@ -87,7 +88,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
       child: TextField(
         controller: controllerTags,
         cursorColor: accentColor,
-        style: Theme.of(context).textTheme.bodyText2,
+        style: Theme.of(context).textTheme.bodyText1,
         decoration: decoratorInputWidget('Tags'),
       ),
     );
@@ -100,7 +101,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
         controller: controllerAmount,
         keyboardType: TextInputType.number,
         cursorColor: accentColor,
-        style: Theme.of(context).textTheme.bodyText2,
+        style: Theme.of(context).textTheme.bodyText1,
         decoration: decoratorInputWidget('Amount'),
       ),
     );
@@ -122,17 +123,48 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
                   controllerAmount.text == '' ||
                   categoryIndex == null) {
                 return showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text(
+                        'Warning',
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                      backgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
+                      content: Text(
+                        'Please enter all the fields',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            'OK',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              } else {
+                double amount = double.parse(controllerAmount.text);
+                if (amount > 1000000) {
+                  return showDialog(
                     context: context,
                     builder: (_) {
                       return AlertDialog(
                         title: Text(
-                          'Warning',
+                          'Get an Accountant',
                           style: Theme.of(context).textTheme.headline1,
                         ),
                         backgroundColor:
                             Theme.of(context).scaffoldBackgroundColor,
                         content: Text(
-                          'Please enter all the fields',
+                          'If you\'re dealing with so much money then you need an accountant, not an app',
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                         actions: <Widget>[
@@ -147,16 +179,18 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
                           ),
                         ],
                       );
-                    });
-              } else {
-                expenseDao.addExpense(
-                  ExpensesCompanion(
-                    tags: Value(controllerTags.text),
-                    amount: Value(double.parse(controllerAmount.text)),
-                    date: Value(DateTime.now()),
-                    categoryIndex: Value(categoryIndex),
-                  ),
-                );
+                    },
+                  );
+                } else {
+                  expenseDao.addExpense(
+                    ExpensesCompanion(
+                      tags: Value(controllerTags.text),
+                      amount: Value(double.parse(controllerAmount.text)),
+                      date: Value(DateTime.now()),
+                      categoryIndex: Value(categoryIndex),
+                    ),
+                  );
+                }
               }
               Navigator.pop(context);
             },
@@ -176,7 +210,16 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
 
     return ListView(
       children: [
-        Text('Add New Expense', style: Theme.of(context).textTheme.bodyText1),
+        Center(
+          child: Text(
+            'Add New Expense',
+            style: Theme.of(context)
+                .textTheme
+                .headline1
+                .copyWith(color: accentColor),
+          ),
+        ),
+        SizedBox(height: 10),
         inputCategory,
         inputTags,
         inputAmt,
@@ -188,14 +231,14 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
   InputDecoration decoratorInputWidget(String text) {
     return InputDecoration(
       labelText: text,
-      labelStyle: TextStyle(color: Theme.of(context).buttonColor),
+      labelStyle: TextStyle(color: accentColor),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Theme.of(context).buttonColor, width: 1),
+        borderSide: BorderSide(color: accentColor, width: 1),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Theme.of(context).buttonColor, width: 1),
+        borderSide: BorderSide(color: accentColor, width: 1),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
