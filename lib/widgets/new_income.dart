@@ -196,6 +196,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
     );
   }
 
+  // * renders the categories list
   void showCategories() async {
     var width = MediaQuery.of(context).size.width;
 
@@ -239,6 +240,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
     });
   }
 
+  // * renders a warning dialog box
   Future _getWarning() {
     return showDialog(
       context: context,
@@ -269,6 +271,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
     );
   }
 
+  // * renders an easter egg
   Future _getEasterEgg() {
     return showDialog(
       context: context,

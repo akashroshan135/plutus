@@ -7,15 +7,6 @@ import 'package:moor_flutter/moor_flutter.dart';
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
-// * Notifications Packages
-// ! timezone latest_all.dart is used as latest.dart doesn't work on emulator
-// TODO use latest.dart in export builds
-// import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 //* Custom Widgets
 import 'package:plutus/widgets/category.dart';
 
@@ -42,32 +33,6 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
   var categoryIndex;
 
   final accentColor = Color(0xffe32012);
-
-  final notificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  // * code to initialize notification plugin
-  @override
-  void initState() {
-    super.initState();
-    var androidInit = AndroidInitializationSettings('app_icon');
-    var initSettings = InitializationSettings(android: androidInit);
-    notificationsPlugin.initialize(
-      initSettings,
-      onSelectNotification: selectNotification,
-    );
-    _configureLocalTimeZone();
-  }
-
-  // * code to configure and set timezone
-  Future<void> _configureLocalTimeZone() async {
-    tz.initializeTimeZones();
-    final String timezone = await FlutterNativeTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(timezone));
-  }
-
-  // * code that gets executed when the notification is pressed
-  // TODO implement some use for this
-  Future selectNotification(String payload) async {}
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +135,6 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
                       categoryIndex: Value(categoryIndex),
                     ),
                   );
-                  _setNotification(controllerTags.text, amount);
                 }
               }
               Navigator.pop(context);
@@ -335,32 +299,6 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
           ],
         );
       },
-    );
-  }
-
-  // * creates a new notification instance
-  Future _setNotification(String text, double amount) async {
-    final androidDetails = new AndroidNotificationDetails(
-      '1',
-      'Plutus',
-      'Expense',
-      importance: Importance.max,
-    );
-    final notificationDetails =
-        new NotificationDetails(android: androidDetails);
-    // TODO set date dynamically
-    final tz.TZDateTime scheduledDate =
-        tz.TZDateTime.now(tz.local).add(Duration(seconds: 10));
-
-    await notificationsPlugin.zonedSchedule(
-      0,
-      text,
-      amount.toString(),
-      scheduledDate,
-      notificationDetails,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 }

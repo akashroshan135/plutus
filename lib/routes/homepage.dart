@@ -9,6 +9,7 @@ import 'package:plutus/routes/daily_page.dart';
 import 'package:plutus/routes/stats_page.dart';
 import 'package:plutus/routes/calendar_page.dart';
 import 'package:plutus/routes/profile_page.dart';
+import 'package:plutus/routes/new_upcoming.dart';
 
 //* Custom Widgets
 import 'package:plutus/widgets/category.dart';
@@ -93,7 +94,10 @@ class _HomepageState extends State<Homepage> {
     return FloatingActionButton(
       backgroundColor: Colors.blue,
       onPressed: () {
-        _showInputs();
+        if (pageIndex == 2)
+          _showUpcoming();
+        else
+          _showInputs();
       },
       child: Icon(
         Icons.add,
@@ -178,6 +182,13 @@ class _HomepageState extends State<Homepage> {
           },
         );
       },
+    );
+  }
+
+  void _showUpcoming() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UpcomingScreen()),
     );
   }
 }
