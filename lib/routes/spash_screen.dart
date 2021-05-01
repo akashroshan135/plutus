@@ -95,11 +95,11 @@ class _SplashScreenState extends State<SplashScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // TODO insert app logo here
-                      // Image.asset(
-                      //   'assets/images/app_logo.png',
-                      //   height: 250,
-                      //   width: 250,
-                      // ),
+                      Image.asset(
+                        'assets/images/app_icon.png',
+                        height: 250,
+                        width: 250,
+                      ),
                       SizedBox(height: 20),
                       Text(
                         'Plutus',

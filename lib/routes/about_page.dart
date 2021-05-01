@@ -65,16 +65,17 @@ class _AboutScreenState extends State<AboutScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 25),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // TODO insert app logo here
-                // Image.asset(
-                //   'assets/images/app_logo.png',
-                //   height: 50,
-                //   width: 50,
-                // ),
+                Image.asset(
+                  'assets/images/app_icon.png',
+                  height: 75,
+                  width: 75,
+                ),
+                SizedBox(height: 15),
                 Text(
                   'Plutus',
                   style: Theme.of(context).textTheme.headline2,
@@ -132,7 +133,7 @@ class _AboutScreenState extends State<AboutScreen> {
     ];
 
     return Container(
-      height: MediaQuery.of(context).size.height,
+      height: MediaQuery.of(context).size.height / 1.5,
       child: Padding(
         padding: EdgeInsets.all(16),
         child: ListView(
