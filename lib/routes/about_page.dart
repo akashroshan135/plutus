@@ -20,11 +20,11 @@ class _AboutScreenState extends State<AboutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: getPage(),
+      body: _getPage(),
     );
   }
 
-  Widget getPage() {
+  Widget _getPage() {
     return ListView(
       children: [
         _getHeader(),

@@ -6,6 +6,9 @@ import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
+// * Notifications Packages
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 //* Custom Widgets
 import 'package:plutus/widgets/new_expense.dart';
 
@@ -22,6 +25,8 @@ class ExpenseRoute extends StatefulWidget {
 }
 
 class _ExpenseRouteState extends State<ExpenseRoute> {
+  final notificationsPlugin = FlutterLocalNotificationsPlugin();
+
   @override
   Widget build(BuildContext context) {
     // * calling database
@@ -63,6 +68,10 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
         );
       },
     );
+  }
+
+  Future _cancelNotification() async {
+    await notificationsPlugin.cancel(0);
   }
 
   // * code to build one transaction item
@@ -109,6 +118,7 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                 TextButton(
                   onPressed: () {
                     expenseDao.deleteExpense(expense);
+                    _cancelNotification();
                     Navigator.of(context).pop();
                   },
                   child: Text(

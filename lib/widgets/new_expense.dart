@@ -58,12 +58,15 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
     _configureLocalTimeZone();
   }
 
+  // * code to configure and set timezone
   Future<void> _configureLocalTimeZone() async {
     tz.initializeTimeZones();
     final String timezone = await FlutterNativeTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(timezone));
   }
 
+  // * code that gets executed when the notification is pressed
+  // TODO implement some use for this
   Future selectNotification(String payload) async {}
 
   @override
@@ -167,7 +170,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
                       categoryIndex: Value(categoryIndex),
                     ),
                   );
-                  _showNotification(controllerTags.text, amount);
+                  _setNotification(controllerTags.text, amount);
                 }
               }
               Navigator.pop(context);
@@ -229,6 +232,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
     );
   }
 
+  // * renders the categories list
   void showCategories() async {
     var width = MediaQuery.of(context).size.width;
 
@@ -272,6 +276,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
     });
   }
 
+  // * renders a warning dialog box
   Future _getWarning() {
     return showDialog(
       context: context,
@@ -302,6 +307,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
     );
   }
 
+  // * renders an easter egg
   Future _getEasterEgg() {
     return showDialog(
       context: context,
@@ -332,7 +338,8 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
     );
   }
 
-  Future _showNotification(String text, double amount) async {
+  // * creates a new notification instance
+  Future _setNotification(String text, double amount) async {
     final androidDetails = new AndroidNotificationDetails(
       '1',
       'Plutus',
