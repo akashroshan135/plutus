@@ -11,19 +11,19 @@ import 'package:provider/provider.dart';
 import 'package:plutus/widgets/category.dart';
 
 //* Data Classes
-import 'package:plutus/data/expenseCat.dart';
+import 'package:plutus/data/incomeCat.dart';
 import 'package:plutus/data/colorData.dart';
 
-class EditExpenseScreen extends StatefulWidget {
-  final Expense expense;
+class EditIncomeScreen extends StatefulWidget {
+  final Income income;
 
-  EditExpenseScreen({Key key, @required this.expense}) : super(key: key);
+  EditIncomeScreen({Key key, @required this.income}) : super(key: key);
 
   @override
-  _EditExpenseScreenState createState() => _EditExpenseScreenState();
+  _EditIncomeScreenState createState() => _EditIncomeScreenState();
 }
 
-class _EditExpenseScreenState extends State<EditExpenseScreen> {
+class _EditIncomeScreenState extends State<EditIncomeScreen> {
   final _padding = EdgeInsets.all(16);
   final _random = new Random();
 
@@ -34,21 +34,21 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
   var categoryText = 'Select a Category';
   var categoryIndex;
 
-  final accentColor = Color(0xffe32012);
+  final accentColor = Colors.green;
 
   @override
   void initState() {
     super.initState();
-    controllerTags.text = widget.expense.tags;
-    controllerAmount.text = widget.expense.amount.toString();
-    categoryIndex = widget.expense.categoryIndex;
-    categoryIcon = ExpenseCategory.categoryIcon[categoryIndex];
-    categoryText = ExpenseCategory.categoryNames[categoryIndex];
+    controllerTags.text = widget.income.tags;
+    controllerAmount.text = widget.income.amount.toString();
+    categoryIndex = widget.income.categoryIndex;
+    categoryIcon = IncomeCategory.categoryIcon[categoryIndex];
+    categoryText = IncomeCategory.categoryNames[categoryIndex];
   }
 
   @override
   Widget build(BuildContext context) {
-    final expenseDao = Provider.of<ExpenseDao>(context);
+    final incomeDao = Provider.of<IncomeDao>(context);
 
     // * field for category. shows a dialog box
     final inputCategory = Padding(
@@ -139,9 +139,9 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
                 if (amount > 1000000) {
                   return _getEasterEgg();
                 } else {
-                  expenseDao.updateExpense(
-                    ExpensesCompanion(
-                      id: Value(widget.expense.id),
+                  incomeDao.updateIncome(
+                    IncomesCompanion(
+                      id: Value(widget.income.id),
                       tags: Value(controllerTags.text),
                       amount: Value(amount),
                       date: Value(DateTime.now()),
@@ -170,7 +170,7 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
       children: [
         Center(
           child: Text(
-            'Edit Expense',
+            'Edit Income',
             style: Theme.of(context)
                 .textTheme
                 .headline1
@@ -228,12 +228,12 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
               width: width - 50,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: ListView.builder(
-                itemCount: ExpenseCategory.categoryNames.length,
+                itemCount: IncomeCategory.categoryNames.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Category(
                     index: index,
-                    categoryName: ExpenseCategory.categoryNames[index],
-                    categoryIcon: ExpenseCategory.categoryIcon[index],
+                    categoryName: IncomeCategory.categoryNames[index],
+                    categoryIcon: IncomeCategory.categoryIcon[index],
                     categoryColor: ColorData
                         .myColors[_random.nextInt(ColorData.myColors.length)],
                   );
@@ -247,8 +247,8 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
     setState(() {
       if (result != null) {
         categoryIndex = result;
-        categoryIcon = ExpenseCategory.categoryIcon[result];
-        categoryText = ExpenseCategory.categoryNames[result];
+        categoryIcon = IncomeCategory.categoryIcon[result];
+        categoryText = IncomeCategory.categoryNames[result];
       }
     });
   }

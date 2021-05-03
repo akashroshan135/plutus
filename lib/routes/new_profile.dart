@@ -89,7 +89,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               controller: controllerName,
               cursorColor: Theme.of(context).buttonColor,
               style: Theme.of(context).textTheme.bodyText1,
-              decoration: decoratorInputWidget(context, 'Name'),
+              decoration: _decoratorInputWidget(context, 'Name'),
             ),
           ),
           Padding(
@@ -99,7 +99,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               keyboardType: TextInputType.number,
               cursorColor: Theme.of(context).buttonColor,
               style: Theme.of(context).textTheme.bodyText1,
-              decoration: decoratorInputWidget(context, 'Savings'),
+              decoration: _decoratorInputWidget(context, 'Savings'),
             ),
           ),
           _getSubmit(),
@@ -182,7 +182,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
     );
   }
 
-  InputDecoration decoratorInputWidget(BuildContext context, String text) {
+  InputDecoration _decoratorInputWidget(BuildContext context, String text) {
     return InputDecoration(
       labelText: text,
       labelStyle: TextStyle(color: Theme.of(context).buttonColor),

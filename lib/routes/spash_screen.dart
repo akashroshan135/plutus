@@ -22,12 +22,12 @@ class _SplashScreenState extends State<SplashScreen> {
   _loadNewProfileScreen() async {
     return Timer(
       Duration(seconds: _splashDelay),
-      newProfilePage,
+      _newProfilePage,
     );
   }
 
   // * pushes NewProfileScreen to the navigator stack
-  void newProfilePage() {
+  void _newProfilePage() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -40,12 +40,12 @@ class _SplashScreenState extends State<SplashScreen> {
   _loadHomepage() async {
     return Timer(
       Duration(seconds: _splashDelay),
-      newHomepage,
+      _newHomepage,
     );
   }
 
   // * pushes Homepage to the navigator stack
-  void newHomepage() {
+  void _newHomepage() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

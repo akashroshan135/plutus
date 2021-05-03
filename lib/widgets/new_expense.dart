@@ -55,7 +55,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
             highlightColor: Colors.pink[400],
             splashColor: Colors.pink,
             onTap: () {
-              showCategories();
+              _showCategories();
             },
             child: Row(
               children: <Widget>[
@@ -89,7 +89,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
         controller: controllerTags,
         cursorColor: accentColor,
         style: Theme.of(context).textTheme.bodyText1,
-        decoration: decoratorInputWidget('Tags'),
+        decoration: _decoratorInputWidget('Tags'),
       ),
     );
 
@@ -101,7 +101,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
         keyboardType: TextInputType.number,
         cursorColor: accentColor,
         style: Theme.of(context).textTheme.bodyText1,
-        decoration: decoratorInputWidget('Amount'),
+        decoration: _decoratorInputWidget('Amount'),
       ),
     );
 
@@ -173,7 +173,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
     );
   }
 
-  InputDecoration decoratorInputWidget(String text) {
+  InputDecoration _decoratorInputWidget(String text) {
     return InputDecoration(
       labelText: text,
       labelStyle: TextStyle(color: accentColor),
@@ -197,7 +197,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
   }
 
   // * renders the categories list
-  void showCategories() async {
+  void _showCategories() async {
     var width = MediaQuery.of(context).size.width;
 
     var result = await showDialog(

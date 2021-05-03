@@ -84,8 +84,8 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
 
     return Dismissible(
       key: Key(expense.toString()),
-      background: slideRightBackground(),
-      secondaryBackground: slideLeftBackground(),
+      background: _slideRightBackground(),
+      secondaryBackground: _slideLeftBackground(),
       confirmDismiss: (DismissDirection direction) async {
         if (direction == DismissDirection.endToStart) {
           return await showDialog(
@@ -145,7 +145,7 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop(false);
-                      showDetailsSceen(expense);
+                      _showEditSceen(expense);
                     },
                     child: Text(
                       'OK',
@@ -267,7 +267,8 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
     );
   }
 
-  Widget slideRightBackground() {
+  // * adds background data for sliding from right to left
+  Widget _slideRightBackground() {
     return Container(
       color: Colors.green,
       child: Align(
@@ -290,7 +291,8 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
     );
   }
 
-  Widget slideLeftBackground() {
+  // * adds background data for sliding from left to right
+  Widget _slideLeftBackground() {
     return Container(
       color: Colors.red,
       child: Align(
@@ -313,8 +315,8 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
     );
   }
 
-  // TODO implement whatever this is
-  void showDetailsSceen(Expense expense) async {
+  // * renders the edit screen
+  void _showEditSceen(Expense expense) async {
     return await showSlidingBottomSheet(
       context,
       builder: (context) {

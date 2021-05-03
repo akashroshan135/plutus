@@ -63,7 +63,7 @@ class _CustomScreenState extends State<CustomScreen> {
     var initSettings = InitializationSettings(android: androidInit);
     notificationsPlugin.initialize(
       initSettings,
-      onSelectNotification: selectNotification,
+      onSelectNotification: _selectNotification,
     );
     _configureLocalTimeZone();
     controllerDate.text =
@@ -81,7 +81,7 @@ class _CustomScreenState extends State<CustomScreen> {
 
   // * code that gets executed when the notification is pressed
   // TODO implement some use for this
-  Future selectNotification(String payload) async {}
+  Future _selectNotification(String payload) async {}
 
   @override
   Widget build(BuildContext context) {
@@ -135,8 +135,8 @@ class _CustomScreenState extends State<CustomScreen> {
   }
 
   Widget _getBody() {
-    // final incomeDao = Provider.of<IncomeDao>(context);
-    // final expenseDao = Provider.of<ExpenseDao>(context);
+    final incomeDao = Provider.of<IncomeDao>(context);
+    final expenseDao = Provider.of<ExpenseDao>(context);
 
     // * field for category. shows a dialog box
     final inputCategory = Padding(
@@ -156,9 +156,9 @@ class _CustomScreenState extends State<CustomScreen> {
             splashColor: Colors.pink,
             onTap: () {
               if (isIncome)
-                showCategoriesIncome();
+                _showCategoriesIncome();
               else
-                showCategoriesExpense();
+                _showCategoriesExpense();
             },
             child: Row(
               children: <Widget>[
@@ -192,7 +192,7 @@ class _CustomScreenState extends State<CustomScreen> {
         controller: controllerTags,
         cursorColor: isIncome ? accentIncome : accentExpense,
         style: Theme.of(context).textTheme.bodyText1,
-        decoration: decoratorInputWidget('Tags'),
+        decoration: _decoratorInputWidget('Tags'),
       ),
     );
 
@@ -204,7 +204,7 @@ class _CustomScreenState extends State<CustomScreen> {
         keyboardType: TextInputType.number,
         cursorColor: isIncome ? accentIncome : accentExpense,
         style: Theme.of(context).textTheme.bodyText1,
-        decoration: decoratorInputWidget('Amount'),
+        decoration: _decoratorInputWidget('Amount'),
       ),
     );
 
@@ -225,7 +225,7 @@ class _CustomScreenState extends State<CustomScreen> {
                   .textTheme
                   .bodyText1
                   .copyWith(color: isIncome ? accentIncome : accentExpense),
-          decoration: decoratorInputWidget('Date and Time'),
+          decoration: _decoratorInputWidget('Date and Time'),
         ),
       ),
     );
@@ -252,18 +252,25 @@ class _CustomScreenState extends State<CustomScreen> {
                 if (amount > 1000000) {
                   return _getEasterEgg();
                 } else {
-                  if (isIncome)
-                    print('add stuff income');
-                  else
-                    print('add stuff expense');
-                  // incomeDao.addIncome(
-                  //   IncomesCompanion(
-                  //     tags: Value(controllerTags.text),
-                  //     amount: Value(amount),
-                  //     date: Value(DateTime.now()),
-                  //     categoryIndex: Value(categoryIndex),
-                  //   ),
-                  // );
+                  if (isIncome) {
+                    incomeDao.addIncome(
+                      IncomesCompanion(
+                        tags: Value(controllerTags.text),
+                        amount: Value(amount),
+                        date: Value(selectedDate),
+                        categoryIndex: Value(categoryIndex),
+                      ),
+                    );
+                  } else {
+                    expenseDao.addExpense(
+                      ExpensesCompanion(
+                        tags: Value(controllerTags.text),
+                        amount: Value(amount),
+                        date: Value(selectedDate),
+                        categoryIndex: Value(categoryIndex),
+                      ),
+                    );
+                  }
                 }
               }
               Navigator.pop(context);
@@ -415,7 +422,7 @@ class _CustomScreenState extends State<CustomScreen> {
     );
   }
 
-  InputDecoration decoratorInputWidget(String text) {
+  InputDecoration _decoratorInputWidget(String text) {
     return InputDecoration(
       labelText: text,
       labelStyle: TextStyle(color: isIncome ? accentIncome : accentExpense),
@@ -445,7 +452,7 @@ class _CustomScreenState extends State<CustomScreen> {
     );
   }
 
-  void showCategoriesIncome() async {
+  void _showCategoriesIncome() async {
     var width = MediaQuery.of(context).size.width;
 
     var result = await showDialog(
@@ -488,7 +495,7 @@ class _CustomScreenState extends State<CustomScreen> {
     });
   }
 
-  void showCategoriesExpense() async {
+  void _showCategoriesExpense() async {
     var width = MediaQuery.of(context).size.width;
 
     var result = await showDialog(

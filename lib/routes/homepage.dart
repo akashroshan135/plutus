@@ -95,7 +95,7 @@ class _HomepageState extends State<Homepage> {
       backgroundColor: Colors.blue,
       onPressed: () {
         if (pageIndex == 2)
-          _showUpcoming();
+          _showCustomInput();
         else
           _showInputs();
       },
@@ -185,7 +185,7 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  void _showUpcoming() async {
+  void _showCustomInput() async {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => CustomScreen()),
