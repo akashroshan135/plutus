@@ -41,7 +41,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
 
   // * gets the profile data from the database
   Widget _getProfileDao() {
-    // * calling database
+    // * calling profile database dao
     final profileDao = Provider.of<ProfileDao>(context);
 
     // * StreamBuilder used to build list of all objects
@@ -50,6 +50,8 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
       builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
         final profile = snapshot.data ?? [];
         return ListView.builder(
+          primary: false,
+          shrinkWrap: true,
           itemCount: profile.length,
           itemBuilder: (_, index) {
             return _getExpenseDao(context, profileDao, profile[0]);
@@ -249,6 +251,8 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
               width: width - 50,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: ListView.builder(
+                primary: false,
+                shrinkWrap: true,
                 itemCount: ExpenseCategory.categoryNames.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Category(

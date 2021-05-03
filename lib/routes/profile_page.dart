@@ -90,6 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
         final profile = snapshot.data ?? [];
         return ListView.builder(
+          primary: false,
           shrinkWrap: true,
           itemCount: profile.length,
           itemBuilder: (_, index) {

@@ -62,6 +62,8 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
       builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
         final profile = snapshot.data ?? [];
         return ListView.builder(
+          primary: false,
+          shrinkWrap: true,
           itemCount: profile.length,
           itemBuilder: (_, index) {
             return _getExpenseDao(context, profileDao, profile[0]);
@@ -263,6 +265,8 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
               width: width - 50,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: ListView.builder(
+                primary: false,
+                shrinkWrap: true,
                 itemCount: ExpenseCategory.categoryNames.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Category(

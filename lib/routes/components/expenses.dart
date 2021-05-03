@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
 // * Database packages
+import 'package:moor_flutter/moor_flutter.dart' as moor;
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +29,28 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
 
   @override
   Widget build(BuildContext context) {
+    // * calling profile database dao
+    final profileDao = Provider.of<ProfileDao>(context);
+
+    // * StreamBuilder used to build list of all objects
+    return StreamBuilder(
+      stream: profileDao.watchAllProfile(),
+      builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
+        final profile = snapshot.data ?? [];
+        return ListView.builder(
+          primary: false,
+          shrinkWrap: true,
+          itemCount: profile.length,
+          itemBuilder: (_, index) {
+            return _getExpenseDao(context, profileDao, profile[0]);
+          },
+        );
+      },
+    );
+  }
+
+  Widget _getExpenseDao(
+      BuildContext context, ProfileDao profileDao, Profile profile) {
     // * calling database
     final expenseDao = Provider.of<ExpenseDao>(context);
 
@@ -62,7 +85,8 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
               shrinkWrap: true,
               itemCount: expenses.length,
               itemBuilder: (_, index) {
-                return _buildItem(context, expenses[index], expenseDao);
+                return _buildItem(
+                    context, profileDao, profile, expenses[index], expenseDao);
               },
             ),
           ],
@@ -76,8 +100,8 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
   }
 
   // * code to build one transaction item
-  Widget _buildItem(
-      BuildContext context, Expense expense, ExpenseDao expenseDao) {
+  Widget _buildItem(BuildContext context, ProfileDao profileDao,
+      Profile profile, Expense expense, ExpenseDao expenseDao) {
     var size = MediaQuery.of(context).size;
 
     return Dismissible(
@@ -157,6 +181,13 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
         }
       },
       onDismissed: (direction) {
+        profileDao.updateProfile(
+          ProfilesCompanion(
+            id: moor.Value(profile.id),
+            name: moor.Value(profile.name),
+            balance: moor.Value(profile.balance + expense.amount),
+          ),
+        );
         expenseDao.deleteExpense(expense);
         // _cancelNotification();
       },

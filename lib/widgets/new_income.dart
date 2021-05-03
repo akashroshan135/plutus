@@ -41,7 +41,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
 
   // * gets the profile data from the database
   Widget _getProfileDao() {
-    // * calling database
+    // * calling profile database dao
     final profileDao = Provider.of<ProfileDao>(context);
 
     // * StreamBuilder used to build list of all objects
@@ -50,6 +50,8 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
       builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
         final profile = snapshot.data ?? [];
         return ListView.builder(
+          primary: false,
+          shrinkWrap: true,
           itemCount: profile.length,
           itemBuilder: (_, index) {
             return _getIncomeDao(context, profileDao, profile[0]);
@@ -249,6 +251,8 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
               width: width - 50,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: ListView.builder(
+                primary: false,
+                shrinkWrap: true,
                 itemCount: IncomeCategory.categoryNames.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Category(

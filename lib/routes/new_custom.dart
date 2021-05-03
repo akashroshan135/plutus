@@ -87,18 +87,41 @@ class _CustomScreenState extends State<CustomScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: _getPage(),
+      body: _getProfileDao(),
     );
   }
 
-  Widget _getPage() {
+  // * gets the profile data from the database
+  Widget _getProfileDao() {
+    // * calling database
+    final profileDao = Provider.of<ProfileDao>(context);
+
+    // * StreamBuilder used to build list of all objects
+    return StreamBuilder(
+      stream: profileDao.watchAllProfile(),
+      builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
+        final profile = snapshot.data ?? [];
+        return ListView.builder(
+          primary: false,
+          shrinkWrap: true,
+          itemCount: profile.length,
+          itemBuilder: (_, index) {
+            return _getPage(context, profileDao, profile[0]);
+          },
+        );
+      },
+    );
+  }
+
+  Widget _getPage(
+      BuildContext context, ProfileDao profileDao, Profile profile) {
     return SingleChildScrollView(
       child: ListView(
         primary: false,
         shrinkWrap: true,
         children: [
           _getHeader(),
-          _getBody(),
+          _getBody(context, profileDao, profile),
         ],
       ),
     );
@@ -138,7 +161,8 @@ class _CustomScreenState extends State<CustomScreen> {
     );
   }
 
-  Widget _getBody() {
+  Widget _getBody(
+      BuildContext context, ProfileDao profileDao, Profile profile) {
     final incomeDao = Provider.of<IncomeDao>(context);
     final expenseDao = Provider.of<ExpenseDao>(context);
 
@@ -257,6 +281,13 @@ class _CustomScreenState extends State<CustomScreen> {
                   return _getEasterEgg();
                 } else {
                   if (isIncome) {
+                    profileDao.updateProfile(
+                      ProfilesCompanion(
+                        id: Value(profile.id),
+                        name: Value(profile.name),
+                        balance: Value(profile.balance + amount),
+                      ),
+                    );
                     incomeDao.addIncome(
                       IncomesCompanion(
                         tags: Value(controllerTags.text),
@@ -266,6 +297,13 @@ class _CustomScreenState extends State<CustomScreen> {
                       ),
                     );
                   } else {
+                    profileDao.updateProfile(
+                      ProfilesCompanion(
+                        id: Value(profile.id),
+                        name: Value(profile.name),
+                        balance: Value(profile.balance - amount),
+                      ),
+                    );
                     expenseDao.addExpense(
                       ExpensesCompanion(
                         tags: Value(controllerTags.text),
@@ -475,6 +513,8 @@ class _CustomScreenState extends State<CustomScreen> {
               width: width - 50,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: ListView.builder(
+                primary: false,
+                shrinkWrap: true,
                 itemCount: IncomeCategory.categoryNames.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Category(
@@ -518,6 +558,8 @@ class _CustomScreenState extends State<CustomScreen> {
               width: width - 50,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: ListView.builder(
+                primary: false,
+                shrinkWrap: true,
                 itemCount: ExpenseCategory.categoryNames.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Category(

@@ -132,6 +132,8 @@ class _HomepageState extends State<Homepage> {
               width: width - 50,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: ListView.builder(
+                primary: false,
+                shrinkWrap: true,
                 itemCount: inputs.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Category(

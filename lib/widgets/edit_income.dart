@@ -62,6 +62,8 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
       builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
         final profile = snapshot.data ?? [];
         return ListView.builder(
+          primary: false,
+          shrinkWrap: true,
           itemCount: profile.length,
           itemBuilder: (_, index) {
             return _getIncomeDao(context, profileDao, profile[0]);
@@ -263,6 +265,8 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
               width: width - 50,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: ListView.builder(
+                primary: false,
+                shrinkWrap: true,
                 itemCount: IncomeCategory.categoryNames.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Category(
