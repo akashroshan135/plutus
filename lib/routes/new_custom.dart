@@ -24,30 +24,33 @@ import 'package:plutus/data/expenseCat.dart';
 import 'package:plutus/data/incomeCat.dart';
 import 'package:plutus/data/colorData.dart';
 
-class UpcomingScreen extends StatefulWidget {
-  UpcomingScreen({Key key}) : super(key: key);
+class CustomScreen extends StatefulWidget {
+  CustomScreen({Key key}) : super(key: key);
 
   @override
-  _UpcomingScreenState createState() => _UpcomingScreenState();
+  _CustomScreenState createState() => _CustomScreenState();
 }
 
-class _UpcomingScreenState extends State<UpcomingScreen> {
+class _CustomScreenState extends State<CustomScreen> {
   final _padding = EdgeInsets.all(16);
   final _random = new Random();
 
-  final controllerTags = TextEditingController();
-  final controllerAmount = TextEditingController();
+  bool isIncome = false;
+  final accentExpense = Color(0xffe32012);
+  final accentIncome = Colors.green;
 
   var categoryIcon = AntDesign.search1;
   var categoryText = 'Select a Category';
   var categoryIndex;
 
-  final accentExpense = Color(0xffe32012);
-  final accentIncome = Colors.green;
+  final controllerTags = TextEditingController();
+  final controllerAmount = TextEditingController();
+  final controllerDate = TextEditingController();
+  DateTime selectedDate = DateTime.now();
 
   final notificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  // * code to initialize notification plugin
+  // * code to initialize notification plugin and current date & time
   @override
   void initState() {
     super.initState();
@@ -58,6 +61,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
       onSelectNotification: selectNotification,
     );
     _configureLocalTimeZone();
+    controllerDate.text = selectedDate.toString();
   }
 
   // * code to configure and set timezone
@@ -83,9 +87,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
     return ListView(
       children: [
         _getHeader(),
-        // TODO button that switches between income and expense
-        _getBodyIncome(),
-        // _getBodyExpense(),
+        _getBody(),
       ],
     );
   }
@@ -115,7 +117,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
             ),
             SizedBox(width: 25),
             Text(
-              'New Upcoming Transaction',
+              'New Custom Transaction',
               style: Theme.of(context).textTheme.headline1,
             ),
           ],
@@ -124,11 +126,9 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
     );
   }
 
-/* --------------------------------------------------------------
-  Income
--------------------------------------------------------------- */
-  Widget _getBodyIncome() {
-    final incomeDao = Provider.of<IncomeDao>(context);
+  Widget _getBody() {
+    // final incomeDao = Provider.of<IncomeDao>(context);
+    // final expenseDao = Provider.of<ExpenseDao>(context);
 
     // * field for category. shows a dialog box
     final inputCategory = Padding(
@@ -136,7 +136,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
       child: Container(
         // height: 80,
         decoration: BoxDecoration(
-          border: Border.all(color: accentIncome),
+          border: Border.all(color: isIncome ? accentIncome : accentExpense),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Material(
@@ -147,7 +147,10 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
             highlightColor: Colors.pink[400],
             splashColor: Colors.pink,
             onTap: () {
-              showCategoriesIncome();
+              if (isIncome)
+                showCategoriesIncome();
+              else
+                showCategoriesExpense();
             },
             child: Row(
               children: <Widget>[
@@ -155,7 +158,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                   padding: EdgeInsets.all(16),
                   child: Icon(
                     categoryIcon,
-                    color: accentIncome,
+                    color: isIncome ? accentIncome : accentExpense,
                     size: Theme.of(context).primaryIconTheme.size,
                   ),
                 ),
@@ -164,7 +167,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1
-                      .copyWith(color: accentIncome),
+                      .copyWith(color: isIncome ? accentIncome : accentExpense),
                 ),
               ],
             ),
@@ -179,9 +182,9 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
       padding: _padding,
       child: TextField(
         controller: controllerTags,
-        cursorColor: accentIncome,
+        cursorColor: isIncome ? accentIncome : accentExpense,
         style: Theme.of(context).textTheme.bodyText1,
-        decoration: decoratorInputWidgetIncome('Tags'),
+        decoration: decoratorInputWidget('Tags'),
       ),
     );
 
@@ -191,9 +194,26 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
       child: TextField(
         controller: controllerAmount,
         keyboardType: TextInputType.number,
-        cursorColor: accentIncome,
+        cursorColor: isIncome ? accentIncome : accentExpense,
         style: Theme.of(context).textTheme.bodyText1,
-        decoration: decoratorInputWidgetIncome('Amount'),
+        decoration: decoratorInputWidget('Amount'),
+      ),
+    );
+
+    // * input field for date and time
+    final dateTimePicker = InkWell(
+      onTap: () {
+        _selectDate(context);
+      },
+      child: Padding(
+        padding: _padding,
+        child: TextField(
+          controller: controllerDate,
+          enabled: false,
+          cursorColor: isIncome ? accentIncome : accentExpense,
+          style: Theme.of(context).textTheme.bodyText1,
+          decoration: decoratorInputWidget('Date and Time'),
+        ),
       ),
     );
 
@@ -204,7 +224,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
         height: 50,
         child: Material(
           borderRadius: BorderRadius.circular(15),
-          color: accentIncome,
+          color: isIncome ? accentIncome : accentExpense,
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
             highlightColor: Colors.pink[400],
@@ -219,14 +239,18 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                 if (amount > 1000000) {
                   return _getEasterEgg();
                 } else {
-                  incomeDao.addIncome(
-                    IncomesCompanion(
-                      tags: Value(controllerTags.text),
-                      amount: Value(amount),
-                      date: Value(DateTime.now()),
-                      categoryIndex: Value(categoryIndex),
-                    ),
-                  );
+                  if (isIncome)
+                    print('add stuff income');
+                  else
+                    print('add stuff expense');
+                  // incomeDao.addIncome(
+                  //   IncomesCompanion(
+                  //     tags: Value(controllerTags.text),
+                  //     amount: Value(amount),
+                  //     date: Value(DateTime.now()),
+                  //     categoryIndex: Value(categoryIndex),
+                  //   ),
+                  // );
                 }
               }
               Navigator.pop(context);
@@ -248,35 +272,60 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
     return ListView(
       shrinkWrap: true,
       children: [
-        Center(
-          child: Text(
-            'Add New Income',
-            style: Theme.of(context)
-                .textTheme
-                .headline1
-                .copyWith(color: accentIncome),
-          ),
+        SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Expense',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            Switch(
+              value: isIncome,
+              onChanged: (value) {
+                setState(() {
+                  isIncome = value;
+                });
+              },
+              inactiveThumbColor: accentExpense,
+              activeColor: accentIncome,
+              activeTrackColor: accentIncome,
+              inactiveTrackColor: accentExpense,
+            ),
+            Text(
+              'Income',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+          ],
         ),
         SizedBox(height: 10),
         inputCategory,
         inputTags,
         inputAmt,
+        dateTimePicker,
         submit,
       ],
     );
   }
 
-  InputDecoration decoratorInputWidgetIncome(String text) {
+  InputDecoration decoratorInputWidget(String text) {
     return InputDecoration(
       labelText: text,
-      labelStyle: TextStyle(color: accentIncome),
+      labelStyle: TextStyle(color: isIncome ? accentIncome : accentExpense),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: accentIncome, width: 1),
+        borderSide: BorderSide(
+            color: isIncome ? accentIncome : accentExpense, width: 1),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: accentIncome, width: 1),
+        borderSide: BorderSide(
+            color: isIncome ? accentIncome : accentExpense, width: 1),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+            color: isIncome ? accentIncome : accentExpense, width: 1),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
@@ -332,172 +381,6 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
     });
   }
 
-/* --------------------------------------------------------------
-  Expense
--------------------------------------------------------------- */
-  Widget _getBodyExpense() {
-    final expenseDao = Provider.of<ExpenseDao>(context);
-
-    // * field for category. shows a dialog box
-    final inputCategory = Padding(
-      padding: EdgeInsets.all(8),
-      child: Container(
-        // height: 80,
-        decoration: BoxDecoration(
-          border: Border.all(color: accentExpense),
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Material(
-          borderRadius: BorderRadius.circular(15),
-          color: Theme.of(context).secondaryHeaderColor,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(15),
-            highlightColor: Colors.pink[400],
-            splashColor: Colors.pink,
-            onTap: () {
-              showCategoriesExpense();
-            },
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: _padding,
-                  child: Icon(
-                    categoryIcon,
-                    color: accentExpense,
-                    size: Theme.of(context).primaryIconTheme.size,
-                  ),
-                ),
-                Text(
-                  categoryText,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      .copyWith(color: accentExpense),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
-    // * input field for tags
-    // TODO add character limit
-    final inputTags = Padding(
-      padding: _padding,
-      child: TextField(
-        controller: controllerTags,
-        cursorColor: accentExpense,
-        style: Theme.of(context).textTheme.bodyText1,
-        decoration: decoratorInputWidgetExpense('Tags'),
-      ),
-    );
-
-    // * input field for amount
-    final inputAmt = Padding(
-      padding: _padding,
-      child: TextField(
-        controller: controllerAmount,
-        keyboardType: TextInputType.number,
-        cursorColor: accentExpense,
-        style: Theme.of(context).textTheme.bodyText1,
-        decoration: decoratorInputWidgetExpense('Amount'),
-      ),
-    );
-
-    // * submit button. Submits data to db and goes to previous page
-    final submit = Padding(
-      padding: EdgeInsets.only(top: 16, left: 100, right: 100, bottom: 50),
-      child: Container(
-        height: 50,
-        child: Material(
-          borderRadius: BorderRadius.circular(15),
-          color: accentExpense,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(15),
-            highlightColor: Colors.pink[400],
-            splashColor: Colors.pink,
-            onTap: () {
-              if (controllerTags.text == '' ||
-                  controllerAmount.text == '' ||
-                  categoryIndex == null) {
-                return _getWarning();
-              } else {
-                double amount = double.parse(controllerAmount.text);
-                if (amount > 1000000) {
-                  return _getEasterEgg();
-                } else {
-                  expenseDao.addExpense(
-                    ExpensesCompanion(
-                      tags: Value(controllerTags.text),
-                      amount: Value(amount),
-                      date: Value(DateTime.now()),
-                      categoryIndex: Value(categoryIndex),
-                    ),
-                  );
-                  _setNotification(controllerTags.text, amount);
-                }
-              }
-              Navigator.pop(context);
-            },
-            child: Center(
-              child: Text(
-                'Submit',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1
-                    .copyWith(color: Colors.white),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Center(
-          child: Text(
-            'Add New Expense',
-            style: Theme.of(context)
-                .textTheme
-                .headline1
-                .copyWith(color: accentExpense),
-          ),
-        ),
-        SizedBox(height: 10),
-        inputCategory,
-        inputTags,
-        inputAmt,
-        submit,
-      ],
-    );
-  }
-
-  InputDecoration decoratorInputWidgetExpense(String text) {
-    return InputDecoration(
-      labelText: text,
-      labelStyle: TextStyle(color: accentExpense),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: accentExpense, width: 1),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: accentExpense, width: 1),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.red, width: 1),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.red, width: 1),
-      ),
-    );
-  }
-
   void showCategoriesExpense() async {
     var width = MediaQuery.of(context).size.width;
 
@@ -541,9 +424,34 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
     });
   }
 
-/* --------------------------------------------------------------
-  Common stuff
--------------------------------------------------------------- */
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        initialDatePickerMode: DatePickerMode.day,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2101));
+    if (picked != null) {
+      setState(() {
+        selectedDate = picked;
+      });
+      _selectTime(context);
+    }
+  }
+
+  Future<Null> _selectTime(BuildContext context) async {
+    final TimeOfDay selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (selectedTime != null)
+      setState(() {
+        selectedDate = DateTime(selectedDate.year, selectedDate.month,
+            selectedDate.day, selectedTime.hour, selectedTime.minute);
+        controllerDate.text = selectedDate.toString();
+      });
+  }
+
   Future _getWarning() {
     return showDialog(
       context: context,
@@ -595,6 +503,45 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
               },
               child: Text(
                 'OK',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future _getFuture() {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            'Upcoming Transaction',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          content: Text(
+            'This is an upcoming transaction. Would you like to keep a reminder on the specified date?',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'No',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                // _setNotification();
+              },
+              child: Text(
+                'Yes',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ),

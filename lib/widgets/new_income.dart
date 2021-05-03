@@ -49,7 +49,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
         ),
         child: Material(
           borderRadius: BorderRadius.circular(15),
-          color: Theme.of(context).secondaryHeaderColor,
+          color: Theme.of(context).scaffoldBackgroundColor,
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
             highlightColor: Colors.pink[400],
