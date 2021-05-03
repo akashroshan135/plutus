@@ -51,7 +51,8 @@ class ProfileDao extends DatabaseAccessor<AppDatabase> with _$ProfileDaoMixin {
       into(profiles).insert(entry);
 
   // * updates profile balance
-  Future updateProfile(Profile entry) => update(profiles).replace(entry);
+  Future updateProfile(Insertable<Profile> entry) =>
+      update(profiles).replace(entry);
 }
 
 /* --------------------------------------------------------------

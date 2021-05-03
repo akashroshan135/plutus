@@ -24,12 +24,16 @@ class _DailyPageState extends State<DailyPage> {
   }
 
   Widget _getPage() {
-    return ListView(
-      children: [
-        _getHeader(),
-        ExpenseRoute(selectedDate: selectedDate),
-        IncomeRoute(selectedDate: selectedDate),
-      ],
+    return SingleChildScrollView(
+      child: ListView(
+        primary: false,
+        shrinkWrap: true,
+        children: [
+          _getHeader(),
+          ExpenseRoute(selectedDate: selectedDate),
+          IncomeRoute(selectedDate: selectedDate),
+        ],
+      ),
     );
   }
 

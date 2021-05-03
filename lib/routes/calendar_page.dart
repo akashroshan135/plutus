@@ -26,12 +26,16 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Widget _getPage() {
-    return ListView(
-      children: [
-        _getHeader(),
-        ExpenseRoute(selectedDate: _selectedDay),
-        IncomeRoute(selectedDate: _selectedDay),
-      ],
+    return SingleChildScrollView(
+      child: ListView(
+        primary: false,
+        shrinkWrap: true,
+        children: [
+          _getHeader(),
+          ExpenseRoute(selectedDate: _selectedDay),
+          IncomeRoute(selectedDate: _selectedDay),
+        ],
+      ),
     );
   }
 

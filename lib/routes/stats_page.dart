@@ -18,11 +18,15 @@ class _StatsPageState extends State<StatsPage> {
   }
 
   Widget _getPage() {
-    return ListView(
-      children: [
-        _getHeader(),
-        _getBody(),
-      ],
+    return SingleChildScrollView(
+      child: ListView(
+        primary: false,
+        shrinkWrap: true,
+        children: [
+          _getHeader(),
+          _getBody(),
+        ],
+      ),
     );
   }
 

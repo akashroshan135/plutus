@@ -92,11 +92,15 @@ class _CustomScreenState extends State<CustomScreen> {
   }
 
   Widget _getPage() {
-    return ListView(
-      children: [
-        _getHeader(),
-        _getBody(),
-      ],
+    return SingleChildScrollView(
+      child: ListView(
+        primary: false,
+        shrinkWrap: true,
+        children: [
+          _getHeader(),
+          _getBody(),
+        ],
+      ),
     );
   }
 
@@ -410,6 +414,7 @@ class _CustomScreenState extends State<CustomScreen> {
     );
 
     return ListView(
+      primary: false,
       shrinkWrap: true,
       children: [
         toggle,

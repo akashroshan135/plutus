@@ -25,11 +25,15 @@ class _AboutScreenState extends State<AboutScreen> {
   }
 
   Widget _getPage() {
-    return ListView(
-      children: [
-        _getHeader(),
-        _getBody(),
-      ],
+    return SingleChildScrollView(
+      child: ListView(
+        primary: false,
+        shrinkWrap: true,
+        children: [
+          _getHeader(),
+          _getBody(),
+        ],
+      ),
     );
   }
 
@@ -137,6 +141,8 @@ class _AboutScreenState extends State<AboutScreen> {
       child: Padding(
         padding: EdgeInsets.all(16),
         child: ListView(
+          primary: false,
+          shrinkWrap: true,
           children: [
             appDescription,
             appGithub,

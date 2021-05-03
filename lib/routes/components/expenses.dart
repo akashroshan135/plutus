@@ -47,27 +47,25 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
             ),
           );
         }
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 10, bottom: 8, left: 18),
-                child: Text(
-                  'Expenses',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 10, bottom: 8, left: 18),
+              child: Text(
+                'Expenses',
+                style: Theme.of(context).textTheme.bodyText1,
               ),
-              ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: expenses.length,
-                itemBuilder: (_, index) {
-                  return _buildItem(context, expenses[index], expenseDao);
-                },
-              ),
-            ],
-          ),
+            ),
+            ListView.builder(
+              primary: false,
+              shrinkWrap: true,
+              itemCount: expenses.length,
+              itemBuilder: (_, index) {
+                return _buildItem(context, expenses[index], expenseDao);
+              },
+            ),
+          ],
         );
       },
     );

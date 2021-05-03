@@ -26,11 +26,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // * renders the body
   Widget _getPage() {
-    return ListView(
-      children: [
-        _getHeader(),
-        // _getBody(),
-      ],
+    return SingleChildScrollView(
+      child: ListView(
+        primary: false,
+        shrinkWrap: true,
+        children: [
+          _getHeader(),
+          // _getBody(),
+        ],
+      ),
     );
   }
 
@@ -86,7 +90,6 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
         final profile = snapshot.data ?? [];
         return ListView.builder(
-          scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: profile.length,
           itemBuilder: (_, index) {

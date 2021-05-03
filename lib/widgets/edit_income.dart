@@ -48,6 +48,31 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return _getProfileDao();
+  }
+
+  // * gets the profile data from the database
+  Widget _getProfileDao() {
+    // * calling database
+    final profileDao = Provider.of<ProfileDao>(context);
+
+    // * StreamBuilder used to build list of all objects
+    return StreamBuilder(
+      stream: profileDao.watchAllProfile(),
+      builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
+        final profile = snapshot.data ?? [];
+        return ListView.builder(
+          itemCount: profile.length,
+          itemBuilder: (_, index) {
+            return _getIncomeDao(context, profileDao, profile[0]);
+          },
+        );
+      },
+    );
+  }
+
+  Widget _getIncomeDao(
+      BuildContext context, ProfileDao profileDao, Profile profile) {
     final incomeDao = Provider.of<IncomeDao>(context);
 
     // * field for category. shows a dialog box
@@ -139,12 +164,20 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
                 if (amount > 1000000) {
                   return _getEasterEgg();
                 } else {
+                  profileDao.updateProfile(
+                    ProfilesCompanion(
+                      id: Value(profile.id),
+                      name: Value(profile.name),
+                      balance: Value(
+                          (profile.balance - widget.income.amount) + amount),
+                    ),
+                  );
                   incomeDao.updateIncome(
                     IncomesCompanion(
                       id: Value(widget.income.id),
                       tags: Value(controllerTags.text),
                       amount: Value(amount),
-                      date: Value(DateTime.now()),
+                      date: Value(widget.income.date),
                       categoryIndex: Value(categoryIndex),
                     ),
                   );
@@ -167,6 +200,8 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
     );
 
     return ListView(
+      primary: false,
+      shrinkWrap: true,
       children: [
         Center(
           child: Text(

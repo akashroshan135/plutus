@@ -47,27 +47,25 @@ class _IncomeRouteState extends State<IncomeRoute> {
             ),
           );
         }
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 10, bottom: 8, left: 18),
-                child: Text(
-                  'Income',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 10, bottom: 8, left: 18),
+              child: Text(
+                'Income',
+                style: Theme.of(context).textTheme.bodyText1,
               ),
-              ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: incomes.length,
-                itemBuilder: (_, index) {
-                  return _buildItem(context, incomes[index], incomeDao);
-                },
-              ),
-            ],
-          ),
+            ),
+            ListView.builder(
+              primary: false,
+              shrinkWrap: true,
+              itemCount: incomes.length,
+              itemBuilder: (_, index) {
+                return _buildItem(context, incomes[index], incomeDao);
+              },
+            ),
+          ],
         );
       },
     );
