@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:intl/intl.dart';
 import 'dart:math';
 
 // * Database packages
@@ -47,6 +48,7 @@ class _CustomScreenState extends State<CustomScreen> {
   final controllerAmount = TextEditingController();
   final controllerDate = TextEditingController();
   DateTime selectedDate = DateTime.now();
+  bool isDateChanged = false;
 
   final notificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -61,7 +63,8 @@ class _CustomScreenState extends State<CustomScreen> {
       onSelectNotification: selectNotification,
     );
     _configureLocalTimeZone();
-    controllerDate.text = selectedDate.toString();
+    controllerDate.text =
+        DateFormat('d MMM yyyy, hh:mm a').format(selectedDate).toString();
   }
 
   // * code to configure and set timezone
@@ -211,7 +214,12 @@ class _CustomScreenState extends State<CustomScreen> {
           controller: controllerDate,
           enabled: false,
           cursorColor: isIncome ? accentIncome : accentExpense,
-          style: Theme.of(context).textTheme.bodyText1,
+          style: isDateChanged
+              ? Theme.of(context).textTheme.bodyText1
+              : Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(color: isIncome ? accentIncome : accentExpense),
           decoration: decoratorInputWidget('Date and Time'),
         ),
       ),
@@ -285,6 +293,9 @@ class _CustomScreenState extends State<CustomScreen> {
               onChanged: (value) {
                 setState(() {
                   isIncome = value;
+                  categoryIcon = AntDesign.search1;
+                  categoryText = 'Select a Category';
+                  categoryIndex = null;
                 });
               },
               inactiveThumbColor: accentExpense,
@@ -435,6 +446,7 @@ class _CustomScreenState extends State<CustomScreen> {
       setState(() {
         selectedDate = picked;
       });
+      isDateChanged = true;
       _selectTime(context);
     }
   }
@@ -448,7 +460,8 @@ class _CustomScreenState extends State<CustomScreen> {
       setState(() {
         selectedDate = DateTime(selectedDate.year, selectedDate.month,
             selectedDate.day, selectedTime.hour, selectedTime.minute);
-        controllerDate.text = selectedDate.toString();
+        controllerDate.text =
+            DateFormat('d MMM yyyy, hh:mm a').format(selectedDate).toString();
       });
   }
 
