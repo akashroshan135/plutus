@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
 // * Database packages
@@ -10,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 //* Custom Widgets
-import 'package:plutus/widgets/new_expense.dart';
+import 'package:plutus/widgets/edit_expense.dart';
 
 //* Data Classes
 import 'package:plutus/data/expenseCat.dart';
@@ -50,18 +49,22 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
         }
         return SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 30),
               Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: expenses.length,
-                  itemBuilder: (_, index) {
-                    return _buildItem(context, expenses[index], expenseDao);
-                  },
+                padding: EdgeInsets.only(top: 10, bottom: 8, left: 18),
+                child: Text(
+                  'Expenses',
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
+              ),
+              ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: expenses.length,
+                itemBuilder: (_, index) {
+                  return _buildItem(context, expenses[index], expenseDao);
+                },
               ),
             ],
           ),
@@ -79,180 +82,239 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
       BuildContext context, Expense expense, ExpenseDao expenseDao) {
     var size = MediaQuery.of(context).size;
 
-    // TODO add ability to edit transactions (only if it has been one week)
-    final editBtn = IconSlideAction(
-      caption: 'Edit',
-      color: Colors.grey[400],
-      icon: Icons.edit,
-      onTap: () => print('updates'),
-    );
-
-    final deleteBtn = IconSlideAction(
-      caption: 'Delete',
-      color: Colors.red,
-      icon: Icons.delete,
-      onTap: () {
-        return showDialog(
-          context: context,
-          builder: (_) {
-            return AlertDialog(
-              title: Text(
-                'Alert',
-                style: Theme.of(context).textTheme.headline1,
-              ),
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              content: Text(
-                'Are you sure want to delete this item?',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    'CANCEL',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
+    return Dismissible(
+      key: Key(expense.toString()),
+      background: slideRightBackground(),
+      secondaryBackground: slideLeftBackground(),
+      confirmDismiss: (DismissDirection direction) async {
+        if (direction == DismissDirection.endToStart) {
+          return await showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                title: Text(
+                  'Alert',
+                  style: Theme.of(context).textTheme.headline1,
                 ),
-                TextButton(
-                  onPressed: () {
-                    expenseDao.deleteExpense(expense);
-                    _cancelNotification();
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    'OK',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                content: Text(
+                  'Are you sure want to delete this item?',
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
-              ],
-            );
-          },
-        );
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: Text(
+                      'CANCEL',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: Text(
+                      'OK',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          return await showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                title: Text(
+                  'Alert',
+                  style: Theme.of(context).textTheme.headline1,
+                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                content: Text(
+                  'Are you sure want to edit this item?',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: Text(
+                      'CANCEL',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                      showDetailsSceen(expense);
+                    },
+                    child: Text(
+                      'OK',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        }
       },
-    );
-
-    return Column(
-      children: [
-        Slidable(
-          actionPane: SlidableDrawerActionPane(),
-          actionExtentRatio: 0.20,
-          secondaryActions: <Widget>[
-            editBtn,
-            deleteBtn,
-          ],
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Container(
-              //   child: Center(
-              //     child: Container(
-              //       width: 50,
-              //       height: 50,
-              //       child: Neumorphic(
-              //         style: NeumorphicStyle(
-              //             shape: NeumorphicShape.concave,
-              //             boxShape: NeumorphicBoxShape.circle(),
-              //             depth: 3,
-              //             intensity: 0.4,
-              //             lightSource: LightSource.bottom,
-              //             color: Theme.of(context).iconTheme.color),
-              //         child: Center(
-              //           child: NeumorphicIcon(
-              //             ExpenseCategory.categoryIcon[expense.categoryIndex],
-              //             style: NeumorphicStyle(
-              //               shape: NeumorphicShape.flat,
-              //               depth: 5,
-              //               intensity: 0.6,
-              //               lightSource: LightSource.top,
-              //               color: Theme.of(context).primaryIconTheme.color,
-              //             ),
-              //             size: Theme.of(context).primaryIconTheme.size,
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              Container(
-                // height: 80,
-                width: (size.width - 40) * 0.7,
-                child: Row(
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey.withOpacity(0.1),
+      onDismissed: (direction) {
+        expenseDao.deleteExpense(expense);
+        // _cancelNotification();
+      },
+      child: Container(
+        padding: EdgeInsets.only(top: 12, left: 18, right: 18, bottom: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Container(
+            //   child: Center(
+            //     child: Container(
+            //       width: 50,
+            //       height: 50,
+            //       child: Neumorphic(
+            //         style: NeumorphicStyle(
+            //             shape: NeumorphicShape.concave,
+            //             boxShape: NeumorphicBoxShape.circle(),
+            //             depth: 3,
+            //             intensity: 0.4,
+            //             lightSource: LightSource.bottom,
+            //             color: Theme.of(context).iconTheme.color),
+            //         child: Center(
+            //           child: NeumorphicIcon(
+            //             ExpenseCategory.categoryIcon[expense.categoryIndex],
+            //             style: NeumorphicStyle(
+            //               shape: NeumorphicShape.flat,
+            //               depth: 5,
+            //               intensity: 0.6,
+            //               lightSource: LightSource.top,
+            //               color: Theme.of(context).primaryIconTheme.color,
+            //             ),
+            //             size: Theme.of(context).primaryIconTheme.size,
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            Container(
+              // height: 80,
+              width: (size.width - 40) * 0.7,
+              child: Row(
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey.withOpacity(0.1),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        ExpenseCategory.categoryIcon[expense.categoryIndex],
+                        color: Theme.of(context).iconTheme.color,
+                        size: Theme.of(context).iconTheme.size,
                       ),
-                      child: Center(
-                        child: Icon(
-                          ExpenseCategory.categoryIcon[expense.categoryIndex],
-                          color: Theme.of(context).iconTheme.color,
-                          size: Theme.of(context).iconTheme.size,
+                      // child: Image.asset(
+                      //   'assets/images/bank.png',
+                      //   width: 30,
+                      //   height: 30,
+                      // ),
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Container(
+                    width: (size.width - 90) * 0.5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          ExpenseCategory.categoryNames[expense.categoryIndex],
+                          style: Theme.of(context).textTheme.bodyText1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        // child: Image.asset(
-                        //   'assets/images/bank.png',
-                        //   width: 30,
-                        //   height: 30,
-                        // ),
-                      ),
+                        SizedBox(height: 5),
+                        Text(
+                          expense.tags,
+                          style: Theme.of(context).textTheme.bodyText2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 15),
-                    Container(
-                      width: (size.width - 90) * 0.5,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            ExpenseCategory
-                                .categoryNames[expense.categoryIndex],
-                            style: Theme.of(context).textTheme.bodyText1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            expense.tags,
-                            style: Theme.of(context).textTheme.bodyText2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Container(
-                width: (size.width - 40) * 0.3,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      '- ₹' + expense.amount.toString() + ' ',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1
-                          .copyWith(color: Colors.red),
-                    ),
-                  ],
-                ),
+            ),
+            Container(
+              width: (size.width - 40) * 0.3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    '- ₹' + expense.amount.toString() + ' ',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        .copyWith(color: Colors.red),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 65, top: 8),
-          child: Divider(thickness: 0.8),
+      ),
+    );
+  }
+
+  Widget slideRightBackground() {
+    return Container(
+      color: Colors.green,
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 20,
+            ),
+            Icon(Icons.edit),
+            Text(
+              ' Edit',
+              style: Theme.of(context).textTheme.bodyText1,
+              textAlign: TextAlign.left,
+            ),
+          ],
         ),
-      ],
+        alignment: Alignment.centerLeft,
+      ),
+    );
+  }
+
+  Widget slideLeftBackground() {
+    return Container(
+      color: Colors.red,
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Icon(Icons.delete),
+            Text(
+              ' Delete',
+              style: Theme.of(context).textTheme.bodyText1,
+              textAlign: TextAlign.right,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+          ],
+        ),
+        alignment: Alignment.centerRight,
+      ),
     );
   }
 
   // TODO implement whatever this is
-  void showDetailsSceen() async {
+  void showDetailsSceen(Expense expense) async {
     return await showSlidingBottomSheet(
       context,
       builder: (context) {
@@ -272,7 +334,7 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                   color: Theme.of(context).scaffoldBackgroundColor,
                   child: Padding(
                     padding: EdgeInsets.all(16),
-                    child: NewExpenseScreen(),
+                    child: EditExpenseScreen(expense: expense),
                   ),
                 ),
               ),

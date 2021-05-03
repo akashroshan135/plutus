@@ -91,7 +91,8 @@ class IncomeDao extends DatabaseAccessor<AppDatabase> with _$IncomeDaoMixin {
       into(incomes).insert(entry);
 
   // * updates an income transaction with a matching primary key
-  Future updateIncome(Income entry) => update(incomes).replace(entry);
+  Future updateIncome(Insertable<Income> entry) =>
+      update(incomes).replace(entry);
 
   // * deletes an income transaction with a matching primary key
   Future deleteIncome(Insertable<Income> entry) =>
@@ -135,7 +136,8 @@ class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
       into(expenses).insert(entry);
 
   // * updates an expense transaction with a matching primary key
-  Future updateExpense(Expense entry) => update(expenses).replace(entry);
+  Future updateExpense(Insertable<Expense> entry) =>
+      update(expenses).replace(entry);
 
   // * deletes an expense transaction with a matching primary key
   Future deleteExpense(Insertable<Expense> entry) =>

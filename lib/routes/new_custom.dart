@@ -52,6 +52,9 @@ class _CustomScreenState extends State<CustomScreen> {
 
   final notificationsPlugin = FlutterLocalNotificationsPlugin();
 
+  double xAlign;
+  Color toggleColor;
+
   // * code to initialize notification plugin and current date & time
   @override
   void initState() {
@@ -65,6 +68,8 @@ class _CustomScreenState extends State<CustomScreen> {
     _configureLocalTimeZone();
     controllerDate.text =
         DateFormat('d MMM yyyy, hh:mm a').format(selectedDate).toString();
+    xAlign = -1;
+    toggleColor = accentExpense;
   }
 
   // * code to configure and set timezone
@@ -277,39 +282,130 @@ class _CustomScreenState extends State<CustomScreen> {
       ),
     );
 
+    final toggle = Padding(
+      padding: EdgeInsets.only(top: 25, bottom: 15),
+      child: Center(
+        child: Container(
+          width: 225,
+          height: 50,
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.all(
+              Radius.circular(50.0),
+            ),
+          ),
+          child: Stack(
+            children: [
+              AnimatedAlign(
+                alignment: Alignment(xAlign, 0),
+                duration: Duration(milliseconds: 300),
+                child: Container(
+                  width: 200 * 0.5,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: toggleColor,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50.0),
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    xAlign = -1;
+                    toggleColor = accentExpense;
+                    isIncome = false;
+                    categoryIcon = AntDesign.search1;
+                    categoryText = 'Select a Category';
+                    categoryIndex = null;
+                  });
+                },
+                child: Align(
+                  alignment: Alignment(-1, 0),
+                  child: Container(
+                    width: 200 * 0.5,
+                    color: Colors.transparent,
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Expense',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          .copyWith(fontSize: 18),
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    xAlign = 1;
+                    toggleColor = accentIncome;
+                    isIncome = true;
+                    categoryIcon = AntDesign.search1;
+                    categoryText = 'Select a Category';
+                    categoryIndex = null;
+                  });
+                },
+                child: Align(
+                  alignment: Alignment(1, 0),
+                  child: Container(
+                    width: 200 * 0.5,
+                    color: Colors.transparent,
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Income',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          .copyWith(fontSize: 18),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    final toggle1 = Padding(
+      padding: EdgeInsets.only(top: 10, bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Expense',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          Switch(
+            value: isIncome,
+            onChanged: (value) {
+              setState(() {
+                isIncome = value;
+                categoryIcon = AntDesign.search1;
+                categoryText = 'Select a Category';
+                categoryIndex = null;
+              });
+            },
+            inactiveThumbColor: accentExpense,
+            activeColor: accentIncome,
+            activeTrackColor: accentIncome,
+            inactiveTrackColor: accentExpense,
+          ),
+          Text(
+            'Income',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ],
+      ),
+    );
+
     return ListView(
       shrinkWrap: true,
       children: [
-        SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Expense',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Switch(
-              value: isIncome,
-              onChanged: (value) {
-                setState(() {
-                  isIncome = value;
-                  categoryIcon = AntDesign.search1;
-                  categoryText = 'Select a Category';
-                  categoryIndex = null;
-                });
-              },
-              inactiveThumbColor: accentExpense,
-              activeColor: accentIncome,
-              activeTrackColor: accentIncome,
-              inactiveTrackColor: accentExpense,
-            ),
-            Text(
-              'Income',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-          ],
-        ),
-        SizedBox(height: 10),
+        toggle,
         inputCategory,
         inputTags,
         inputAmt,
