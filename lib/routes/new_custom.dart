@@ -87,42 +87,15 @@ class _CustomScreenState extends State<CustomScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: _getProfileDao(),
-    );
-  }
-
-  // * gets the profile data from the database
-  Widget _getProfileDao() {
-    // * calling database
-    final profileDao = Provider.of<ProfileDao>(context);
-
-    // * StreamBuilder used to build list of all objects
-    return StreamBuilder(
-      stream: profileDao.watchAllProfile(),
-      builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
-        final profile = snapshot.data ?? [];
-        return ListView.builder(
+      body: SingleChildScrollView(
+        child: ListView(
           primary: false,
           shrinkWrap: true,
-          itemCount: profile.length,
-          itemBuilder: (_, index) {
-            return _getPage(context, profileDao, profile[0]);
-          },
-        );
-      },
-    );
-  }
-
-  Widget _getPage(
-      BuildContext context, ProfileDao profileDao, Profile profile) {
-    return SingleChildScrollView(
-      child: ListView(
-        primary: false,
-        shrinkWrap: true,
-        children: [
-          _getHeader(),
-          _getBody(context, profileDao, profile),
-        ],
+          children: [
+            _getHeader(),
+            _getBody(),
+          ],
+        ),
       ),
     );
   }
@@ -161,8 +134,9 @@ class _CustomScreenState extends State<CustomScreen> {
     );
   }
 
-  Widget _getBody(
-      BuildContext context, ProfileDao profileDao, Profile profile) {
+  Widget _getBody() {
+    // * calling profile, income and expense database dao
+    final profileDao = Provider.of<ProfileDao>(context);
     final incomeDao = Provider.of<IncomeDao>(context);
     final expenseDao = Provider.of<ExpenseDao>(context);
 
@@ -270,7 +244,7 @@ class _CustomScreenState extends State<CustomScreen> {
             borderRadius: BorderRadius.circular(15),
             highlightColor: Colors.pink[400],
             splashColor: Colors.pink,
-            onTap: () {
+            onTap: () async {
               if (controllerTags.text == '' ||
                   controllerAmount.text == '' ||
                   categoryIndex == null) {
@@ -280,6 +254,8 @@ class _CustomScreenState extends State<CustomScreen> {
                 if (amount > 1000000) {
                   return _getEasterEgg();
                 } else {
+                  final profiles = await profileDao.getAllProfile();
+                  final profile = profiles[0];
                   if (isIncome) {
                     profileDao.updateProfile(
                       ProfilesCompanion(

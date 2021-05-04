@@ -36,33 +36,12 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _getProfileDao();
+    return _getBody();
   }
 
-  // * gets the profile data from the database
-  Widget _getProfileDao() {
-    // * calling profile database dao
+  Widget _getBody() {
+    // * calling profile and expense database dao
     final profileDao = Provider.of<ProfileDao>(context);
-
-    // * StreamBuilder used to build list of all objects
-    return StreamBuilder(
-      stream: profileDao.watchAllProfile(),
-      builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
-        final profile = snapshot.data ?? [];
-        return ListView.builder(
-          primary: false,
-          shrinkWrap: true,
-          itemCount: profile.length,
-          itemBuilder: (_, index) {
-            return _getExpenseDao(context, profileDao, profile[0]);
-          },
-        );
-      },
-    );
-  }
-
-  Widget _getExpenseDao(
-      BuildContext context, ProfileDao profileDao, Profile profile) {
     final expenseDao = Provider.of<ExpenseDao>(context);
 
     // * field for category. shows a dialog box
@@ -144,7 +123,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
             borderRadius: BorderRadius.circular(15),
             highlightColor: Colors.pink[400],
             splashColor: Colors.pink,
-            onTap: () {
+            onTap: () async {
               if (controllerTags.text == '' ||
                   controllerAmount.text == '' ||
                   categoryIndex == null) {
@@ -154,6 +133,9 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
                 if (amount > 1000000) {
                   return _getEasterEgg();
                 } else {
+                  final profiles = await profileDao.getAllProfile();
+                  final profile = profiles[0];
+
                   profileDao.updateProfile(
                     ProfilesCompanion(
                       id: Value(profile.id),
@@ -188,8 +170,6 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
     );
 
     return ListView(
-      primary: false,
-      shrinkWrap: true,
       children: [
         Center(
           child: Text(

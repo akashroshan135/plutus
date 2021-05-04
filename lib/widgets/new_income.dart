@@ -36,33 +36,12 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _getProfileDao();
+    return _getBody();
   }
 
-  // * gets the profile data from the database
-  Widget _getProfileDao() {
-    // * calling profile database dao
+  Widget _getBody() {
+    // * calling profile and income database dao
     final profileDao = Provider.of<ProfileDao>(context);
-
-    // * StreamBuilder used to build list of all objects
-    return StreamBuilder(
-      stream: profileDao.watchAllProfile(),
-      builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
-        final profile = snapshot.data ?? [];
-        return ListView.builder(
-          primary: false,
-          shrinkWrap: true,
-          itemCount: profile.length,
-          itemBuilder: (_, index) {
-            return _getIncomeDao(context, profileDao, profile[0]);
-          },
-        );
-      },
-    );
-  }
-
-  Widget _getIncomeDao(
-      BuildContext context, ProfileDao profileDao, Profile profile) {
     final incomeDao = Provider.of<IncomeDao>(context);
 
     // * field for category. shows a dialog box
@@ -144,7 +123,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
             borderRadius: BorderRadius.circular(15),
             highlightColor: Colors.pink[400],
             splashColor: Colors.pink,
-            onTap: () {
+            onTap: () async {
               if (controllerTags.text == '' ||
                   controllerAmount.text == '' ||
                   categoryIndex == null) {
@@ -154,6 +133,8 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
                 if (amount > 1000000) {
                   return _getEasterEgg();
                 } else {
+                  final profiles = await profileDao.getAllProfile();
+                  final profile = profiles[0];
                   profileDao.updateProfile(
                     ProfilesCompanion(
                       id: Value(profile.id),
@@ -188,8 +169,6 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
     );
 
     return ListView(
-      primary: false,
-      shrinkWrap: true,
       children: [
         Center(
           child: Text(
