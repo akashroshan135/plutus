@@ -87,10 +87,7 @@ class _HomepageState extends State<Homepage> {
     return FloatingActionButton(
       backgroundColor: Colors.blue,
       onPressed: () {
-        if (pageIndex == 2)
-          _showCustomInput();
-        else
-          _showInputs();
+        _showInputs();
       },
       child: Icon(
         Icons.add,
@@ -105,15 +102,15 @@ class _HomepageState extends State<Homepage> {
   }
 
   // * shows option to select transaction type
-  // TODO make better one
   void _showInputs() async {
     var width = MediaQuery.of(context).size.width;
-    List inputTitle = ['Income', 'Expense'];
+    List inputTitle = ['Income', 'Expense', 'Custom Transaction'];
     List inputIcon = [
       'assets/images/income.png',
       'assets/images/expense.png',
+      'assets/images/custom_transaction.png',
     ];
-    List inputColor = [Colors.green, Colors.red];
+    List inputColor = [Colors.green, Colors.red, Colors.grey];
 
     var result = await showDialog(
       context: context,
@@ -126,7 +123,6 @@ class _HomepageState extends State<Homepage> {
         content: Builder(
           builder: (context) {
             return Container(
-              height: 190,
               width: width - 50,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: ListView.builder(
@@ -150,6 +146,7 @@ class _HomepageState extends State<Homepage> {
     setState(() {
       if (result == 0) _showNewInputSceen(NewIncomeScreen());
       if (result == 1) _showNewInputSceen(NewExpenseScreen());
+      if (result == 2) _showCustomInput();
     });
   }
 

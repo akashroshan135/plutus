@@ -27,9 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
   // * renders the body
   Widget _getPage() {
     return SingleChildScrollView(
-      child: ListView(
-        primary: false,
-        shrinkWrap: true,
+      child: Column(
         children: [
           _getHeader(),
           // _getBody(),
@@ -52,7 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 30),
+        padding: EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 30),
         child: Column(
           children: [
             Row(

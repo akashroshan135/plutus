@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 // * Database packages
-import 'package:moor_flutter/moor_flutter.dart';
+import 'package:moor_flutter/moor_flutter.dart' as moor;
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
@@ -84,9 +84,7 @@ class _CustomScreenState extends State<CustomScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
-        child: ListView(
-          primary: false,
-          shrinkWrap: true,
+        child: Column(
           children: [
             _getHeader(),
             _getBody(),
@@ -109,7 +107,7 @@ class _CustomScreenState extends State<CustomScreen> {
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 30),
+        padding: EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 30),
         child: Row(
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -253,33 +251,33 @@ class _CustomScreenState extends State<CustomScreen> {
                   if (isIncome) {
                     profileDao.updateProfile(
                       ProfilesCompanion(
-                        id: Value(profile.id),
-                        name: Value(profile.name),
-                        balance: Value(profile.balance + amount),
+                        id: moor.Value(profile.id),
+                        name: moor.Value(profile.name),
+                        balance: moor.Value(profile.balance + amount),
                       ),
                     );
                     incomeDao.addIncome(
                       IncomesCompanion(
-                        tags: Value(controllerTags.text),
-                        amount: Value(amount),
-                        date: Value(selectedDate),
-                        categoryIndex: Value(categoryIndex),
+                        tags: moor.Value(controllerTags.text),
+                        amount: moor.Value(amount),
+                        date: moor.Value(selectedDate),
+                        categoryIndex: moor.Value(categoryIndex),
                       ),
                     );
                   } else {
                     profileDao.updateProfile(
                       ProfilesCompanion(
-                        id: Value(profile.id),
-                        name: Value(profile.name),
-                        balance: Value(profile.balance - amount),
+                        id: moor.Value(profile.id),
+                        name: moor.Value(profile.name),
+                        balance: moor.Value(profile.balance - amount),
                       ),
                     );
                     expenseDao.addExpense(
                       ExpensesCompanion(
-                        tags: Value(controllerTags.text),
-                        amount: Value(amount),
-                        date: Value(selectedDate),
-                        categoryIndex: Value(categoryIndex),
+                        tags: moor.Value(controllerTags.text),
+                        amount: moor.Value(amount),
+                        date: moor.Value(selectedDate),
+                        categoryIndex: moor.Value(categoryIndex),
                       ),
                     );
                   }

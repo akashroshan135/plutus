@@ -34,9 +34,7 @@ class _AboutScreenState extends State<AboutScreen> {
 
   Widget _getPage() {
     return SingleChildScrollView(
-      child: ListView(
-        primary: false,
-        shrinkWrap: true,
+      child: Column(
         children: [
           _getHeader(),
           _getBody(),
@@ -58,7 +56,7 @@ class _AboutScreenState extends State<AboutScreen> {
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 30),
+        padding: EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 30),
         child: Column(
           children: [
             Row(
@@ -144,21 +142,18 @@ class _AboutScreenState extends State<AboutScreen> {
       ),
     ];
 
-    return Container(
-      height: MediaQuery.of(context).size.height / 1.5,
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: ListView(
-          primary: false,
-          shrinkWrap: true,
-          children: [
-            appDescription,
-            appGithub,
-            developers[0],
-            developers[1],
-            developers[2],
-          ],
-        ),
+    return Padding(
+      padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      child: ListView(
+        primary: false,
+        shrinkWrap: true,
+        children: [
+          appDescription,
+          appGithub,
+          developers[0],
+          developers[1],
+          developers[2],
+        ],
       ),
     );
   }

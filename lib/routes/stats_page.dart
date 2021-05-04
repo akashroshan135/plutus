@@ -19,9 +19,7 @@ class _StatsPageState extends State<StatsPage> {
 
   Widget _getPage() {
     return SingleChildScrollView(
-      child: ListView(
-        primary: false,
-        shrinkWrap: true,
+      child: Column(
         children: [
           _getHeader(),
           _getBody(),
@@ -44,7 +42,7 @@ class _StatsPageState extends State<StatsPage> {
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 30),
+        padding: EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 30),
         child: Column(
           children: [
             Row(
