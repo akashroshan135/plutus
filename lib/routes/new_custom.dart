@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:intl/intl.dart';
-import 'dart:math';
 
 // * Database packages
 import 'package:moor_flutter/moor_flutter.dart';
@@ -23,7 +21,6 @@ import 'package:plutus/widgets/category.dart';
 //* Data Classes
 import 'package:plutus/data/expenseCat.dart';
 import 'package:plutus/data/incomeCat.dart';
-import 'package:plutus/data/colorData.dart';
 
 class CustomScreen extends StatefulWidget {
   CustomScreen({Key key}) : super(key: key);
@@ -34,13 +31,12 @@ class CustomScreen extends StatefulWidget {
 
 class _CustomScreenState extends State<CustomScreen> {
   final _padding = EdgeInsets.all(16);
-  final _random = new Random();
 
   bool isIncome = false;
   final accentExpense = Color(0xffe32012);
   final accentIncome = Colors.green;
 
-  var categoryIcon = AntDesign.search1;
+  var categoryIcon = 'assets/images/search.png';
   var categoryText = 'Select a Category';
   var categoryIndex;
 
@@ -154,8 +150,6 @@ class _CustomScreenState extends State<CustomScreen> {
           color: Theme.of(context).scaffoldBackgroundColor,
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
-            highlightColor: Colors.pink[400],
-            splashColor: Colors.pink,
             onTap: () {
               if (isIncome)
                 _showCategoriesIncome();
@@ -166,10 +160,10 @@ class _CustomScreenState extends State<CustomScreen> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.all(16),
-                  child: Icon(
+                  child: Image.asset(
                     categoryIcon,
-                    color: isIncome ? accentIncome : accentExpense,
-                    size: Theme.of(context).primaryIconTheme.size,
+                    height: 30,
+                    width: 30,
                   ),
                 ),
                 Text(
@@ -242,8 +236,8 @@ class _CustomScreenState extends State<CustomScreen> {
           color: isIncome ? accentIncome : accentExpense,
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
-            highlightColor: Colors.pink[400],
-            splashColor: Colors.pink,
+            highlightColor: isIncome ? Colors.green[700] : Colors.red,
+            splashColor: isIncome ? Colors.green[700] : Colors.red,
             onTap: () async {
               if (controllerTags.text == '' ||
                   controllerAmount.text == '' ||
@@ -341,7 +335,7 @@ class _CustomScreenState extends State<CustomScreen> {
                     xAlign = -1;
                     toggleColor = accentExpense;
                     isIncome = false;
-                    categoryIcon = AntDesign.search1;
+                    categoryIcon = 'assets/images/search.png';
                     categoryText = 'Select a Category';
                     categoryIndex = null;
                   });
@@ -368,7 +362,7 @@ class _CustomScreenState extends State<CustomScreen> {
                     xAlign = 1;
                     toggleColor = accentIncome;
                     isIncome = true;
-                    categoryIcon = AntDesign.search1;
+                    categoryIcon = 'assets/images/search.png';
                     categoryText = 'Select a Category';
                     categoryIndex = null;
                   });
@@ -392,38 +386,6 @@ class _CustomScreenState extends State<CustomScreen> {
             ],
           ),
         ),
-      ),
-    );
-
-    final toggle1 = Padding(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Expense',
-            style: Theme.of(context).textTheme.bodyText1,
-          ),
-          Switch(
-            value: isIncome,
-            onChanged: (value) {
-              setState(() {
-                isIncome = value;
-                categoryIcon = AntDesign.search1;
-                categoryText = 'Select a Category';
-                categoryIndex = null;
-              });
-            },
-            inactiveThumbColor: accentExpense,
-            activeColor: accentIncome,
-            activeTrackColor: accentIncome,
-            inactiveTrackColor: accentExpense,
-          ),
-          Text(
-            'Income',
-            style: Theme.of(context).textTheme.bodyText1,
-          ),
-        ],
       ),
     );
 
@@ -497,8 +459,7 @@ class _CustomScreenState extends State<CustomScreen> {
                     index: index,
                     categoryName: IncomeCategory.categoryNames[index],
                     categoryIcon: IncomeCategory.categoryIcon[index],
-                    categoryColor: ColorData
-                        .myColors[_random.nextInt(ColorData.myColors.length)],
+                    categoryColor: Colors.green,
                   );
                 },
               ),
@@ -542,8 +503,7 @@ class _CustomScreenState extends State<CustomScreen> {
                     index: index,
                     categoryName: ExpenseCategory.categoryNames[index],
                     categoryIcon: ExpenseCategory.categoryIcon[index],
-                    categoryColor: ColorData
-                        .myColors[_random.nextInt(ColorData.myColors.length)],
+                    categoryColor: Colors.red,
                   );
                 },
               ),

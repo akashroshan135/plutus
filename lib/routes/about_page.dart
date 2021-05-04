@@ -3,8 +3,16 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 
-//* Data Classes
-import 'package:plutus/data/colorData.dart';
+//* Colors List
+List myColors = <Color>[
+  Colors.teal,
+  Colors.orange,
+  Colors.pinkAccent,
+  Colors.blueAccent,
+  Colors.yellow,
+  Colors.greenAccent,
+  Colors.purpleAccent,
+];
 
 class AboutScreen extends StatefulWidget {
   AboutScreen({Key key}) : super(key: key);
@@ -157,8 +165,7 @@ class _AboutScreenState extends State<AboutScreen> {
 
   Widget _buttonWidget(BuildContext context, Icon icon, mainText, subText) {
     final _random = new Random();
-    var _inkwellColor =
-        ColorData.myColors[_random.nextInt(ColorData.myColors.length)];
+    var _inkwellColor = myColors[_random.nextInt(myColors.length)];
 
     return Padding(
       padding: EdgeInsets.all(8),

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class IncomeCategory {
   static const categoryNames = <String>[
     'Salary',
@@ -7,15 +5,15 @@ class IncomeCategory {
     'Gift',
     'Investment Returns',
     'Insurance',
-    'Miscellaneous'
+    'Miscellaneous',
   ];
 
   static const categoryIcon = [
-    Icons.monetization_on_sharp,
-    Icons.house,
-    Icons.card_giftcard,
-    Icons.local_cafe_outlined,
-    Icons.linear_scale,
-    Icons.construction_outlined,
+    'assets/images/salary.png',
+    'assets/images/rent.png',
+    'assets/images/gift.png',
+    'assets/images/investment.png',
+    'assets/images/insurance.png',
+    'assets/images/miscellaneous.png',
   ];
 }

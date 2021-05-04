@@ -39,7 +39,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
             top: 0,
             left: 0,
             child: Image.asset(
-              'assets/images/main_top.png',
+              'assets/images/profile_top.png',
               width: size.width * 0.35,
             ),
           ),
@@ -47,7 +47,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
             bottom: 0,
             right: 0,
             child: Image.asset(
-              'assets/images/login_bottom.png',
+              'assets/images/profile_bottom.png',
               width: size.width * 0.4,
             ),
           ),
@@ -77,7 +77,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
           ),
           SizedBox(height: size.height * 0.03),
           Image.asset(
-            'assets/images/login_center.png',
+            'assets/images/profile_center.png',
             fit: BoxFit.fitWidth,
             width: 220,
             alignment: Alignment.bottomCenter,

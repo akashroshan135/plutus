@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'dart:math';
 
 // * Database packages
 import 'package:moor_flutter/moor_flutter.dart';
@@ -12,7 +10,6 @@ import 'package:plutus/widgets/category.dart';
 
 //* Data Classes
 import 'package:plutus/data/incomeCat.dart';
-import 'package:plutus/data/colorData.dart';
 
 class EditIncomeScreen extends StatefulWidget {
   final Income income;
@@ -25,12 +22,11 @@ class EditIncomeScreen extends StatefulWidget {
 
 class _EditIncomeScreenState extends State<EditIncomeScreen> {
   final _padding = EdgeInsets.all(16);
-  final _random = new Random();
 
   final controllerTags = TextEditingController();
   final controllerAmount = TextEditingController();
 
-  var categoryIcon = AntDesign.search1;
+  var categoryIcon = 'assets/images/search.png';
   var categoryText = 'Select a Category';
   var categoryIndex;
 
@@ -70,8 +66,6 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
           color: Theme.of(context).scaffoldBackgroundColor,
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
-            highlightColor: Colors.pink[400],
-            splashColor: Colors.pink,
             onTap: () {
               _showCategories();
             },
@@ -79,10 +73,10 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
               children: <Widget>[
                 Padding(
                   padding: _padding,
-                  child: Icon(
+                  child: Image.asset(
                     categoryIcon,
-                    color: accentColor,
-                    size: Theme.of(context).primaryIconTheme.size,
+                    height: 30,
+                    width: 30,
                   ),
                 ),
                 Text(
@@ -133,8 +127,8 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
           color: accentColor,
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
-            highlightColor: Colors.pink[400],
-            splashColor: Colors.pink,
+            highlightColor: Colors.green[700],
+            splashColor: Colors.green[700],
             onTap: () async {
               if (controllerTags.text == '' ||
                   controllerAmount.text == '' ||
@@ -252,8 +246,7 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
                     index: index,
                     categoryName: IncomeCategory.categoryNames[index],
                     categoryIcon: IncomeCategory.categoryIcon[index],
-                    categoryColor: ColorData
-                        .myColors[_random.nextInt(ColorData.myColors.length)],
+                    categoryColor: accentColor,
                   );
                 },
               ),

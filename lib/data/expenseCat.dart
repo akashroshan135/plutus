@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class ExpenseCategory {
   static const categoryNames = <String>[
     'Rent',
@@ -9,7 +7,6 @@ class ExpenseCategory {
     'Grocery',
     'Food',
     'Transportation',
-    'Travel',
     'Entertainment',
     'Shopping',
     'Clothing',
@@ -17,25 +14,24 @@ class ExpenseCategory {
     'Medical',
     'Pet',
     'Education',
-    'Miscellaneous'
+    'Miscellaneous',
   ];
 
   static const categoryIcon = [
-    Icons.monetization_on_sharp,
-    Icons.house,
-    Icons.card_giftcard,
-    Icons.local_cafe_outlined,
-    Icons.linear_scale,
-    Icons.construction_outlined,
-    Icons.monetization_on_sharp,
-    Icons.house,
-    Icons.card_giftcard,
-    Icons.local_cafe_outlined,
-    Icons.linear_scale,
-    Icons.monetization_on_sharp,
-    Icons.house,
-    Icons.card_giftcard,
-    Icons.local_cafe_outlined,
-    Icons.construction_outlined,
+    'assets/images/rent.png',
+    'assets/images/mortgage.png',
+    'assets/images/emi.png',
+    'assets/images/bills.png',
+    'assets/images/grocery.png',
+    'assets/images/food.png',
+    'assets/images/transportation.png',
+    'assets/images/entertainment.png',
+    'assets/images/shopping.png',
+    'assets/images/clothing.png',
+    'assets/images/tax.png',
+    'assets/images/medical.png',
+    'assets/images/pet.png',
+    'assets/images/education.png',
+    'assets/images/miscellaneous.png',
   ];
 }

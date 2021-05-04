@@ -239,16 +239,11 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                       color: Colors.grey.withOpacity(0.1),
                     ),
                     child: Center(
-                      child: Icon(
+                      child: Image.asset(
                         ExpenseCategory.categoryIcon[expense.categoryIndex],
-                        color: Theme.of(context).iconTheme.color,
-                        size: Theme.of(context).iconTheme.size,
+                        width: 35,
+                        height: 35,
                       ),
-                      // child: Image.asset(
-                      //   'assets/images/bank.png',
-                      //   width: 30,
-                      //   height: 30,
-                      // ),
                     ),
                   ),
                   SizedBox(width: 15),

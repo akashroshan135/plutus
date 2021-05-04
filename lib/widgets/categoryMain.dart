@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 // * renders a category widget
-class Category extends StatelessWidget {
+class CategoryMain extends StatelessWidget {
   final index;
   final categoryName;
   final categoryIcon;
   final categoryColor;
 
-  const Category({
+  const CategoryMain({
     @required this.index,
     @required this.categoryName,
     @required this.categoryIcon,
@@ -37,19 +37,11 @@ class Category extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.all(15),
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey.withOpacity(0.1),
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        categoryIcon,
-                        width: 40,
-                        height: 40,
-                      ),
+                  child: Center(
+                    child: Image.asset(
+                      categoryIcon,
+                      width: 60,
+                      height: 60,
                     ),
                   ),
                 ),

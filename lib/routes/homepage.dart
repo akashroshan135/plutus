@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
-import 'dart:math';
 
 //* Routes to other pages
 import 'package:plutus/routes/daily_page.dart';
@@ -12,12 +11,9 @@ import 'package:plutus/routes/profile_page.dart';
 import 'package:plutus/routes/new_custom.dart';
 
 //* Custom Widgets
-import 'package:plutus/widgets/category.dart';
+import 'package:plutus/widgets/categoryMain.dart';
 import 'package:plutus/widgets/new_income.dart';
 import 'package:plutus/widgets/new_expense.dart';
-
-//* Data Classes
-import 'package:plutus/data/colorData.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({Key key}) : super(key: key);
@@ -58,8 +54,6 @@ class _HomepageState extends State<Homepage> {
 
   // * returns bottom navigation bar. Changes page when clicking the icons
   Widget _getFooter() {
-    final _random = new Random();
-
     // * list of icon data
     List<IconData> iconItems = [
       MaterialCommunityIcons.calendar_week,
@@ -72,8 +66,7 @@ class _HomepageState extends State<Homepage> {
       backgroundColor: Theme.of(context).secondaryHeaderColor,
       activeColor: Theme.of(context).primaryIconTheme.color,
       inactiveColor: Theme.of(context).accentIconTheme.color,
-      splashColor:
-          ColorData.myColors[_random.nextInt(ColorData.myColors.length)],
+      splashColor: Theme.of(context).primaryColor,
       iconSize: Theme.of(context).primaryIconTheme.size,
       icons: iconItems,
       activeIndex: pageIndex,
@@ -115,7 +108,12 @@ class _HomepageState extends State<Homepage> {
   // TODO make better one
   void _showInputs() async {
     var width = MediaQuery.of(context).size.width;
-    List inputs = ['Income', 'Expense'];
+    List inputTitle = ['Income', 'Expense'];
+    List inputIcon = [
+      'assets/images/income.png',
+      'assets/images/expense.png',
+    ];
+    List inputColor = [Colors.green, Colors.red];
 
     var result = await showDialog(
       context: context,
@@ -134,13 +132,13 @@ class _HomepageState extends State<Homepage> {
               child: ListView.builder(
                 primary: false,
                 shrinkWrap: true,
-                itemCount: inputs.length,
+                itemCount: inputTitle.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Category(
+                  return CategoryMain(
                     index: index,
-                    categoryName: inputs[index],
-                    categoryIcon: FontAwesome5.money_bill_alt,
-                    categoryColor: Colors.pink,
+                    categoryName: inputTitle[index],
+                    categoryIcon: inputIcon[index],
+                    categoryColor: inputColor[index],
                   );
                 },
               ),
