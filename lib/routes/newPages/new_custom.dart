@@ -425,6 +425,8 @@ class _CustomScreenState extends State<CustomScreen> {
   InputDecoration _decoratorInputWidget(String text) {
     return InputDecoration(
       labelText: text,
+      counterStyle:
+          TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       labelStyle: TextStyle(color: isIncome ? accentIncome : accentExpense),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),

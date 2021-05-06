@@ -30,9 +30,7 @@ class Category extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             highlightColor: categoryColor[400],
             splashColor: categoryColor,
-            onTap: () {
-              Navigator.pop(context, index);
-            },
+            onTap: () => Navigator.pop(context, index),
             child: Row(
               children: <Widget>[
                 Padding(

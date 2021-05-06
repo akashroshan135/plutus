@@ -54,9 +54,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
           color: Theme.of(context).scaffoldBackgroundColor,
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
-            onTap: () {
-              _showCategories();
-            },
+            onTap: () => _showCategories(),
             child: Row(
               children: <Widget>[
                 Padding(
@@ -191,6 +189,8 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
   InputDecoration _decoratorInputWidget(String text) {
     return InputDecoration(
       labelText: text,
+      counterStyle:
+          TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       labelStyle: TextStyle(color: accentColor),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
@@ -265,9 +265,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 'OK',
                 style: Theme.of(context).textTheme.bodyText1,
@@ -296,9 +294,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 'OK',
                 style: Theme.of(context).textTheme.bodyText1,

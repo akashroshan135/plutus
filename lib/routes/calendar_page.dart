@@ -104,7 +104,10 @@ class _CalendarPageState extends State<CalendarPage> {
                   style: Theme.of(context).textTheme.headline1,
                 ),
                 InkWell(
-                  child: Icon(Icons.restore),
+                  child: Tooltip(
+                    message: 'Go back to Today',
+                    child: Icon(Icons.restore),
+                  ),
                   onTap: () {
                     setState(() {
                       _focusedDay = DateTime.now();

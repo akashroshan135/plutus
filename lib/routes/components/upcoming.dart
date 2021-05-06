@@ -42,18 +42,19 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 10, left: 18),
+              padding: EdgeInsets.only(top: 10, bottom: 8, left: 18),
               child: Text(
                 'Upcoming',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ),
             ListView.builder(
+              padding: EdgeInsets.all(0),
               primary: false,
               shrinkWrap: true,
               itemCount: upcoming.length,
               itemBuilder: (_, index) {
-                return _buildItem(context, upcoming[index], upcomingDao);
+                return _buildItem(upcoming[index], upcomingDao);
               },
             ),
           ],
@@ -67,8 +68,7 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
   }
 
   // * code to build one transaction item
-  Widget _buildItem(
-      BuildContext context, Upcoming upcoming, UpcomingDao upcomingDao) {
+  Widget _buildItem(Upcoming upcoming, UpcomingDao upcomingDao) {
     // * calling profile database dao
     final profileDao = Provider.of<ProfileDao>(context);
     final incomeDao = Provider.of<IncomeDao>(context);
@@ -230,7 +230,9 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          isIncome ? 'Income : ' : 'Expense : ' + upcoming.tags,
+                          isIncome
+                              ? 'Income : ' + upcoming.tags
+                              : 'Expense : ' + upcoming.tags,
                           style: Theme.of(context).textTheme.bodyText1,
                           overflow: TextOverflow.ellipsis,
                         ),

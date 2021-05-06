@@ -16,7 +16,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   String _versionName = 'V. somewhere-alpha';
-  final _splashDelay = 2;
+  final _splashDelay = 3;
 
   // * Sets a timer of _splashDelay seconds and pushes NewProfileScreen
   _loadNewProfileScreen() async {

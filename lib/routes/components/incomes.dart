@@ -32,35 +32,38 @@ class _IncomeRouteState extends State<IncomeRoute> {
       stream: incomeDao.watchDayIncome(widget.selectedDate),
       builder: (context, AsyncSnapshot<List<Income>> snapshot) {
         final incomes = snapshot.data ?? [];
+        var list;
+
         if (incomes.isEmpty) {
           // TODO make good empty page
-          return Container(
-            child: Center(
-              child: Text(
-                'No Incomes',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
+          list = Center(
+            child: Text(
+              'Nothing here',
+              style: Theme.of(context).textTheme.bodyText1,
             ),
+          );
+        } else {
+          list = ListView.builder(
+            padding: EdgeInsets.all(0),
+            primary: false,
+            shrinkWrap: true,
+            itemCount: incomes.length,
+            itemBuilder: (_, index) {
+              return _buildItem(incomes[index], incomeDao);
+            },
           );
         }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 10, left: 18),
+              padding: EdgeInsets.only(top: 10, bottom: 8, left: 18),
               child: Text(
                 'Income',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ),
-            ListView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: incomes.length,
-              itemBuilder: (_, index) {
-                return _buildItem(context, incomes[index], incomeDao);
-              },
-            ),
+            list
           ],
         );
       },
@@ -68,7 +71,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
   }
 
   // * code to build one transaction item
-  Widget _buildItem(BuildContext context, Income income, IncomeDao incomeDao) {
+  Widget _buildItem(Income income, IncomeDao incomeDao) {
     // * calling profile database dao
     final profileDao = Provider.of<ProfileDao>(context);
 

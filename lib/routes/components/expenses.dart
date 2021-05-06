@@ -32,35 +32,39 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
       stream: expenseDao.watchDayExpense(widget.selectedDate),
       builder: (context, AsyncSnapshot<List<Expense>> snapshot) {
         final expenses = snapshot.data ?? [];
+        var list;
+
         if (expenses.isEmpty) {
           // TODO make good empty page
-          return Container(
-            child: Center(
-              child: Text(
-                'No Expenses',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
+          list = Center(
+            child: Text(
+              'Nothing here',
+              style: Theme.of(context).textTheme.bodyText1,
             ),
           );
+        } else {
+          list = ListView.builder(
+            padding: EdgeInsets.all(0),
+            primary: false,
+            shrinkWrap: true,
+            itemCount: expenses.length,
+            itemBuilder: (_, index) {
+              return _buildItem(expenses[index], expenseDao);
+            },
+          );
         }
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 10, left: 18),
+              padding: EdgeInsets.only(top: 10, bottom: 8, left: 18),
               child: Text(
                 'Expenses',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ),
-            ListView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: expenses.length,
-              itemBuilder: (_, index) {
-                return _buildItem(context, expenses[index], expenseDao);
-              },
-            ),
+            list,
           ],
         );
       },
@@ -68,8 +72,7 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
   }
 
   // * code to build one transaction item
-  Widget _buildItem(
-      BuildContext context, Expense expense, ExpenseDao expenseDao) {
+  Widget _buildItem(Expense expense, ExpenseDao expenseDao) {
     // * calling profile database dao
     final profileDao = Provider.of<ProfileDao>(context);
 

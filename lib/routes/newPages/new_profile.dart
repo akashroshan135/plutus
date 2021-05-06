@@ -89,7 +89,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               controller: controllerName,
               cursorColor: Theme.of(context).buttonColor,
               style: Theme.of(context).textTheme.bodyText1,
-              decoration: _decoratorInputWidget(context, 'Name'),
+              decoration: _decoratorInputWidget('Name'),
             ),
           ),
           Padding(
@@ -99,7 +99,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               keyboardType: TextInputType.number,
               cursorColor: Theme.of(context).buttonColor,
               style: Theme.of(context).textTheme.bodyText1,
-              decoration: _decoratorInputWidget(context, 'Savings'),
+              decoration: _decoratorInputWidget('Savings'),
             ),
           ),
           _getSubmit(),
@@ -140,9 +140,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
                       ),
                       actions: <Widget>[
                         TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
+                          onPressed: () => Navigator.of(context).pop(),
                           child: Text(
                             'OK',
                             style: Theme.of(context).textTheme.bodyText1,
@@ -182,9 +180,11 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
     );
   }
 
-  InputDecoration _decoratorInputWidget(BuildContext context, String text) {
+  InputDecoration _decoratorInputWidget(String text) {
     return InputDecoration(
       labelText: text,
+      counterStyle:
+          TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       labelStyle: TextStyle(color: Theme.of(context).buttonColor),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
@@ -193,14 +193,6 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(color: Theme.of(context).buttonColor, width: 1),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.red, width: 1),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.red, width: 1),
       ),
     );
   }

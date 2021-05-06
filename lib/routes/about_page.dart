@@ -64,9 +64,7 @@ class _AboutScreenState extends State<AboutScreen> {
               children: [
                 InkWell(
                   child: Icon(Icons.arrow_back),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
+                  onTap: () => Navigator.pop(context),
                 ),
                 SizedBox(width: 25),
                 Text(
@@ -113,7 +111,6 @@ class _AboutScreenState extends State<AboutScreen> {
     );
 
     final appGithub = _buttonWidget(
-      context,
       Icon(AntDesign.github),
       'Github',
       'https://github.com/akashroshan135/plutus',
@@ -130,7 +127,6 @@ class _AboutScreenState extends State<AboutScreen> {
         ),
       ),
       _buttonWidget(
-        context,
         Icon(AntDesign.github),
         'Akash Roshan',
         '@akashroshan135',
@@ -148,14 +144,12 @@ class _AboutScreenState extends State<AboutScreen> {
         ),
       ),
       _buttonWidget(
-        context,
         Icon(AntDesign.github),
         'Ratandeep Kaur Sodhi',
         '@ratandeepkaur',
         'https://github.com/ratandeepkaur',
       ),
       _buttonWidget(
-        context,
         Icon(AntDesign.twitter),
         'Subramanium Sai Marei',
         '@subbu_tutnh',
@@ -181,8 +175,7 @@ class _AboutScreenState extends State<AboutScreen> {
     );
   }
 
-  Widget _buttonWidget(
-      BuildContext context, Icon icon, mainText, subText, link) {
+  Widget _buttonWidget(Icon icon, mainText, subText, link) {
     final _random = new Random();
     var _inkwellColor = myColors[_random.nextInt(myColors.length)];
 

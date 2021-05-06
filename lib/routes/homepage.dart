@@ -86,9 +86,7 @@ class _HomepageState extends State<Homepage> {
   Widget _getFloatingButton() {
     return FloatingActionButton(
       backgroundColor: Colors.blue,
-      onPressed: () {
-        _showInputs();
-      },
+      onPressed: () => _showInputs(),
       child: Icon(
         Icons.add,
         size: Theme.of(context).iconTheme.size,
@@ -161,7 +159,7 @@ class _HomepageState extends State<Homepage> {
           ),
           builder: (context, state) {
             return Container(
-              height: 500,
+              height: MediaQuery.of(context).size.height / 1.5,
               child: Center(
                 child: Material(
                   color: Theme.of(context).scaffoldBackgroundColor,
