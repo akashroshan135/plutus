@@ -29,29 +29,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
 
   @override
   Widget build(BuildContext context) {
-    // * calling profile database dao
-    final profileDao = Provider.of<ProfileDao>(context);
-
-    // * StreamBuilder used to build list of all objects
-    return StreamBuilder(
-      stream: profileDao.watchAllProfile(),
-      builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
-        final profile = snapshot.data ?? [];
-        return ListView.builder(
-          primary: false,
-          shrinkWrap: true,
-          itemCount: profile.length,
-          itemBuilder: (_, index) {
-            return _getIncomeDao(context, profileDao, profile[0]);
-          },
-        );
-      },
-    );
-  }
-
-  Widget _getIncomeDao(
-      BuildContext context, ProfileDao profileDao, Profile profile) {
-    // * calling database
+    // * calling income database dao
     final incomeDao = Provider.of<IncomeDao>(context);
 
     // * StreamBuilder used to build list of all objects
@@ -85,8 +63,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
               shrinkWrap: true,
               itemCount: incomes.length,
               itemBuilder: (_, index) {
-                return _buildItem(
-                    context, profileDao, profile, incomes[index], incomeDao);
+                return _buildItem(context, incomes[index], incomeDao);
               },
             ),
           ],
@@ -100,8 +77,10 @@ class _IncomeRouteState extends State<IncomeRoute> {
   }
 
   // * code to build one transaction item
-  Widget _buildItem(BuildContext context, ProfileDao profileDao,
-      Profile profile, Income income, IncomeDao incomeDao) {
+  Widget _buildItem(BuildContext context, Income income, IncomeDao incomeDao) {
+    // * calling profile database dao
+    final profileDao = Provider.of<ProfileDao>(context);
+
     var size = MediaQuery.of(context).size;
 
     return Dismissible(
@@ -180,7 +159,10 @@ class _IncomeRouteState extends State<IncomeRoute> {
           );
         }
       },
-      onDismissed: (direction) {
+      onDismissed: (direction) async {
+        final profiles = await profileDao.getAllProfile();
+        final profile = profiles[0];
+
         profileDao.updateProfile(
           ProfilesCompanion(
             id: moor.Value(profile.id),

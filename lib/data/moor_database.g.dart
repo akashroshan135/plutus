@@ -917,14 +917,14 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
   final DateTime date;
   final double amount;
   final int categoryIndex;
-  final int notificationId;
+  final String type;
   Upcoming(
       {@required this.id,
       @required this.tags,
       @required this.date,
       @required this.amount,
       @required this.categoryIndex,
-      this.notificationId});
+      @required this.type});
   factory Upcoming.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -941,8 +941,7 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
           doubleType.mapFromDatabaseResponse(data['${effectivePrefix}amount']),
       categoryIndex: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}category_index']),
-      notificationId: intType
-          .mapFromDatabaseResponse(data['${effectivePrefix}notification_id']),
+      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
     );
   }
   @override
@@ -963,8 +962,8 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
     if (!nullToAbsent || categoryIndex != null) {
       map['category_index'] = Variable<int>(categoryIndex);
     }
-    if (!nullToAbsent || notificationId != null) {
-      map['notification_id'] = Variable<int>(notificationId);
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<String>(type);
     }
     return map;
   }
@@ -979,9 +978,7 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
       categoryIndex: categoryIndex == null && nullToAbsent
           ? const Value.absent()
           : Value(categoryIndex),
-      notificationId: notificationId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(notificationId),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
     );
   }
 
@@ -994,7 +991,7 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
       date: serializer.fromJson<DateTime>(json['date']),
       amount: serializer.fromJson<double>(json['amount']),
       categoryIndex: serializer.fromJson<int>(json['categoryIndex']),
-      notificationId: serializer.fromJson<int>(json['notificationId']),
+      type: serializer.fromJson<String>(json['type']),
     );
   }
   @override
@@ -1006,7 +1003,7 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
       'date': serializer.toJson<DateTime>(date),
       'amount': serializer.toJson<double>(amount),
       'categoryIndex': serializer.toJson<int>(categoryIndex),
-      'notificationId': serializer.toJson<int>(notificationId),
+      'type': serializer.toJson<String>(type),
     };
   }
 
@@ -1016,14 +1013,14 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
           DateTime date,
           double amount,
           int categoryIndex,
-          int notificationId}) =>
+          String type}) =>
       Upcoming(
         id: id ?? this.id,
         tags: tags ?? this.tags,
         date: date ?? this.date,
         amount: amount ?? this.amount,
         categoryIndex: categoryIndex ?? this.categoryIndex,
-        notificationId: notificationId ?? this.notificationId,
+        type: type ?? this.type,
       );
   @override
   String toString() {
@@ -1033,7 +1030,7 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
           ..write('date: $date, ')
           ..write('amount: $amount, ')
           ..write('categoryIndex: $categoryIndex, ')
-          ..write('notificationId: $notificationId')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
@@ -1046,7 +1043,7 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
           $mrjc(
               date.hashCode,
               $mrjc(amount.hashCode,
-                  $mrjc(categoryIndex.hashCode, notificationId.hashCode))))));
+                  $mrjc(categoryIndex.hashCode, type.hashCode))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1056,7 +1053,7 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
           other.date == this.date &&
           other.amount == this.amount &&
           other.categoryIndex == this.categoryIndex &&
-          other.notificationId == this.notificationId);
+          other.type == this.type);
 }
 
 class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
@@ -1065,14 +1062,14 @@ class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
   final Value<DateTime> date;
   final Value<double> amount;
   final Value<int> categoryIndex;
-  final Value<int> notificationId;
+  final Value<String> type;
   const UpcomingsCompanion({
     this.id = const Value.absent(),
     this.tags = const Value.absent(),
     this.date = const Value.absent(),
     this.amount = const Value.absent(),
     this.categoryIndex = const Value.absent(),
-    this.notificationId = const Value.absent(),
+    this.type = const Value.absent(),
   });
   UpcomingsCompanion.insert({
     this.id = const Value.absent(),
@@ -1080,18 +1077,19 @@ class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
     @required DateTime date,
     @required double amount,
     @required int categoryIndex,
-    this.notificationId = const Value.absent(),
+    @required String type,
   })  : tags = Value(tags),
         date = Value(date),
         amount = Value(amount),
-        categoryIndex = Value(categoryIndex);
+        categoryIndex = Value(categoryIndex),
+        type = Value(type);
   static Insertable<Upcoming> custom({
     Expression<int> id,
     Expression<String> tags,
     Expression<DateTime> date,
     Expression<double> amount,
     Expression<int> categoryIndex,
-    Expression<int> notificationId,
+    Expression<String> type,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1099,7 +1097,7 @@ class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
       if (date != null) 'date': date,
       if (amount != null) 'amount': amount,
       if (categoryIndex != null) 'category_index': categoryIndex,
-      if (notificationId != null) 'notification_id': notificationId,
+      if (type != null) 'type': type,
     });
   }
 
@@ -1109,14 +1107,14 @@ class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
       Value<DateTime> date,
       Value<double> amount,
       Value<int> categoryIndex,
-      Value<int> notificationId}) {
+      Value<String> type}) {
     return UpcomingsCompanion(
       id: id ?? this.id,
       tags: tags ?? this.tags,
       date: date ?? this.date,
       amount: amount ?? this.amount,
       categoryIndex: categoryIndex ?? this.categoryIndex,
-      notificationId: notificationId ?? this.notificationId,
+      type: type ?? this.type,
     );
   }
 
@@ -1138,8 +1136,8 @@ class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
     if (categoryIndex.present) {
       map['category_index'] = Variable<int>(categoryIndex.value);
     }
-    if (notificationId.present) {
-      map['notification_id'] = Variable<int>(notificationId.value);
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
     }
     return map;
   }
@@ -1152,7 +1150,7 @@ class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
           ..write('date: $date, ')
           ..write('amount: $amount, ')
           ..write('categoryIndex: $categoryIndex, ')
-          ..write('notificationId: $notificationId')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
@@ -1219,23 +1217,18 @@ class $UpcomingsTable extends Upcomings
     );
   }
 
-  final VerificationMeta _notificationIdMeta =
-      const VerificationMeta('notificationId');
-  GeneratedIntColumn _notificationId;
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  GeneratedTextColumn _type;
   @override
-  GeneratedIntColumn get notificationId =>
-      _notificationId ??= _constructNotificationId();
-  GeneratedIntColumn _constructNotificationId() {
-    return GeneratedIntColumn(
-      'notification_id',
-      $tableName,
-      true,
-    );
+  GeneratedTextColumn get type => _type ??= _constructType();
+  GeneratedTextColumn _constructType() {
+    return GeneratedTextColumn('type', $tableName, false,
+        minTextLength: 1, maxTextLength: 10);
   }
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, tags, date, amount, categoryIndex, notificationId];
+      [id, tags, date, amount, categoryIndex, type];
   @override
   $UpcomingsTable get asDslTable => this;
   @override
@@ -1276,11 +1269,11 @@ class $UpcomingsTable extends Upcomings
     } else if (isInserting) {
       context.missing(_categoryIndexMeta);
     }
-    if (data.containsKey('notification_id')) {
+    if (data.containsKey('type')) {
       context.handle(
-          _notificationIdMeta,
-          notificationId.isAcceptableOrUnknown(
-              data['notification_id'], _notificationIdMeta));
+          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
     }
     return context;
   }

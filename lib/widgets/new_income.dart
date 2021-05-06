@@ -82,12 +82,12 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
     );
 
     // * input field for tags
-    // TODO add character limit
     final inputTags = Padding(
       padding: _padding,
       child: TextField(
         controller: controllerTags,
         cursorColor: accentColor,
+        maxLength: 50,
         style: Theme.of(context).textTheme.bodyText1,
         decoration: _decoratorInputWidget('Tags'),
       ),
