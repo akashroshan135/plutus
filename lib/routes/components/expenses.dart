@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
+import 'package:intl/intl.dart';
 
 // * Database packages
 import 'package:moor_flutter/moor_flutter.dart' as moor;
@@ -197,14 +198,27 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          ExpenseCategory.categoryNames[expense.categoryIndex],
-                          style: Theme.of(context).textTheme.bodyText1,
-                          overflow: TextOverflow.ellipsis,
+                        Row(
+                          children: [
+                            Text(
+                              ExpenseCategory
+                                      .categoryNames[expense.categoryIndex] +
+                                  ' : ',
+                              style: Theme.of(context).textTheme.bodyText1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Flexible(
+                              child: Text(
+                                expense.tags,
+                                style: Theme.of(context).textTheme.bodyText2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 5),
                         Text(
-                          expense.tags,
+                          DateFormat('hh:mm a').format(expense.date).toString(),
                           style: Theme.of(context).textTheme.bodyText2,
                           overflow: TextOverflow.ellipsis,
                         ),

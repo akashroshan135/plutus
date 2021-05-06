@@ -217,8 +217,8 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
                         isIncome
                             ? 'assets/images/income.png'
                             : 'assets/images/expense.png',
-                        width: 35,
-                        height: 35,
+                        width: 45,
+                        height: 45,
                       ),
                     ),
                   ),
@@ -230,15 +230,36 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          isIncome
-                              ? 'Income : ' + upcoming.tags
-                              : 'Expense : ' + upcoming.tags,
+                          isIncome ? 'Income' : 'Expense',
                           style: Theme.of(context).textTheme.bodyText1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 5),
+                        // SizedBox(height: 5),
+                        Row(
+                          children: [
+                            Text(
+                              isIncome
+                                  ? IncomeCategory.categoryNames[
+                                          upcoming.categoryIndex] +
+                                      ' : '
+                                  : ExpenseCategory.categoryNames[
+                                          upcoming.categoryIndex] +
+                                      ' : ',
+                              style: Theme.of(context).textTheme.bodyText1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Flexible(
+                              child: Text(
+                                upcoming.tags,
+                                style: Theme.of(context).textTheme.bodyText2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        // SizedBox(height: 5),
                         Text(
-                          DateFormat('d MMM yyyy, hh:mm a')
+                          DateFormat('hh:mm a')
                               .format(upcoming.date)
                               .toString(),
                           style: Theme.of(context).textTheme.bodyText2,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
+import 'package:intl/intl.dart';
 
 // * Database packages
 import 'package:moor_flutter/moor_flutter.dart' as moor;
@@ -196,14 +197,27 @@ class _IncomeRouteState extends State<IncomeRoute> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          IncomeCategory.categoryNames[income.categoryIndex],
-                          style: Theme.of(context).textTheme.bodyText1,
-                          overflow: TextOverflow.ellipsis,
+                        Row(
+                          children: [
+                            Text(
+                              IncomeCategory
+                                      .categoryNames[income.categoryIndex] +
+                                  ' : ',
+                              style: Theme.of(context).textTheme.bodyText1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Flexible(
+                              child: Text(
+                                income.tags,
+                                style: Theme.of(context).textTheme.bodyText2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 5),
                         Text(
-                          income.tags,
+                          DateFormat('hh:mm a').format(income.date).toString(),
                           style: Theme.of(context).textTheme.bodyText2,
                           overflow: TextOverflow.ellipsis,
                         ),
