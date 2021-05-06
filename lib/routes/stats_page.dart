@@ -52,7 +52,6 @@ class _StatsPageState extends State<StatsPage> {
                   'Monthly Statistics',
                   style: Theme.of(context).textTheme.headline1,
                 ),
-                // Icon(AntDesign.search1)
               ],
             ),
             SizedBox(height: 25),

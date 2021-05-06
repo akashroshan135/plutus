@@ -126,7 +126,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
                 double amount;
                 try {
                   amount = double.parse(controllerAmount.text);
-                  if (amount > 1000000) {
+                  if (amount > 100000) {
                     return _getEasterEgg();
                   } else {
                     final profiles = await profileDao.getAllProfile();

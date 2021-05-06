@@ -4,6 +4,7 @@ import 'package:jiffy/jiffy.dart';
 //* Routes to other pages
 import 'package:plutus/routes/components/incomes.dart';
 import 'package:plutus/routes/components/expenses.dart';
+import 'package:plutus/routes/components/upcoming.dart';
 
 class DailyPage extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class DailyPage extends StatefulWidget {
 class _DailyPageState extends State<DailyPage> {
   // * selects the 3rd date item which will be the current date
   int activeDay = 3;
-  DateTime selectedDate = DateTime.now();
+  DateTime _selectedDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +29,9 @@ class _DailyPageState extends State<DailyPage> {
       child: Column(
         children: [
           _getHeader(),
-          ExpenseRoute(selectedDate: selectedDate),
-          IncomeRoute(selectedDate: selectedDate),
+          UpcomingRoute(selectedDate: _selectedDay),
+          ExpenseRoute(selectedDate: _selectedDay),
+          IncomeRoute(selectedDate: _selectedDay),
         ],
       ),
     );
@@ -59,7 +61,6 @@ class _DailyPageState extends State<DailyPage> {
                   'Daily Transactions',
                   style: Theme.of(context).textTheme.headline1,
                 ),
-                // Icon(AntDesign.search1)
               ],
             ),
             SizedBox(height: 25),
@@ -83,7 +84,7 @@ class _DailyPageState extends State<DailyPage> {
           onTap: () {
             setState(() {
               activeDay = index;
-              selectedDate = date.dateTime;
+              _selectedDay = date.dateTime;
             });
           },
           child: Container(

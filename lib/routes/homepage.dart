@@ -8,7 +8,7 @@ import 'package:plutus/routes/daily_page.dart';
 import 'package:plutus/routes/stats_page.dart';
 import 'package:plutus/routes/calendar_page.dart';
 import 'package:plutus/routes/profile_page.dart';
-import 'package:plutus/routes/new_custom.dart';
+import 'package:plutus/routes/newPages/new_custom.dart';
 
 //* Custom Widgets
 import 'package:plutus/widgets/categoryMain.dart';
@@ -94,10 +94,6 @@ class _HomepageState extends State<Homepage> {
         size: Theme.of(context).iconTheme.size,
         color: Theme.of(context).iconTheme.color,
       ),
-      // child: NeumorphicIcon(
-      //   Icons.add_circle,
-      //   size: 50,
-      // ),
     );
   }
 

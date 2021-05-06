@@ -6,7 +6,7 @@ import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
 //* Routes to other pages
-import 'package:plutus/routes/new_profile.dart';
+import 'package:plutus/routes/newPages/new_profile.dart';
 import 'package:plutus/routes/homepage.dart';
 
 class SplashScreen extends StatefulWidget {

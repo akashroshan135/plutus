@@ -43,6 +43,7 @@ class _CustomScreenState extends State<CustomScreen> {
   final controllerTags = TextEditingController();
   final controllerAmount = TextEditingController();
   final controllerDate = TextEditingController();
+
   DateTime selectedDate = DateTime.now();
   bool isDateChanged = false;
 
@@ -113,9 +114,7 @@ class _CustomScreenState extends State<CustomScreen> {
           children: [
             InkWell(
               child: Icon(Icons.arrow_back),
-              onTap: () {
-                Navigator.pop(context);
-              },
+              onTap: () => Navigator.pop(context),
             ),
             SizedBox(width: 25),
             Text(
@@ -129,16 +128,16 @@ class _CustomScreenState extends State<CustomScreen> {
   }
 
   Widget _getBody() {
-    // * calling profile, income and expense database dao
+    // * calling profile, income, expense and upcoming database dao
     final profileDao = Provider.of<ProfileDao>(context);
     final incomeDao = Provider.of<IncomeDao>(context);
     final expenseDao = Provider.of<ExpenseDao>(context);
+    final upcomingDao = Provider.of<UpcomingDao>(context);
 
     // * field for category. shows a dialog box
     final inputCategory = Padding(
       padding: EdgeInsets.all(8),
       child: Container(
-        // height: 80,
         decoration: BoxDecoration(
           border: Border.all(color: isIncome ? accentIncome : accentExpense),
           borderRadius: BorderRadius.circular(15),
@@ -179,12 +178,12 @@ class _CustomScreenState extends State<CustomScreen> {
     );
 
     // * input field for tags
-    // TODO add character limit
     final inputTags = Padding(
       padding: _padding,
       child: TextField(
         controller: controllerTags,
         cursorColor: isIncome ? accentIncome : accentExpense,
+        maxLength: 50,
         style: Theme.of(context).textTheme.bodyText1,
         decoration: _decoratorInputWidget('Tags'),
       ),
@@ -204,9 +203,7 @@ class _CustomScreenState extends State<CustomScreen> {
 
     // * input field for date and time
     final dateTimePicker = InkWell(
-      onTap: () {
-        _selectDate(context);
-      },
+      onTap: () => _selectDate(context),
       child: Padding(
         padding: _padding,
         child: TextField(
@@ -245,47 +242,65 @@ class _CustomScreenState extends State<CustomScreen> {
                 double amount;
                 try {
                   amount = double.parse(controllerAmount.text);
-                  if (amount > 1000000) {
+                  if (amount > 100000) {
                     return _getEasterEgg();
                   } else {
-                    final profiles = await profileDao.getAllProfile();
-                    final profile = profiles[0];
-
-                    if (isIncome) {
-                      profileDao.updateProfile(
-                        ProfilesCompanion(
-                          id: moor.Value(profile.id),
-                          name: moor.Value(profile.name),
-                          balance: moor.Value(profile.balance + amount),
-                        ),
-                      );
-                      incomeDao.addIncome(
-                        IncomesCompanion(
+                    if (selectedDate.compareTo(DateTime.now()) == 1) {
+                      int id = await upcomingDao.addUpcoming(
+                        UpcomingsCompanion(
                           tags: moor.Value(controllerTags.text),
                           amount: moor.Value(amount),
                           date: moor.Value(selectedDate),
                           categoryIndex: moor.Value(categoryIndex),
+                          type: moor.Value(isIncome ? 'Income' : 'Expense'),
                         ),
                       );
+                      var transaction = Transaction(
+                          id: id,
+                          tags: controllerTags.text,
+                          amount: amount,
+                          selectedDate: selectedDate,
+                          categoryIndex: categoryIndex,
+                          type: isIncome ? 'Income' : 'Expense');
+                      return _getFuture(transaction);
                     } else {
-                      profileDao.updateProfile(
-                        ProfilesCompanion(
-                          id: moor.Value(profile.id),
-                          name: moor.Value(profile.name),
-                          balance: moor.Value(profile.balance - amount),
-                        ),
-                      );
-                      print(
-                        await expenseDao.addExpense(
+                      final profiles = await profileDao.getAllProfile();
+                      final profile = profiles[0];
+
+                      if (isIncome) {
+                        profileDao.updateProfile(
+                          ProfilesCompanion(
+                            id: moor.Value(profile.id),
+                            name: moor.Value(profile.name),
+                            balance: moor.Value(profile.balance + amount),
+                          ),
+                        );
+                        incomeDao.addIncome(
+                          IncomesCompanion(
+                            tags: moor.Value(controllerTags.text),
+                            amount: moor.Value(amount),
+                            date: moor.Value(selectedDate),
+                            categoryIndex: moor.Value(categoryIndex),
+                          ),
+                        );
+                      } else {
+                        profileDao.updateProfile(
+                          ProfilesCompanion(
+                            id: moor.Value(profile.id),
+                            name: moor.Value(profile.name),
+                            balance: moor.Value(profile.balance - amount),
+                          ),
+                        );
+                        expenseDao.addExpense(
                           ExpensesCompanion(
                             tags: moor.Value(controllerTags.text),
                             amount: moor.Value(amount),
                             date: moor.Value(selectedDate),
                             categoryIndex: moor.Value(categoryIndex),
                           ),
-                        ),
-                      );
-                      Navigator.pop(context);
+                        );
+                        Navigator.pop(context);
+                      }
                     }
                   }
                 } catch (FormatException) {
@@ -563,9 +578,7 @@ class _CustomScreenState extends State<CustomScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 'OK',
                 style: Theme.of(context).textTheme.bodyText1,
@@ -593,9 +606,7 @@ class _CustomScreenState extends State<CustomScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 'OK',
                 style: Theme.of(context).textTheme.bodyText1,
@@ -607,7 +618,7 @@ class _CustomScreenState extends State<CustomScreen> {
     );
   }
 
-  Future _getFuture() {
+  Future _getFuture(Transaction transaction) {
     return showDialog(
       context: context,
       builder: (_) {
@@ -625,6 +636,7 @@ class _CustomScreenState extends State<CustomScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.of(context).pop();
               },
               child: Text(
                 'No',
@@ -633,7 +645,8 @@ class _CustomScreenState extends State<CustomScreen> {
             ),
             TextButton(
               onPressed: () {
-                // _setNotification();
+                _setNotification(transaction);
+                Navigator.of(context).pop();
               },
               child: Text(
                 'Yes',
@@ -647,7 +660,7 @@ class _CustomScreenState extends State<CustomScreen> {
   }
 
   // * creates a new notification instance
-  Future _setNotification(String text, double amount) async {
+  Future _setNotification(Transaction transaction) async {
     final androidDetails = new AndroidNotificationDetails(
       '1',
       'Plutus',
@@ -656,19 +669,43 @@ class _CustomScreenState extends State<CustomScreen> {
     );
     final notificationDetails =
         new NotificationDetails(android: androidDetails);
-    // TODO set date dynamically
+
+    final mainText = 'Pending Upcoming Transaction';
+    final subText = 'Tags: ' +
+        transaction.tags +
+        ', Amount: ' +
+        transaction.amount.toString();
     final tz.TZDateTime scheduledDate =
-        tz.TZDateTime.now(tz.local).add(Duration(seconds: 10));
+        tz.TZDateTime.from(transaction.selectedDate, tz.local);
 
     await notificationsPlugin.zonedSchedule(
-      0,
-      text,
-      amount.toString(),
+      transaction.id,
+      mainText,
+      subText,
       scheduledDate,
       notificationDetails,
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );
+    Navigator.pop(context);
   }
+}
+
+class Transaction {
+  final int id;
+  final String tags;
+  final double amount;
+  final DateTime selectedDate;
+  final categoryIndex;
+  final String type;
+
+  Transaction({
+    @required this.id,
+    @required this.tags,
+    @required this.amount,
+    @required this.selectedDate,
+    @required this.categoryIndex,
+    @required this.type,
+  });
 }

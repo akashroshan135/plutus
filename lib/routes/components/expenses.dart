@@ -6,9 +6,6 @@ import 'package:moor_flutter/moor_flutter.dart' as moor;
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
-// * Notifications Packages
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 //* Custom Widgets
 import 'package:plutus/widgets/edit_expense.dart';
 
@@ -25,8 +22,6 @@ class ExpenseRoute extends StatefulWidget {
 }
 
 class _ExpenseRouteState extends State<ExpenseRoute> {
-  final notificationsPlugin = FlutterLocalNotificationsPlugin();
-
   @override
   Widget build(BuildContext context) {
     // * calling expense database dao
@@ -52,7 +47,7 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 10, bottom: 8, left: 18),
+              padding: EdgeInsets.only(top: 10, left: 18),
               child: Text(
                 'Expenses',
                 style: Theme.of(context).textTheme.bodyText1,
@@ -70,10 +65,6 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
         );
       },
     );
-  }
-
-  Future _cancelNotification() async {
-    await notificationsPlugin.cancel(0);
   }
 
   // * code to build one transaction item
@@ -107,14 +98,14 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(false),
                     child: Text(
-                      'CANCEL',
+                      'No',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(true),
                     child: Text(
-                      'OK',
+                      'Yes',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
@@ -140,7 +131,7 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(false),
                     child: Text(
-                      'CANCEL',
+                      'No',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
@@ -150,7 +141,7 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                       _showEditSceen(expense);
                     },
                     child: Text(
-                      'OK',
+                      'Yes',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
@@ -172,46 +163,13 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
           ),
         );
         expenseDao.deleteExpense(expense);
-        // _cancelNotification();
       },
       child: Container(
         padding: EdgeInsets.only(top: 12, left: 18, right: 18, bottom: 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Container(
-            //   child: Center(
-            //     child: Container(
-            //       width: 50,
-            //       height: 50,
-            //       child: Neumorphic(
-            //         style: NeumorphicStyle(
-            //             shape: NeumorphicShape.concave,
-            //             boxShape: NeumorphicBoxShape.circle(),
-            //             depth: 3,
-            //             intensity: 0.4,
-            //             lightSource: LightSource.bottom,
-            //             color: Theme.of(context).iconTheme.color),
-            //         child: Center(
-            //           child: NeumorphicIcon(
-            //             ExpenseCategory.categoryIcon[expense.categoryIndex],
-            //             style: NeumorphicStyle(
-            //               shape: NeumorphicShape.flat,
-            //               depth: 5,
-            //               intensity: 0.6,
-            //               lightSource: LightSource.top,
-            //               color: Theme.of(context).primaryIconTheme.color,
-            //             ),
-            //             size: Theme.of(context).primaryIconTheme.size,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Container(
-              // height: 80,
-              width: (size.width - 40) * 0.7,
               child: Row(
                 children: [
                   Container(
@@ -279,12 +237,11 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
     return Container(
       color: Colors.green,
       child: Align(
+        alignment: Alignment.centerLeft,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            SizedBox(
-              width: 20,
-            ),
+            SizedBox(width: 20),
             Icon(Icons.edit),
             Text(
               ' Edit',
@@ -293,7 +250,6 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
             ),
           ],
         ),
-        alignment: Alignment.centerLeft,
       ),
     );
   }
@@ -303,6 +259,7 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
     return Container(
       color: Colors.red,
       child: Align(
+        alignment: Alignment.centerRight,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
@@ -312,12 +269,9 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
               style: Theme.of(context).textTheme.bodyText1,
               textAlign: TextAlign.right,
             ),
-            SizedBox(
-              width: 20,
-            ),
+            SizedBox(width: 20),
           ],
         ),
-        alignment: Alignment.centerRight,
       ),
     );
   }

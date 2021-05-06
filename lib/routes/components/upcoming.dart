@@ -1,47 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:sliding_sheet/sliding_sheet.dart';
+import 'package:intl/intl.dart';
 
 // * Database packages
 import 'package:moor_flutter/moor_flutter.dart' as moor;
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
-//* Custom Widgets
-import 'package:plutus/widgets/edit_income.dart';
+// * Notifications Packages
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 //* Data Classes
+import 'package:plutus/data/expenseCat.dart';
 import 'package:plutus/data/incomeCat.dart';
 
-class IncomeRoute extends StatefulWidget {
+class UpcomingRoute extends StatefulWidget {
   final DateTime selectedDate;
 
-  const IncomeRoute({Key key, this.selectedDate}) : super(key: key);
+  UpcomingRoute({Key key, this.selectedDate}) : super(key: key);
 
   @override
-  _IncomeRouteState createState() => _IncomeRouteState();
+  _UpcomingRouteState createState() => _UpcomingRouteState();
 }
 
-class _IncomeRouteState extends State<IncomeRoute> {
+class _UpcomingRouteState extends State<UpcomingRoute> {
+  final notificationsPlugin = FlutterLocalNotificationsPlugin();
+
   @override
   Widget build(BuildContext context) {
-    // * calling income database dao
-    final incomeDao = Provider.of<IncomeDao>(context);
+    // * calling expense database dao
+    final upcomingDao = Provider.of<UpcomingDao>(context);
 
     // * StreamBuilder used to build list of all objects
     return StreamBuilder(
-      stream: incomeDao.watchDayIncome(widget.selectedDate),
-      builder: (context, AsyncSnapshot<List<Income>> snapshot) {
-        final incomes = snapshot.data ?? [];
-        if (incomes.isEmpty) {
-          // TODO make good empty page
-          return Container(
-            child: Center(
-              child: Text(
-                'No Incomes',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ),
-          );
+      stream: upcomingDao.watchDayUpcoming(widget.selectedDate),
+      builder: (context, AsyncSnapshot<List<Upcoming>> snapshot) {
+        final upcoming = snapshot.data ?? [];
+        if (upcoming.isEmpty) {
+          return Container();
         }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,16 +44,16 @@ class _IncomeRouteState extends State<IncomeRoute> {
             Padding(
               padding: EdgeInsets.only(top: 10, left: 18),
               child: Text(
-                'Income',
+                'Upcoming',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ),
             ListView.builder(
               primary: false,
               shrinkWrap: true,
-              itemCount: incomes.length,
+              itemCount: upcoming.length,
               itemBuilder: (_, index) {
-                return _buildItem(context, incomes[index], incomeDao);
+                return _buildItem(context, upcoming[index], upcomingDao);
               },
             ),
           ],
@@ -67,15 +62,28 @@ class _IncomeRouteState extends State<IncomeRoute> {
     );
   }
 
+  Future _cancelNotification(Upcoming upcoming) async {
+    await notificationsPlugin.cancel(upcoming.id);
+  }
+
   // * code to build one transaction item
-  Widget _buildItem(BuildContext context, Income income, IncomeDao incomeDao) {
+  Widget _buildItem(
+      BuildContext context, Upcoming upcoming, UpcomingDao upcomingDao) {
     // * calling profile database dao
     final profileDao = Provider.of<ProfileDao>(context);
+    final incomeDao = Provider.of<IncomeDao>(context);
+    final expenseDao = Provider.of<ExpenseDao>(context);
 
     var size = MediaQuery.of(context).size;
+    var isIncome;
+
+    if (upcoming.type == 'Income')
+      isIncome = true;
+    else
+      isIncome = false;
 
     return Dismissible(
-      key: Key(income.toString()),
+      key: Key(upcoming.toString()),
       background: _slideRightBackground(),
       secondaryBackground: _slideLeftBackground(),
       confirmDismiss: (DismissDirection direction) async {
@@ -90,7 +98,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                 ),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 content: Text(
-                  'Are you sure want to delete this item?',
+                  'Are you sure want to delete this transaction?',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 actions: <Widget>[
@@ -123,7 +131,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                 ),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 content: Text(
-                  'Are you sure want to edit this item?',
+                  'Are you sure want to mark this transaction as Completed?',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 actions: <Widget>[
@@ -135,10 +143,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                      _showEditSceen(income);
-                    },
+                    onPressed: () => Navigator.of(context).pop(true),
                     child: Text(
                       'Yes',
                       style: Theme.of(context).textTheme.bodyText1,
@@ -151,17 +156,46 @@ class _IncomeRouteState extends State<IncomeRoute> {
         }
       },
       onDismissed: (direction) async {
-        final profiles = await profileDao.getAllProfile();
-        final profile = profiles[0];
+        if (direction == DismissDirection.startToEnd) {
+          final profiles = await profileDao.getAllProfile();
+          final profile = profiles[0];
 
-        profileDao.updateProfile(
-          ProfilesCompanion(
-            id: moor.Value(profile.id),
-            name: moor.Value(profile.name),
-            balance: moor.Value(profile.balance - income.amount),
-          ),
-        );
-        incomeDao.deleteIncome(income);
+          if (isIncome) {
+            profileDao.updateProfile(
+              ProfilesCompanion(
+                id: moor.Value(profile.id),
+                name: moor.Value(profile.name),
+                balance: moor.Value(profile.balance + upcoming.amount),
+              ),
+            );
+            incomeDao.addIncome(
+              IncomesCompanion(
+                tags: moor.Value(upcoming.tags),
+                amount: moor.Value(upcoming.amount),
+                date: moor.Value(upcoming.date),
+                categoryIndex: moor.Value(upcoming.categoryIndex),
+              ),
+            );
+          } else {
+            profileDao.updateProfile(
+              ProfilesCompanion(
+                id: moor.Value(profile.id),
+                name: moor.Value(profile.name),
+                balance: moor.Value(profile.balance - upcoming.amount),
+              ),
+            );
+            expenseDao.addExpense(
+              ExpensesCompanion(
+                tags: moor.Value(upcoming.tags),
+                amount: moor.Value(upcoming.amount),
+                date: moor.Value(upcoming.date),
+                categoryIndex: moor.Value(upcoming.categoryIndex),
+              ),
+            );
+          }
+        }
+        _cancelNotification(upcoming);
+        upcomingDao.deleteUpcoming(upcoming);
       },
       child: Container(
         padding: EdgeInsets.only(top: 12, left: 18, right: 18, bottom: 12),
@@ -180,7 +214,9 @@ class _IncomeRouteState extends State<IncomeRoute> {
                     ),
                     child: Center(
                       child: Image.asset(
-                        IncomeCategory.categoryIcon[income.categoryIndex],
+                        isIncome
+                            ? 'assets/images/income.png'
+                            : 'assets/images/expense.png',
                         width: 35,
                         height: 35,
                       ),
@@ -194,13 +230,15 @@ class _IncomeRouteState extends State<IncomeRoute> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          IncomeCategory.categoryNames[income.categoryIndex],
+                          isIncome ? 'Income : ' : 'Expense : ' + upcoming.tags,
                           style: Theme.of(context).textTheme.bodyText1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: 5),
                         Text(
-                          income.tags,
+                          DateFormat('d MMM yyyy, hh:mm a')
+                              .format(upcoming.date)
+                              .toString(),
                           style: Theme.of(context).textTheme.bodyText2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -216,11 +254,11 @@ class _IncomeRouteState extends State<IncomeRoute> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    '+ ₹' + income.amount.toString() + ' ',
+                    upcoming.amount.toString() + ' ',
                     style: Theme.of(context)
                         .textTheme
                         .bodyText1
-                        .copyWith(color: Colors.green),
+                        .copyWith(color: Colors.grey),
                   ),
                 ],
               ),
@@ -241,9 +279,9 @@ class _IncomeRouteState extends State<IncomeRoute> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(width: 20),
-            Icon(Icons.edit),
+            Icon(Icons.check),
             Text(
-              ' Edit',
+              ' Mark as Completed',
               style: Theme.of(context).textTheme.bodyText1,
               textAlign: TextAlign.left,
             ),
@@ -272,38 +310,6 @@ class _IncomeRouteState extends State<IncomeRoute> {
           ],
         ),
       ),
-    );
-  }
-
-  // * renders the edit screen
-  void _showEditSceen(Income income) async {
-    return await showSlidingBottomSheet(
-      context,
-      builder: (context) {
-        return SlidingSheetDialog(
-          elevation: 10,
-          cornerRadius: 16,
-          snapSpec: const SnapSpec(
-            snap: true,
-            snappings: [0.58, 0.7, 1.0],
-            positioning: SnapPositioning.relativeToAvailableSpace,
-          ),
-          builder: (context, state) {
-            return Container(
-              height: 500,
-              child: Center(
-                child: Material(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: EditIncomeScreen(income: income),
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
     );
   }
 }

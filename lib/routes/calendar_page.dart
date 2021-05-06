@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 //* Routes to other pages
 import 'package:plutus/routes/components/expenses.dart';
 import 'package:plutus/routes/components/incomes.dart';
+import 'package:plutus/routes/components/upcoming.dart';
 
 class CalendarPage extends StatefulWidget {
   CalendarPage({Key key}) : super(key: key);
@@ -30,6 +31,7 @@ class _CalendarPageState extends State<CalendarPage> {
       child: Column(
         children: [
           _getHeader(),
+          UpcomingRoute(selectedDate: _selectedDay),
           ExpenseRoute(selectedDate: _selectedDay),
           IncomeRoute(selectedDate: _selectedDay),
         ],
