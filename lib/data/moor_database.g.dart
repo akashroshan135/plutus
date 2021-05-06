@@ -911,6 +911,394 @@ class $ExpensesTable extends Expenses with TableInfo<$ExpensesTable, Expense> {
   }
 }
 
+class Upcoming extends DataClass implements Insertable<Upcoming> {
+  final int id;
+  final String tags;
+  final DateTime date;
+  final double amount;
+  final int categoryIndex;
+  final int notificationId;
+  Upcoming(
+      {@required this.id,
+      @required this.tags,
+      @required this.date,
+      @required this.amount,
+      @required this.categoryIndex,
+      this.notificationId});
+  factory Upcoming.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    final dateTimeType = db.typeSystem.forDartType<DateTime>();
+    final doubleType = db.typeSystem.forDartType<double>();
+    return Upcoming(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      tags: stringType.mapFromDatabaseResponse(data['${effectivePrefix}tags']),
+      date:
+          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
+      amount:
+          doubleType.mapFromDatabaseResponse(data['${effectivePrefix}amount']),
+      categoryIndex: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}category_index']),
+      notificationId: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}notification_id']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || tags != null) {
+      map['tags'] = Variable<String>(tags);
+    }
+    if (!nullToAbsent || date != null) {
+      map['date'] = Variable<DateTime>(date);
+    }
+    if (!nullToAbsent || amount != null) {
+      map['amount'] = Variable<double>(amount);
+    }
+    if (!nullToAbsent || categoryIndex != null) {
+      map['category_index'] = Variable<int>(categoryIndex);
+    }
+    if (!nullToAbsent || notificationId != null) {
+      map['notification_id'] = Variable<int>(notificationId);
+    }
+    return map;
+  }
+
+  UpcomingsCompanion toCompanion(bool nullToAbsent) {
+    return UpcomingsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      tags: tags == null && nullToAbsent ? const Value.absent() : Value(tags),
+      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
+      amount:
+          amount == null && nullToAbsent ? const Value.absent() : Value(amount),
+      categoryIndex: categoryIndex == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryIndex),
+      notificationId: notificationId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notificationId),
+    );
+  }
+
+  factory Upcoming.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Upcoming(
+      id: serializer.fromJson<int>(json['id']),
+      tags: serializer.fromJson<String>(json['tags']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      amount: serializer.fromJson<double>(json['amount']),
+      categoryIndex: serializer.fromJson<int>(json['categoryIndex']),
+      notificationId: serializer.fromJson<int>(json['notificationId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'tags': serializer.toJson<String>(tags),
+      'date': serializer.toJson<DateTime>(date),
+      'amount': serializer.toJson<double>(amount),
+      'categoryIndex': serializer.toJson<int>(categoryIndex),
+      'notificationId': serializer.toJson<int>(notificationId),
+    };
+  }
+
+  Upcoming copyWith(
+          {int id,
+          String tags,
+          DateTime date,
+          double amount,
+          int categoryIndex,
+          int notificationId}) =>
+      Upcoming(
+        id: id ?? this.id,
+        tags: tags ?? this.tags,
+        date: date ?? this.date,
+        amount: amount ?? this.amount,
+        categoryIndex: categoryIndex ?? this.categoryIndex,
+        notificationId: notificationId ?? this.notificationId,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Upcoming(')
+          ..write('id: $id, ')
+          ..write('tags: $tags, ')
+          ..write('date: $date, ')
+          ..write('amount: $amount, ')
+          ..write('categoryIndex: $categoryIndex, ')
+          ..write('notificationId: $notificationId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          tags.hashCode,
+          $mrjc(
+              date.hashCode,
+              $mrjc(amount.hashCode,
+                  $mrjc(categoryIndex.hashCode, notificationId.hashCode))))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Upcoming &&
+          other.id == this.id &&
+          other.tags == this.tags &&
+          other.date == this.date &&
+          other.amount == this.amount &&
+          other.categoryIndex == this.categoryIndex &&
+          other.notificationId == this.notificationId);
+}
+
+class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
+  final Value<int> id;
+  final Value<String> tags;
+  final Value<DateTime> date;
+  final Value<double> amount;
+  final Value<int> categoryIndex;
+  final Value<int> notificationId;
+  const UpcomingsCompanion({
+    this.id = const Value.absent(),
+    this.tags = const Value.absent(),
+    this.date = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.categoryIndex = const Value.absent(),
+    this.notificationId = const Value.absent(),
+  });
+  UpcomingsCompanion.insert({
+    this.id = const Value.absent(),
+    @required String tags,
+    @required DateTime date,
+    @required double amount,
+    @required int categoryIndex,
+    this.notificationId = const Value.absent(),
+  })  : tags = Value(tags),
+        date = Value(date),
+        amount = Value(amount),
+        categoryIndex = Value(categoryIndex);
+  static Insertable<Upcoming> custom({
+    Expression<int> id,
+    Expression<String> tags,
+    Expression<DateTime> date,
+    Expression<double> amount,
+    Expression<int> categoryIndex,
+    Expression<int> notificationId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (tags != null) 'tags': tags,
+      if (date != null) 'date': date,
+      if (amount != null) 'amount': amount,
+      if (categoryIndex != null) 'category_index': categoryIndex,
+      if (notificationId != null) 'notification_id': notificationId,
+    });
+  }
+
+  UpcomingsCompanion copyWith(
+      {Value<int> id,
+      Value<String> tags,
+      Value<DateTime> date,
+      Value<double> amount,
+      Value<int> categoryIndex,
+      Value<int> notificationId}) {
+    return UpcomingsCompanion(
+      id: id ?? this.id,
+      tags: tags ?? this.tags,
+      date: date ?? this.date,
+      amount: amount ?? this.amount,
+      categoryIndex: categoryIndex ?? this.categoryIndex,
+      notificationId: notificationId ?? this.notificationId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (tags.present) {
+      map['tags'] = Variable<String>(tags.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    if (categoryIndex.present) {
+      map['category_index'] = Variable<int>(categoryIndex.value);
+    }
+    if (notificationId.present) {
+      map['notification_id'] = Variable<int>(notificationId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UpcomingsCompanion(')
+          ..write('id: $id, ')
+          ..write('tags: $tags, ')
+          ..write('date: $date, ')
+          ..write('amount: $amount, ')
+          ..write('categoryIndex: $categoryIndex, ')
+          ..write('notificationId: $notificationId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $UpcomingsTable extends Upcomings
+    with TableInfo<$UpcomingsTable, Upcoming> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $UpcomingsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _tagsMeta = const VerificationMeta('tags');
+  GeneratedTextColumn _tags;
+  @override
+  GeneratedTextColumn get tags => _tags ??= _constructTags();
+  GeneratedTextColumn _constructTags() {
+    return GeneratedTextColumn('tags', $tableName, false,
+        minTextLength: 1, maxTextLength: 50);
+  }
+
+  final VerificationMeta _dateMeta = const VerificationMeta('date');
+  GeneratedDateTimeColumn _date;
+  @override
+  GeneratedDateTimeColumn get date => _date ??= _constructDate();
+  GeneratedDateTimeColumn _constructDate() {
+    return GeneratedDateTimeColumn(
+      'date',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _amountMeta = const VerificationMeta('amount');
+  GeneratedRealColumn _amount;
+  @override
+  GeneratedRealColumn get amount => _amount ??= _constructAmount();
+  GeneratedRealColumn _constructAmount() {
+    return GeneratedRealColumn(
+      'amount',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _categoryIndexMeta =
+      const VerificationMeta('categoryIndex');
+  GeneratedIntColumn _categoryIndex;
+  @override
+  GeneratedIntColumn get categoryIndex =>
+      _categoryIndex ??= _constructCategoryIndex();
+  GeneratedIntColumn _constructCategoryIndex() {
+    return GeneratedIntColumn(
+      'category_index',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _notificationIdMeta =
+      const VerificationMeta('notificationId');
+  GeneratedIntColumn _notificationId;
+  @override
+  GeneratedIntColumn get notificationId =>
+      _notificationId ??= _constructNotificationId();
+  GeneratedIntColumn _constructNotificationId() {
+    return GeneratedIntColumn(
+      'notification_id',
+      $tableName,
+      true,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, tags, date, amount, categoryIndex, notificationId];
+  @override
+  $UpcomingsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'upcomings';
+  @override
+  final String actualTableName = 'upcomings';
+  @override
+  VerificationContext validateIntegrity(Insertable<Upcoming> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('tags')) {
+      context.handle(
+          _tagsMeta, tags.isAcceptableOrUnknown(data['tags'], _tagsMeta));
+    } else if (isInserting) {
+      context.missing(_tagsMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date'], _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(_amountMeta,
+          amount.isAcceptableOrUnknown(data['amount'], _amountMeta));
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('category_index')) {
+      context.handle(
+          _categoryIndexMeta,
+          categoryIndex.isAcceptableOrUnknown(
+              data['category_index'], _categoryIndexMeta));
+    } else if (isInserting) {
+      context.missing(_categoryIndexMeta);
+    }
+    if (data.containsKey('notification_id')) {
+      context.handle(
+          _notificationIdMeta,
+          notificationId.isAcceptableOrUnknown(
+              data['notification_id'], _notificationIdMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Upcoming map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Upcoming.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $UpcomingsTable createAlias(String alias) {
+    return $UpcomingsTable(_db, alias);
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $ProfilesTable _profiles;
@@ -919,17 +1307,22 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $IncomesTable get incomes => _incomes ??= $IncomesTable(this);
   $ExpensesTable _expenses;
   $ExpensesTable get expenses => _expenses ??= $ExpensesTable(this);
+  $UpcomingsTable _upcomings;
+  $UpcomingsTable get upcomings => _upcomings ??= $UpcomingsTable(this);
   ProfileDao _profileDao;
   ProfileDao get profileDao => _profileDao ??= ProfileDao(this as AppDatabase);
   IncomeDao _incomeDao;
   IncomeDao get incomeDao => _incomeDao ??= IncomeDao(this as AppDatabase);
   ExpenseDao _expenseDao;
   ExpenseDao get expenseDao => _expenseDao ??= ExpenseDao(this as AppDatabase);
+  UpcomingDao _upcomingDao;
+  UpcomingDao get upcomingDao =>
+      _upcomingDao ??= UpcomingDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [profiles, incomes, expenses];
+      [profiles, incomes, expenses, upcomings];
 }
 
 // **************************************************************************
@@ -944,4 +1337,7 @@ mixin _$IncomeDaoMixin on DatabaseAccessor<AppDatabase> {
 }
 mixin _$ExpenseDaoMixin on DatabaseAccessor<AppDatabase> {
   $ExpensesTable get expenses => attachedDatabase.expenses;
+}
+mixin _$UpcomingDaoMixin on DatabaseAccessor<AppDatabase> {
+  $UpcomingsTable get upcomings => attachedDatabase.upcomings;
 }

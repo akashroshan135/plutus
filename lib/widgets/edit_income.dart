@@ -133,34 +133,40 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
               if (controllerTags.text == '' ||
                   controllerAmount.text == '' ||
                   categoryIndex == null) {
-                return _getWarning();
+                return _getWarning('Please enter all the fields');
               } else {
-                double amount = double.parse(controllerAmount.text);
-                if (amount > 1000000) {
-                  return _getEasterEgg();
-                } else {
-                  final profiles = await profileDao.getAllProfile();
-                  final profile = profiles[0];
-                  profileDao.updateProfile(
-                    ProfilesCompanion(
-                      id: Value(profile.id),
-                      name: Value(profile.name),
-                      balance: Value(
-                          (profile.balance - widget.income.amount) + amount),
-                    ),
-                  );
-                  incomeDao.updateIncome(
-                    IncomesCompanion(
-                      id: Value(widget.income.id),
-                      tags: Value(controllerTags.text),
-                      amount: Value(amount),
-                      date: Value(widget.income.date),
-                      categoryIndex: Value(categoryIndex),
-                    ),
-                  );
+                double amount;
+                try {
+                  amount = double.parse(controllerAmount.text);
+                  if (amount > 1000000) {
+                    return _getEasterEgg();
+                  } else {
+                    final profiles = await profileDao.getAllProfile();
+                    final profile = profiles[0];
+
+                    profileDao.updateProfile(
+                      ProfilesCompanion(
+                        id: Value(profile.id),
+                        name: Value(profile.name),
+                        balance: Value(
+                            (profile.balance - widget.income.amount) + amount),
+                      ),
+                    );
+                    incomeDao.updateIncome(
+                      IncomesCompanion(
+                        id: Value(widget.income.id),
+                        tags: Value(controllerTags.text),
+                        amount: Value(amount),
+                        date: Value(widget.income.date),
+                        categoryIndex: Value(categoryIndex),
+                      ),
+                    );
+                    Navigator.pop(context);
+                  }
+                } catch (FormatException) {
+                  return _getWarning('Please enter number data for amount');
                 }
               }
-              Navigator.pop(context);
             },
             child: Center(
               child: Text(
@@ -207,14 +213,6 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(color: accentColor, width: 1),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.red, width: 1),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.red, width: 1),
       ),
     );
   }
@@ -265,7 +263,7 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
   }
 
   // * renders a warning dialog box
-  Future _getWarning() {
+  Future _getWarning(String text) {
     return showDialog(
       context: context,
       builder: (_) {
@@ -276,7 +274,7 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           content: Text(
-            'Please enter all the fields',
+            text,
             style: Theme.of(context).textTheme.bodyText1,
           ),
           actions: <Widget>[

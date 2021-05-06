@@ -6,8 +6,8 @@ part 'moor_database.g.dart';
   Main App Database
 -------------------------------------------------------------- */
 @UseMoor(
-  tables: [Profiles, Incomes, Expenses],
-  daos: [ProfileDao, IncomeDao, ExpenseDao],
+  tables: [Profiles, Incomes, Expenses, Upcomings],
+  daos: [ProfileDao, IncomeDao, ExpenseDao, UpcomingDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase()
@@ -143,4 +143,51 @@ class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
   // * deletes an expense transaction with a matching primary key
   Future deleteExpense(Insertable<Expense> entry) =>
       delete(expenses).delete(entry);
+}
+
+/* --------------------------------------------------------------
+  Upcomings Table and DAO
+-------------------------------------------------------------- */
+class Upcomings extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get tags => text().withLength(min: 1, max: 50)();
+  DateTimeColumn get date => dateTime()();
+  RealColumn get amount => real()();
+  IntColumn get categoryIndex => integer()();
+  TextColumn get type => text().withLength(min: 1, max: 10)();
+}
+
+@UseDao(tables: [Upcomings])
+class UpcomingDao extends DatabaseAccessor<AppDatabase>
+    with _$UpcomingDaoMixin {
+  final AppDatabase db;
+
+  // * gets database object
+  UpcomingDao(this.db) : super(db);
+
+  // * returns upcoming rows
+  Future<List<Upcoming>> getAllUpcoming() => select(upcomings).get();
+  Stream<List<Upcoming>> watchAllUpcoming() => select(upcomings).watch();
+
+  // * streams upcoming rows filtered by seleted date
+  Stream<List<Upcoming>> watchDayUpcoming(DateTime searchDate) {
+    return (select(upcomings)
+          ..where((row) =>
+              row.date.day.equals(searchDate.day) &
+              row.date.month.equals(searchDate.month) &
+              row.date.year.equals(searchDate.year)))
+        .watch();
+  }
+
+  // * add an upcoming transaction
+  Future<int> addUpcoming(Insertable<Upcoming> entry) =>
+      into(upcomings).insert(entry);
+
+  // * updates an upcoming transaction with a matching primary key
+  Future updateUpcoming(Insertable<Upcoming> entry) =>
+      update(upcomings).replace(entry);
+
+  // * deletes an upcoming transaction with a matching primary key
+  Future deleteUpcoming(Insertable<Upcoming> entry) =>
+      delete(upcomings).delete(entry);
 }

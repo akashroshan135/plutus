@@ -117,14 +117,15 @@ class _AboutScreenState extends State<AboutScreen> {
       Icon(AntDesign.github),
       'Github',
       'https://github.com/akashroshan135/plutus',
+      'https://github.com/akashroshan135/plutus',
     );
 
-    final developers = <Widget>[
+    final developer = <Widget>[
       Container(
         padding: EdgeInsets.all(16),
         alignment: Alignment.center,
         child: Text(
-          'Developers',
+          'Developer',
           style: Theme.of(context).textTheme.headline1,
         ),
       ),
@@ -132,13 +133,33 @@ class _AboutScreenState extends State<AboutScreen> {
         context,
         Icon(AntDesign.github),
         'Akash Roshan',
+        '@akashroshan135',
         'https://github.com/akashroshan135',
+      ),
+    ];
+
+    final contributors = <Widget>[
+      Container(
+        padding: EdgeInsets.all(16),
+        alignment: Alignment.center,
+        child: Text(
+          'Contributors',
+          style: Theme.of(context).textTheme.headline1,
+        ),
       ),
       _buttonWidget(
         context,
         Icon(AntDesign.github),
         'Ratandeep Kaur Sodhi',
+        '@ratandeepkaur',
         'https://github.com/ratandeepkaur',
+      ),
+      _buttonWidget(
+        context,
+        Icon(AntDesign.twitter),
+        'Subramanium Sai Marei',
+        '@subbu_tutnh',
+        'https://twitter.com/subbu_tutnh',
       ),
     ];
 
@@ -150,15 +171,18 @@ class _AboutScreenState extends State<AboutScreen> {
         children: [
           appDescription,
           appGithub,
-          developers[0],
-          developers[1],
-          developers[2],
+          developer[0],
+          developer[1],
+          contributors[0],
+          contributors[1],
+          contributors[2],
         ],
       ),
     );
   }
 
-  Widget _buttonWidget(BuildContext context, Icon icon, mainText, subText) {
+  Widget _buttonWidget(
+      BuildContext context, Icon icon, mainText, subText, link) {
     final _random = new Random();
     var _inkwellColor = myColors[_random.nextInt(myColors.length)];
 
@@ -173,7 +197,7 @@ class _AboutScreenState extends State<AboutScreen> {
             borderRadius: BorderRadius.circular(15),
             highlightColor: _inkwellColor,
             splashColor: _inkwellColor,
-            onTap: () => launch(subText),
+            onTap: () => launch(link),
             child: Row(
               children: <Widget>[
                 Padding(

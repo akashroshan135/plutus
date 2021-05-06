@@ -240,50 +240,58 @@ class _CustomScreenState extends State<CustomScreen> {
               if (controllerTags.text == '' ||
                   controllerAmount.text == '' ||
                   categoryIndex == null) {
-                return _getWarning();
+                return _getWarning('Please enter all the fields');
               } else {
-                double amount = double.parse(controllerAmount.text);
-                if (amount > 1000000) {
-                  return _getEasterEgg();
-                } else {
-                  final profiles = await profileDao.getAllProfile();
-                  final profile = profiles[0];
-                  if (isIncome) {
-                    profileDao.updateProfile(
-                      ProfilesCompanion(
-                        id: moor.Value(profile.id),
-                        name: moor.Value(profile.name),
-                        balance: moor.Value(profile.balance + amount),
-                      ),
-                    );
-                    incomeDao.addIncome(
-                      IncomesCompanion(
-                        tags: moor.Value(controllerTags.text),
-                        amount: moor.Value(amount),
-                        date: moor.Value(selectedDate),
-                        categoryIndex: moor.Value(categoryIndex),
-                      ),
-                    );
+                double amount;
+                try {
+                  amount = double.parse(controllerAmount.text);
+                  if (amount > 1000000) {
+                    return _getEasterEgg();
                   } else {
-                    profileDao.updateProfile(
-                      ProfilesCompanion(
-                        id: moor.Value(profile.id),
-                        name: moor.Value(profile.name),
-                        balance: moor.Value(profile.balance - amount),
-                      ),
-                    );
-                    expenseDao.addExpense(
-                      ExpensesCompanion(
-                        tags: moor.Value(controllerTags.text),
-                        amount: moor.Value(amount),
-                        date: moor.Value(selectedDate),
-                        categoryIndex: moor.Value(categoryIndex),
-                      ),
-                    );
+                    final profiles = await profileDao.getAllProfile();
+                    final profile = profiles[0];
+
+                    if (isIncome) {
+                      profileDao.updateProfile(
+                        ProfilesCompanion(
+                          id: moor.Value(profile.id),
+                          name: moor.Value(profile.name),
+                          balance: moor.Value(profile.balance + amount),
+                        ),
+                      );
+                      incomeDao.addIncome(
+                        IncomesCompanion(
+                          tags: moor.Value(controllerTags.text),
+                          amount: moor.Value(amount),
+                          date: moor.Value(selectedDate),
+                          categoryIndex: moor.Value(categoryIndex),
+                        ),
+                      );
+                    } else {
+                      profileDao.updateProfile(
+                        ProfilesCompanion(
+                          id: moor.Value(profile.id),
+                          name: moor.Value(profile.name),
+                          balance: moor.Value(profile.balance - amount),
+                        ),
+                      );
+                      print(
+                        await expenseDao.addExpense(
+                          ExpensesCompanion(
+                            tags: moor.Value(controllerTags.text),
+                            amount: moor.Value(amount),
+                            date: moor.Value(selectedDate),
+                            categoryIndex: moor.Value(categoryIndex),
+                          ),
+                        ),
+                      );
+                      Navigator.pop(context);
+                    }
                   }
+                } catch (FormatException) {
+                  return _getWarning('Please enter number data for amount');
                 }
               }
-              Navigator.pop(context);
             },
             child: Center(
               child: Text(
@@ -387,9 +395,7 @@ class _CustomScreenState extends State<CustomScreen> {
       ),
     );
 
-    return ListView(
-      primary: false,
-      shrinkWrap: true,
+    return Column(
       children: [
         toggle,
         inputCategory,
@@ -419,14 +425,6 @@ class _CustomScreenState extends State<CustomScreen> {
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(
             color: isIncome ? accentIncome : accentExpense, width: 1),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.red, width: 1),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.red, width: 1),
       ),
     );
   }
@@ -513,8 +511,8 @@ class _CustomScreenState extends State<CustomScreen> {
     setState(() {
       if (result != null) {
         categoryIndex = result;
-        categoryIcon = IncomeCategory.categoryIcon[result];
-        categoryText = IncomeCategory.categoryNames[result];
+        categoryIcon = ExpenseCategory.categoryIcon[result];
+        categoryText = ExpenseCategory.categoryNames[result];
       }
     });
   }
@@ -549,7 +547,7 @@ class _CustomScreenState extends State<CustomScreen> {
       });
   }
 
-  Future _getWarning() {
+  Future _getWarning(String text) {
     return showDialog(
       context: context,
       builder: (_) {
@@ -560,7 +558,7 @@ class _CustomScreenState extends State<CustomScreen> {
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           content: Text(
-            'Please enter all the fields',
+            text,
             style: Theme.of(context).textTheme.bodyText1,
           ),
           actions: <Widget>[

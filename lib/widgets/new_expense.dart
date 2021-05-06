@@ -121,33 +121,38 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
               if (controllerTags.text == '' ||
                   controllerAmount.text == '' ||
                   categoryIndex == null) {
-                return _getWarning();
+                return _getWarning('Please enter all the fields');
               } else {
-                double amount = double.parse(controllerAmount.text);
-                if (amount > 1000000) {
-                  return _getEasterEgg();
-                } else {
-                  final profiles = await profileDao.getAllProfile();
-                  final profile = profiles[0];
+                double amount;
+                try {
+                  amount = double.parse(controllerAmount.text);
+                  if (amount > 1000000) {
+                    return _getEasterEgg();
+                  } else {
+                    final profiles = await profileDao.getAllProfile();
+                    final profile = profiles[0];
 
-                  profileDao.updateProfile(
-                    ProfilesCompanion(
-                      id: Value(profile.id),
-                      name: Value(profile.name),
-                      balance: Value(profile.balance - amount),
-                    ),
-                  );
-                  expenseDao.addExpense(
-                    ExpensesCompanion(
-                      tags: Value(controllerTags.text),
-                      amount: Value(amount),
-                      date: Value(DateTime.now()),
-                      categoryIndex: Value(categoryIndex),
-                    ),
-                  );
+                    profileDao.updateProfile(
+                      ProfilesCompanion(
+                        id: Value(profile.id),
+                        name: Value(profile.name),
+                        balance: Value(profile.balance - amount),
+                      ),
+                    );
+                    expenseDao.addExpense(
+                      ExpensesCompanion(
+                        tags: Value(controllerTags.text),
+                        amount: Value(amount),
+                        date: Value(DateTime.now()),
+                        categoryIndex: Value(categoryIndex),
+                      ),
+                    );
+                    Navigator.pop(context);
+                  }
+                } catch (FormatException) {
+                  return _getWarning('Please enter number data for amount');
                 }
               }
-              Navigator.pop(context);
             },
             child: Center(
               child: Text(
@@ -194,14 +199,6 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(color: accentColor, width: 1),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.red, width: 1),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.red, width: 1),
       ),
     );
   }
@@ -252,7 +249,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
   }
 
   // * renders a warning dialog box
-  Future _getWarning() {
+  Future _getWarning(String text) {
     return showDialog(
       context: context,
       builder: (_) {
@@ -263,7 +260,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           content: Text(
-            'Please enter all the fields',
+            text,
             style: Theme.of(context).textTheme.bodyText1,
           ),
           actions: <Widget>[
