@@ -178,12 +178,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
-              Text(
-                // TODO put somthing useful here
-                'Credit score: 73.50',
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
+              // SizedBox(height: 10),
+              // Text(
+              //   // TODO put somthing useful here
+              //   'Credit score: 73.50',
+              //   style: Theme.of(context).textTheme.bodyText2,
+              // ),
             ],
           ),
         ),

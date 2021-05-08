@@ -203,7 +203,11 @@ class _CustomScreenState extends State<CustomScreen> {
 
     // * input field for date and time
     final dateTimePicker = InkWell(
-      onTap: () => _selectDate(context),
+      onTap: () {
+        _selectDate(context);
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        currentFocus.unfocus();
+      },
       child: Padding(
         padding: _padding,
         child: TextField(

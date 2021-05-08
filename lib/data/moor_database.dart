@@ -87,6 +87,13 @@ class IncomeDao extends DatabaseAccessor<AppDatabase> with _$IncomeDaoMixin {
         .watch();
   }
 
+  // * gets income rows filtered by seleted date
+  Future<List<Income>> getMonthIncome(DateTime searchDate) {
+    return (select(incomes)
+          ..where((row) => row.date.month.equals(searchDate.month)))
+        .get();
+  }
+
   // * add an income transaction
   Future<int> addIncome(Insertable<Income> entry) =>
       into(incomes).insert(entry);
@@ -130,6 +137,13 @@ class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
               row.date.month.equals(searchDate.month) &
               row.date.year.equals(searchDate.year)))
         .watch();
+  }
+
+  // * gets expense rows filtered by seleted month
+  Future<List<Expense>> getMonthExpense(DateTime searchDate) {
+    return (select(expenses)
+          ..where((row) => row.date.month.equals(searchDate.month)))
+        .get();
   }
 
   // * add an expense transaction

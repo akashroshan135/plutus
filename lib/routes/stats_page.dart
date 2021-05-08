@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+
+// * Database packages
+import 'package:plutus/data/moor_database.dart';
+import 'package:provider/provider.dart';
+
+//* Data Classes
+import 'package:plutus/data/expenseCat.dart';
+import 'package:plutus/data/incomeCat.dart';
+
+import 'package:plutus/widgets/bar_graph.dart';
 
 class StatsPage extends StatefulWidget {
   @override
@@ -8,6 +19,19 @@ class StatsPage extends StatefulWidget {
 
 class _StatsPageState extends State<StatsPage> {
   int activeMonth = 5;
+  DateTime selectedMonth = DateTime.now();
+  List expenses;
+  List income;
+
+  Future _getDatai() async {
+    final incomeDao = Provider.of<IncomeDao>(context, listen: false);
+    income = await incomeDao.getMonthIncome(selectedMonth);
+  }
+
+  Future _getDatae() async {
+    final expenseDao = Provider.of<ExpenseDao>(context, listen: false);
+    expenses = await expenseDao.getMonthExpense(selectedMonth);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +42,18 @@ class _StatsPageState extends State<StatsPage> {
   }
 
   Widget _getPage() {
+    // print(expenses);
+    Future.wait([_getDatae(), _getDatai()]).then((value) {});
     return SingleChildScrollView(
       child: Column(
         children: [
           _getHeader(),
-          _getBody(),
+          BarGraphScreen(
+            selectedMonth: selectedMonth,
+            transExpense: expenses,
+            transIncome: income,
+          ),
+          _getPieExpense(),
         ],
       ),
     );
@@ -71,9 +102,10 @@ class _StatsPageState extends State<StatsPage> {
       (index) {
         var month = Jiffy().subtract(months: 5);
         return GestureDetector(
-          onTap: () {
+          onTap: () async {
             setState(() {
               activeMonth = index;
+              selectedMonth = month.dateTime;
             });
           },
           child: Container(
@@ -91,12 +123,8 @@ class _StatsPageState extends State<StatsPage> {
                   decoration: BoxDecoration(
                     color: activeMonth == index
                         ? Theme.of(context).primaryColor
-                        : Colors.transparent,
+                        : Theme.of(context).scaffoldBackgroundColor,
                     borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                        color: activeMonth == index
-                            ? Theme.of(context).primaryColor
-                            : Colors.grey[500]),
                   ),
                   child: Center(
                     child: Text(
@@ -113,19 +141,23 @@ class _StatsPageState extends State<StatsPage> {
     );
   }
 
-  Widget _getBody() {
+  Widget _getPieExpense() {
+    final expenseDao = Provider.of<ExpenseDao>(context);
+
     return Padding(
-      padding: EdgeInsets.all(16),
+      // padding: EdgeInsets.all(16),
+      padding: EdgeInsets.only(bottom: 16, right: 16, left: 16),
       child: Container(
         width: double.infinity,
-        height: 250,
+        // height: double.infinity,
         decoration: BoxDecoration(
           color: Theme.of(context).accentColor,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(
           padding: EdgeInsets.all(16),
-          child: Stack(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsets.only(top: 10),
@@ -146,12 +178,13 @@ class _StatsPageState extends State<StatsPage> {
                   ],
                 ),
               ),
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  width: (MediaQuery.of(context).size.width - 20),
-                  height: 150,
-                  child: _lineChart(),
+              SizedBox(height: 20),
+              Container(
+                // padding: EdgeInsets.only(top: 55),
+                // width: (MediaQuery.of(context).size.width - 40),
+                height: 240,
+                child: DonutAutoLabelChart(
+                  seriesList: _createSampleData2(),
                 ),
               ),
             ],
@@ -161,103 +194,80 @@ class _StatsPageState extends State<StatsPage> {
     );
   }
 
-  Widget _lineChart() {
-    // TODO add chart stuff here
-    return Container();
+  static List<charts.Series<PerDayExpense, int>> _createSampleData2() {
+    final data = [
+      new PerDayExpense(1, 100),
+      new PerDayExpense(2, 75),
+      new PerDayExpense(3, 25),
+      new PerDayExpense(4, 5),
+    ];
+
+    return [
+      new charts.Series<PerDayExpense, int>(
+        id: 'Sales',
+        domainFn: (PerDayExpense day, _) => day.categoryIndex,
+        measureFn: (PerDayExpense day, _) => day.amount,
+        data: data,
+        // Set a label accessor to control the text of the arc label.
+        labelAccessorFn: (PerDayExpense row, _) =>
+            '${ExpenseCategory.categoryNames[row.categoryIndex]}: \₹${row.amount}',
+      )
+    ];
   }
+}
 
-  // Widget _lineChart() {
-  //   double maxX = 7;
-  //   double maxY = 10;
-  //   var rng = new Random();
+class DonutAutoLabelChart extends StatelessWidget {
+  final List<charts.Series> seriesList;
 
-  //   List<FlSpot> spots = List.generate(
-  //     7,
-  //     (index) => FlSpot(
-  //       index.toDouble(),
-  //       rng.nextInt(maxY.toInt()).toDouble(),
-  //     ),
-  //   );
-  //   var date = Jiffy();
-  //   print(date.format('E'));
-  //   return LineChart(
-  //     LineChartData(
-  //       gridData: FlGridData(
-  //         show: true,
-  //         drawHorizontalLine: true,
-  //         getDrawingHorizontalLine: (value) {
-  //           return FlLine(
-  //             color: Theme.of(context).iconTheme.color,
-  //             strokeWidth: 0.1,
-  //           );
-  //         },
-  //       ),
-  //       titlesData: FlTitlesData(
-  //         show: true,
-  //         bottomTitles: SideTitles(
-  //           showTitles: true,
-  //           reservedSize: 22,
-  //           getTextStyles: (value) => Theme.of(context).textTheme.bodyText2,
-  //           getTitles: (value) {
-  //             switch (value.toInt()) {
-  //               case 0:
-  //                 return date.format('E');
-  //               case 1:
-  //                 return date.add(days: 1).format('E');
-  //               case 2:
-  //                 return date.add(days: 1).format('E');
-  //               case 3:
-  //                 return date.add(days: 1).format('E');
-  //               case 4:
-  //                 return date.add(days: 1).format('E');
-  //               case 5:
-  //                 return date.add(days: 1).format('E');
-  //               case 6:
-  //                 return date.add(days: 1).format('E');
-  //             }
-  //             return '';
-  //           },
-  //           margin: 8,
-  //         ),
-  //         leftTitles: SideTitles(
-  //           showTitles: true,
-  //           getTextStyles: (value) => Theme.of(context).textTheme.bodyText2,
-  //           getTitles: (value) {
-  //             switch (value.toInt()) {
-  //               case 1:
-  //                 return '10k';
-  //               case 3:
-  //                 return '50k';
-  //               case 5:
-  //                 return '100k';
-  //             }
-  //             return '';
-  //           },
-  //           reservedSize: 28,
-  //           margin: 12,
-  //         ),
-  //       ),
-  //       borderData: FlBorderData(
-  //         show: true,
-  //       ),
-  //       minX: 0,
-  //       maxX: maxX,
-  //       minY: 0,
-  //       maxY: maxY,
-  //       lineBarsData: [
-  //         LineChartBarData(
-  //           spots: spots,
-  //           isCurved: true,
-  //           colors: gradientColors,
-  //           barWidth: 3,
-  //           isStrokeCapRound: true,
-  //           dotData: FlDotData(
-  //             show: true,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+  const DonutAutoLabelChart({Key key, this.seriesList}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return new charts.PieChart(
+      seriesList,
+      animate: true,
+      defaultRenderer: new charts.ArcRendererConfig(
+        arcWidth: 60,
+        arcRendererDecorators: [
+          new charts.ArcLabelDecorator(
+            labelPosition: charts.ArcLabelPosition.outside,
+            leaderLineColor: charts.ColorUtil.fromDartColor(
+                Theme.of(context).textTheme.bodyText1.color),
+            outsideLabelStyleSpec: charts.TextStyleSpec(
+              fontSize: 13,
+              color: charts.ColorUtil.fromDartColor(
+                  Theme.of(context).textTheme.bodyText1.color),
+            ),
+          )
+        ],
+      ),
+      selectionModels: [
+        charts.SelectionModelConfig(
+            changedListener: (charts.SelectionModel model) {
+          if (model.hasDatumSelection)
+            print(
+              model.selectedSeries[0].domainFn(model.selectedDatum[0].index),
+            );
+        })
+      ],
+    );
+  }
+}
+
+class PerDayTransactions {
+  final String date;
+  final int amount;
+  PerDayTransactions(this.date, this.amount);
+}
+
+class PerDayExpense {
+  final int categoryIndex;
+  final int amount;
+  PerDayExpense(this.categoryIndex, this.amount);
+}
+
+class PerDayIncome {
+  final int categoryIndex;
+  final int amount;
+  PerDayIncome(this.categoryIndex, this.amount);
 }
