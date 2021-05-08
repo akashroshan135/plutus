@@ -139,11 +139,11 @@ class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
         .watch();
   }
 
-  // * gets expense rows filtered by seleted month
-  Future<List<Expense>> getMonthExpense(DateTime searchDate) {
+  // * streams expense rows filtered by seleted month
+  Stream<List<Expense>> watchMonthExpense(DateTime searchDate) {
     return (select(expenses)
           ..where((row) => row.date.month.equals(searchDate.month)))
-        .get();
+        .watch();
   }
 
   // * add an expense transaction

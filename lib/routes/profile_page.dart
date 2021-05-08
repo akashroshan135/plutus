@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:plutus/routes/about_page.dart';
 
 //* Custom Widgets
-import 'package:plutus/widgets/edit_profile.dart';
+import 'package:plutus/widgets/edit/edit_profile.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key key}) : super(key: key);

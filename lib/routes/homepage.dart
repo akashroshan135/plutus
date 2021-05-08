@@ -12,8 +12,8 @@ import 'package:plutus/routes/newPages/new_custom.dart';
 
 //* Custom Widgets
 import 'package:plutus/widgets/categoryMain.dart';
-import 'package:plutus/widgets/new_income.dart';
-import 'package:plutus/widgets/new_expense.dart';
+import 'package:plutus/widgets/new/new_income.dart';
+import 'package:plutus/widgets/new/new_expense.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({Key key}) : super(key: key);

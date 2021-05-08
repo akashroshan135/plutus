@@ -6,11 +6,12 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
+//* Custom Widgets
+import 'package:plutus/widgets/stat/bar_graph.dart';
+
 //* Data Classes
 import 'package:plutus/data/expenseCat.dart';
 import 'package:plutus/data/incomeCat.dart';
-
-import 'package:plutus/widgets/bar_graph.dart';
 
 class StatsPage extends StatefulWidget {
   @override
@@ -22,36 +23,78 @@ class _StatsPageState extends State<StatsPage> {
   DateTime selectedMonth = DateTime.now();
   List expenses;
   List income;
+  int _index = 0;
+  List labelText = [
+    'First Week',
+    'Second Week',
+    'Third Week',
+    'Fourth Week',
+    'Fifth Week',
+  ];
 
-  Future _getDatai() async {
-    final incomeDao = Provider.of<IncomeDao>(context, listen: false);
-    income = await incomeDao.getMonthIncome(selectedMonth);
-  }
-
-  Future _getDatae() async {
-    final expenseDao = Provider.of<ExpenseDao>(context, listen: false);
-    expenses = await expenseDao.getMonthExpense(selectedMonth);
+  @override
+  void initState() {
+    super.initState();
+    _getDataIncome();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: _getPage(),
+    // * calling expense database dao
+    final expenseDao = Provider.of<ExpenseDao>(context);
+
+    // * StreamBuilder used to build list of all objects
+    return StreamBuilder(
+      stream: expenseDao.watchMonthExpense(selectedMonth),
+      builder: (context, AsyncSnapshot<List<Expense>> snapshot) {
+        expenses = snapshot.data ?? [];
+        return Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: _getPage(),
+        );
+      },
     );
   }
 
+  Future _getDataIncome() async {
+    final incomeDao = Provider.of<IncomeDao>(context, listen: false);
+    income = await incomeDao.getMonthIncome(selectedMonth);
+  }
+
   Widget _getPage() {
-    // print(expenses);
-    Future.wait([_getDatae(), _getDatai()]).then((value) {});
     return SingleChildScrollView(
       child: Column(
         children: [
           _getHeader(),
-          BarGraphScreen(
-            selectedMonth: selectedMonth,
-            transExpense: expenses,
-            transIncome: income,
+          SizedBox(
+            height: 260,
+            child: PageView.builder(
+              itemCount: selectedMonth.month == 2 ? 4 : 5,
+              onPageChanged: (int index) {
+                setState(() {
+                  _index = index;
+                });
+              },
+              itemBuilder: (_, i) {
+                return Transform.scale(
+                  scale: i == _index ? 1 : 0.9,
+                  child: Card(
+                    // elevation: 6,
+                    child: Container(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      width: MediaQuery.of(context).size.width,
+                      child: BarGraphScreen(
+                        selectedMonth: selectedMonth,
+                        transExpense: expenses,
+                        transIncome: income,
+                        mainText: labelText[i],
+                        startDate: (i * 7) + 1,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
           _getPieExpense(),
         ],
@@ -107,6 +150,7 @@ class _StatsPageState extends State<StatsPage> {
               activeMonth = index;
               selectedMonth = month.dateTime;
             });
+            await _getDataIncome();
           },
           child: Container(
             width: (MediaQuery.of(context).size.width - 40) / 6,
@@ -142,8 +186,6 @@ class _StatsPageState extends State<StatsPage> {
   }
 
   Widget _getPieExpense() {
-    final expenseDao = Provider.of<ExpenseDao>(context);
-
     return Padding(
       // padding: EdgeInsets.all(16),
       padding: EdgeInsets.only(bottom: 16, right: 16, left: 16),

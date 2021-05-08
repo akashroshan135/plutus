@@ -8,7 +8,7 @@ import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
 //* Custom Widgets
-import 'package:plutus/widgets/edit_income.dart';
+import 'package:plutus/widgets/edit/edit_income.dart';
 
 //* Data Classes
 import 'package:plutus/data/incomeCat.dart';

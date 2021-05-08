@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:plutus/data/moor_database.dart';
-
-// * Database packages
-import 'package:plutus/data/moor_database.dart';
-import 'package:provider/provider.dart';
 
 class BarGraphScreen extends StatefulWidget {
-  final List<Expense> transExpense;
-  final List<Income> transIncome;
+  final List transExpense;
+  final List transIncome;
   final DateTime selectedMonth;
+  final String mainText;
+  final int startDate;
 
   BarGraphScreen({
     Key key,
     this.selectedMonth,
     this.transExpense,
     this.transIncome,
+    this.mainText,
+    this.startDate,
   }) : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(12),
         child: Container(
           width: double.infinity,
           height: 235,
@@ -47,7 +47,11 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "First week",
+                        widget.mainText +
+                            ' of ' +
+                            DateFormat('MMMM')
+                                .format(widget.selectedMonth)
+                                .toString(),
                         style: Theme.of(context).textTheme.headline2,
                       ),
                       // SizedBox(
@@ -81,8 +85,15 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
   List<charts.Series<PerDayTransactions, String>> _createSampleData() {
     List<PerDayTransactions> incomeData = [];
     List<PerDayTransactions> expenseData = [];
+    int endDate = widget.startDate + 7;
 
-    for (var i = 1; i < 8; i++) {
+    if (widget.startDate == 29) {
+      endDate = new DateTime(
+              widget.selectedMonth.year, widget.selectedMonth.month + 1, 0)
+          .day;
+    }
+
+    for (var i = widget.startDate; i < endDate; i++) {
       double amount = 0;
       if (widget.transExpense != null) {
         for (var item in widget.transExpense) {
@@ -96,7 +107,7 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
         ),
       );
     }
-    for (var i = 1; i < 8; i++) {
+    for (var i = widget.startDate; i < endDate; i++) {
       double amount = 0;
       if (widget.transIncome != null) {
         for (var item in widget.transIncome) {
@@ -127,7 +138,7 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
         data: incomeData,
         colorFn: (_, __) => charts.ColorUtil.fromDartColor(Colors.green),
         displayName: 'Income',
-      )..setAttribute(charts.measureAxisIdKey, 'secondaryMeasureAxisId'),
+      )
     ];
   }
 }
@@ -169,6 +180,7 @@ class BarGraphWidget extends StatelessWidget {
           ),
         ),
       ),
+      secondaryMeasureAxis: null,
       selectionModels: [
         charts.SelectionModelConfig(
             changedListener: (charts.SelectionModel model) {
