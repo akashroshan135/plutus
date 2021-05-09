@@ -248,15 +248,15 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
         shrinkWrap: true,
         children: [
           _buttonWidget(
-            'Tags',
+            'Tags:',
             transaction.tags,
           ),
           _buttonWidget(
-            'Amount',
-            transaction.amount.toString(),
+            'Amount:',
+            '₹ ' + transaction.amount.toString(),
           ),
           _buttonWidget(
-            'Date and Time',
+            'Date and Time:',
             DateFormat('d MMM yyyy, hh:mm a')
                 .format(transaction.date)
                 .toString(),
@@ -286,11 +286,17 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
                   children: [
                     Text(
                       mainText,
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          .copyWith(fontSize: 18),
                     ),
                     Text(
                       subText,
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .copyWith(fontSize: 15),
                     ),
                   ],
                 ),

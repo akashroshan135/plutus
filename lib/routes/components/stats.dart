@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 
 // * Database packages
 import 'package:plutus/data/moor_database.dart';
@@ -62,7 +63,7 @@ class _StatsDetailsPageState extends State<StatsDetailsPage> {
   Widget _getPage() {
     return Column(
       children: [
-        SizedBox(
+        Container(
           height: MediaQuery.of(context).size.height / 2.5,
           child: PageView.builder(
             itemCount: widget.selectedMonth.month == 2 ? 4 : 5,
@@ -74,22 +75,28 @@ class _StatsDetailsPageState extends State<StatsDetailsPage> {
             itemBuilder: (_, i) {
               return Transform.scale(
                 scale: i == _index ? 1 : 0.9,
-                child: Card(
-                  // elevation: 6,
-                  child: Container(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    width: MediaQuery.of(context).size.width,
-                    child: BarGraphScreen(
-                      selectedMonth: widget.selectedMonth,
-                      transExpense: expenses,
-                      transIncome: income,
-                      mainText: labelText[i],
-                      startDate: (i * 7) + 1,
-                    ),
+                child: Container(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  width: MediaQuery.of(context).size.width,
+                  child: BarGraphScreen(
+                    selectedMonth: widget.selectedMonth,
+                    transExpense: expenses,
+                    transIncome: income,
+                    mainText: labelText[i],
+                    startDate: (i * 7) + 1,
                   ),
                 ),
               );
             },
+          ),
+        ),
+        DotsIndicator(
+          dotsCount: widget.selectedMonth.month == 2 ? 4 : 5,
+          position: widget.selectedMonth.month == 2 && _index == 4
+              ? 3
+              : _index.toDouble(),
+          decorator: DotsDecorator(
+            spacing: const EdgeInsets.all(10.0),
           ),
         ),
         PieChartScreen(

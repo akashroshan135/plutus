@@ -64,10 +64,10 @@ class NotificationService {
         transaction.tags +
         ', Amount: ' +
         transaction.amount.toString();
-    // final tz.TZDateTime scheduledDate =
-    //     tz.TZDateTime.from(transaction.selectedDate, tz.local);
     final tz.TZDateTime scheduledDate =
-        tz.TZDateTime.now(tz.local).add(Duration(seconds: 10));
+        tz.TZDateTime.from(transaction.selectedDate, tz.local);
+    // final tz.TZDateTime scheduledDate =
+    //     tz.TZDateTime.now(tz.local).add(Duration(seconds: 10));
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       transaction.id,

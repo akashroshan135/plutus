@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 
 //* Custom Widgets
-import 'package:plutus/widgets/stats.dart';
+import 'package:plutus/routes/components/stats.dart';
 
 class StatsPage extends StatefulWidget {
   @override

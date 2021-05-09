@@ -125,15 +125,15 @@ class _TransactionScreenState extends State<TransactionScreen> {
         shrinkWrap: true,
         children: [
           _buttonWidget(
-            'Tags',
+            'Tags:',
             widget.transaction.tags,
           ),
           _buttonWidget(
-            'Amount',
-            widget.transaction.amount.toString(),
+            'Amount:',
+            '₹ ' + widget.transaction.amount.toString(),
           ),
           _buttonWidget(
-            'Date and Time',
+            'Date and Time:',
             DateFormat('d MMM yyyy, hh:mm a')
                 .format(widget.transaction.date)
                 .toString(),
@@ -162,11 +162,17 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   children: [
                     Text(
                       mainText,
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          .copyWith(fontSize: 18),
                     ),
                     Text(
                       subText,
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .copyWith(fontSize: 15),
                     ),
                   ],
                 ),

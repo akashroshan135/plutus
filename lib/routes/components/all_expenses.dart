@@ -128,7 +128,7 @@ class _AllExpenseRouteState extends State<AllExpenseRoute> {
                 ),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 content: Text(
-                  'Are you sure want to delete this item?',
+                  'Are you sure want to delete this transaction?',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 actions: <Widget>[
@@ -161,7 +161,7 @@ class _AllExpenseRouteState extends State<AllExpenseRoute> {
                 ),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 content: Text(
-                  'Are you sure want to edit this item?',
+                  'Are you sure want to edit this transaction?',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 actions: <Widget>[
@@ -269,7 +269,7 @@ class _AllExpenseRouteState extends State<AllExpenseRoute> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    '- ₹' + expense.amount.toString() + ' ',
+                    '- \₹' + expense.amount.toString() + ' ',
                     style: Theme.of(context)
                         .textTheme
                         .bodyText1

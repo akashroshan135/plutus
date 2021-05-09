@@ -97,7 +97,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                 ),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 content: Text(
-                  'Are you sure want to delete this item?',
+                  'Are you sure want to delete this transaction?',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 actions: <Widget>[
@@ -130,7 +130,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                 ),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 content: Text(
-                  'Are you sure want to edit this item?',
+                  'Are you sure want to edit this transaction?',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 actions: <Widget>[
@@ -248,7 +248,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      '+ ₹' + income.amount.toString() + ' ',
+                      '+ \₹' + income.amount.toString() + ' ',
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1

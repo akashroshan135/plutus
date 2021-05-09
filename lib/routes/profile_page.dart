@@ -222,7 +222,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  '₹ ' + profile.balance.toString(),
+                  '\₹ ' + profile.balance.toString(),
                   style: Theme.of(context).textTheme.headline1,
                 ),
               ],

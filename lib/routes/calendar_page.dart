@@ -8,7 +8,7 @@ import 'package:plutus/routes/components/incomes.dart';
 import 'package:plutus/routes/components/upcoming.dart';
 
 //* Custom Widgets
-import 'package:plutus/widgets/stats.dart';
+import 'package:plutus/routes/components/stats.dart';
 
 class CalendarPage extends StatefulWidget {
   CalendarPage({Key key}) : super(key: key);
