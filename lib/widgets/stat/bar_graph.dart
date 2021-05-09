@@ -3,9 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class BarGraphScreen extends StatefulWidget {
+  final DateTime selectedMonth;
   final List transExpense;
   final List transIncome;
-  final DateTime selectedMonth;
   final String mainText;
   final int startDate;
 
@@ -54,13 +54,6 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
                                 .toString(),
                         style: Theme.of(context).textTheme.headline2,
                       ),
-                      // SizedBox(
-                      //   height: 10,
-                      // ),
-                      // Text(
-                      //   "\₹1000.00",
-                      //   style: Theme.of(context).textTheme.headline2,
-                      // )
                     ],
                   ),
                 ),

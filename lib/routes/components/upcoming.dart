@@ -9,6 +9,9 @@ import 'package:provider/provider.dart';
 // * Notifications Packages
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+//* Routes to other pages
+import 'package:plutus/routes/transUpcoming.dart';
+
 //* Data Classes
 import 'package:plutus/data/expenseCat.dart';
 import 'package:plutus/data/incomeCat.dart';
@@ -197,96 +200,106 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
         _cancelNotification(upcoming);
         upcomingDao.deleteUpcoming(upcoming);
       },
-      child: Container(
-        padding: EdgeInsets.only(top: 12, left: 18, right: 18, bottom: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              child: Row(
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey.withOpacity(0.1),
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        isIncome
-                            ? 'assets/images/income.png'
-                            : 'assets/images/expense.png',
-                        width: 45,
-                        height: 45,
+      child: InkWell(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TransactionUpcomingScreen(
+              transUpcoming: upcoming,
+            ),
+          ),
+        ),
+        child: Container(
+          padding: EdgeInsets.only(top: 12, left: 18, right: 18, bottom: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: Row(
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey.withOpacity(0.1),
+                      ),
+                      child: Center(
+                        child: Image.asset(
+                          isIncome
+                              ? 'assets/images/income.png'
+                              : 'assets/images/expense.png',
+                          width: 45,
+                          height: 45,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 15),
-                  Container(
-                    width: (size.width - 90) * 0.5,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          isIncome ? 'Income' : 'Expense',
-                          style: Theme.of(context).textTheme.bodyText1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        // SizedBox(height: 5),
-                        Row(
-                          children: [
-                            Text(
-                              isIncome
-                                  ? IncomeCategory.categoryNames[
-                                          upcoming.categoryIndex] +
-                                      ' : '
-                                  : ExpenseCategory.categoryNames[
-                                          upcoming.categoryIndex] +
-                                      ' : ',
-                              style: Theme.of(context).textTheme.bodyText1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Flexible(
-                              child: Text(
-                                upcoming.tags,
-                                style: Theme.of(context).textTheme.bodyText2,
+                    SizedBox(width: 15),
+                    Container(
+                      width: (size.width - 90) * 0.5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            isIncome ? 'Income' : 'Expense',
+                            style: Theme.of(context).textTheme.bodyText1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          // SizedBox(height: 5),
+                          Row(
+                            children: [
+                              Text(
+                                isIncome
+                                    ? IncomeCategory.categoryNames[
+                                            upcoming.categoryIndex] +
+                                        ' : '
+                                    : ExpenseCategory.categoryNames[
+                                            upcoming.categoryIndex] +
+                                        ' : ',
+                                style: Theme.of(context).textTheme.bodyText1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                          ],
-                        ),
-                        // SizedBox(height: 5),
-                        Text(
-                          DateFormat('hh:mm a')
-                              .format(upcoming.date)
-                              .toString(),
-                          style: Theme.of(context).textTheme.bodyText2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                              Flexible(
+                                child: Text(
+                                  upcoming.tags,
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          // SizedBox(height: 5),
+                          Text(
+                            DateFormat('hh:mm a')
+                                .format(upcoming.date)
+                                .toString(),
+                            style: Theme.of(context).textTheme.bodyText2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Container(
-              width: (size.width - 40) * 0.3,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    upcoming.amount.toString() + ' ',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        .copyWith(color: Colors.grey),
-                  ),
-                ],
+              Container(
+                width: (size.width - 40) * 0.3,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      upcoming.amount.toString() + ' ',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          .copyWith(color: Colors.grey),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
