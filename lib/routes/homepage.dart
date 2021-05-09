@@ -41,6 +41,7 @@ class _HomepageState extends State<Homepage> {
   // * returns one of the pages
   Widget _getBody() {
     return Scaffold(
+      extendBody: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: IndexedStack(
         index: pageIndex,
