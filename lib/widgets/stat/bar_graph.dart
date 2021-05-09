@@ -27,55 +27,47 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: EdgeInsets.all(12),
-        child: Container(
-          width: double.infinity,
-          height: 235,
-          decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.mainText +
-                            ' of ' +
-                            DateFormat('MMMM')
-                                .format(widget.selectedMonth)
-                                .toString(),
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                    ],
-                  ),
+    return Padding(
+      padding: EdgeInsets.all(12),
+      child: Container(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height / 2,
+        decoration: BoxDecoration(
+          color: Theme.of(context).accentColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Text(
+                  widget.mainText +
+                      ' of ' +
+                      DateFormat('MMMM')
+                          .format(widget.selectedMonth)
+                          .toString(),
+                  style: Theme.of(context).textTheme.headline2,
                 ),
-                Positioned(
-                  bottom: 0,
-                  child: Container(
-                    width: (MediaQuery.of(context).size.width - 40),
-                    height: 150,
-                    child: BarGraphWidget(
-                      seriesList: _createSampleData(),
-                    ),
-                  ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                width: MediaQuery.of(context).size.width - 40,
+                height: MediaQuery.of(context).size.height / 4.1,
+                child: BarGraphWidget(
+                  seriesList: _getData(),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  List<charts.Series<PerDayTransactions, String>> _createSampleData() {
+  List<charts.Series<PerDayTransactions, String>> _getData() {
     List<PerDayTransactions> incomeData = [];
     List<PerDayTransactions> expenseData = [];
     int endDate = widget.startDate + 7;
@@ -176,12 +168,13 @@ class BarGraphWidget extends StatelessWidget {
       secondaryMeasureAxis: null,
       selectionModels: [
         charts.SelectionModelConfig(
-            changedListener: (charts.SelectionModel model) {
-          if (model.hasDatumSelection)
-            print(
-              model.selectedSeries[0].measureFn(model.selectedDatum[0].index),
-            );
-        })
+          changedListener: (charts.SelectionModel model) {
+            if (model.hasDatumSelection)
+              print(
+                model.selectedSeries[0].measureFn(model.selectedDatum[0].index),
+              );
+          },
+        )
       ],
     );
   }

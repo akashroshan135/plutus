@@ -87,11 +87,11 @@ class IncomeDao extends DatabaseAccessor<AppDatabase> with _$IncomeDaoMixin {
         .watch();
   }
 
-  // * gets income rows filtered by seleted date
-  Future<List<Income>> getMonthIncome(DateTime searchDate) {
+  // * streams income rows filtered by seleted date
+  Stream<List<Income>> watchMonthIncome(DateTime searchDate) {
     return (select(incomes)
           ..where((row) => row.date.month.equals(searchDate.month)))
-        .get();
+        .watch();
   }
 
   // * add an income transaction
