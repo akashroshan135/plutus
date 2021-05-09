@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:plutus/services/notification.dart';
 
 //* Routes to other pages
-import 'package:plutus/routes/transUpcoming.dart';
+import 'package:plutus/routes/individual/transUpcoming.dart';
 
 //* Data Classes
 import 'package:plutus/data/expenseCat.dart';

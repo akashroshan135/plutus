@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:plutus/main.dart';
 
-import 'package:plutus/routes/transUpcoming.dart';
+import 'package:plutus/routes/individual/transUpcoming.dart';
 
 // *  Notification Packages
 // ! timezone latest_all.dart is used as latest.dart doesn't work on emulator

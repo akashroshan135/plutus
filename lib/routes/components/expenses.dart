@@ -7,6 +7,9 @@ import 'package:moor_flutter/moor_flutter.dart' as moor;
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
+//* Routes to other pages
+import 'package:plutus/routes/individual/transaction.dart';
+
 //* Custom Widgets
 import 'package:plutus/widgets/edit/edit_expense.dart';
 
@@ -168,82 +171,95 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
         );
         expenseDao.deleteExpense(expense);
       },
-      child: Container(
-        padding: EdgeInsets.only(top: 12, left: 18, right: 18, bottom: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              child: Row(
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey.withOpacity(0.1),
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        ExpenseCategory.categoryIcon[expense.categoryIndex],
-                        width: 35,
-                        height: 35,
+      child: InkWell(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TransactionScreen(
+              transaction: expense,
+              isIncome: false,
+            ),
+          ),
+        ),
+        child: Container(
+          padding: EdgeInsets.only(top: 12, left: 18, right: 18, bottom: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: Row(
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey.withOpacity(0.1),
+                      ),
+                      child: Center(
+                        child: Image.asset(
+                          ExpenseCategory.categoryIcon[expense.categoryIndex],
+                          width: 35,
+                          height: 35,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 15),
-                  Container(
-                    width: (size.width - 90) * 0.5,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              ExpenseCategory
-                                      .categoryNames[expense.categoryIndex] +
-                                  ' : ',
-                              style: Theme.of(context).textTheme.bodyText1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Flexible(
-                              child: Text(
-                                expense.tags,
-                                style: Theme.of(context).textTheme.bodyText2,
+                    SizedBox(width: 15),
+                    Container(
+                      width: (size.width - 90) * 0.5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                ExpenseCategory
+                                        .categoryNames[expense.categoryIndex] +
+                                    ' : ',
+                                style: Theme.of(context).textTheme.bodyText1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          DateFormat('hh:mm a').format(expense.date).toString(),
-                          style: Theme.of(context).textTheme.bodyText2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                              Flexible(
+                                child: Text(
+                                  expense.tags,
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            DateFormat('hh:mm a')
+                                .format(expense.date)
+                                .toString(),
+                            style: Theme.of(context).textTheme.bodyText2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Container(
-              width: (size.width - 40) * 0.3,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    '- ₹' + expense.amount.toString() + ' ',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        .copyWith(color: Colors.red),
-                  ),
-                ],
+              Container(
+                width: (size.width - 40) * 0.3,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      '- ₹' + expense.amount.toString() + ' ',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          .copyWith(color: Colors.red),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

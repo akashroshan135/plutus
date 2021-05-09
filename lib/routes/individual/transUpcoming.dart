@@ -159,7 +159,7 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
                     ),
                     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     content: Text(
-                      'Are you sure want to mark this transUpcoming as Completed?',
+                      'Are you sure want to mark this transaction as Completed?',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     actions: <Widget>[
