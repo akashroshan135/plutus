@@ -193,6 +193,11 @@ class UpcomingDao extends DatabaseAccessor<AppDatabase>
         .watch();
   }
 
+  // * gets upcoming row filtered by id
+  Future<Upcoming> getUpcoming(int id) {
+    return (select(upcomings)..where((row) => row.id.equals(id))).getSingle();
+  }
+
   // * add an upcoming transaction
   Future<int> addUpcoming(Insertable<Upcoming> entry) =>
       into(upcomings).insert(entry);

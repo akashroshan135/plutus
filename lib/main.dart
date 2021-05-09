@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plutus/services/notification.dart';
 
 // * Database packages
 import 'package:provider/provider.dart';
@@ -8,11 +9,17 @@ import 'package:plutus/data/moor_database.dart';
 import 'package:plutus/routes/spash_screen.dart';
 
 // * renders main app
-void main() => runApp(MyApp());
+// void main() => runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().init();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // * creating an AppDatabase instance
   final db = AppDatabase();
+  static final navigatorKey = new GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +103,7 @@ class MyApp extends StatelessWidget {
         title: 'Plutus',
         theme: _lightTheme,
         darkTheme: _darkTheme,
+        navigatorKey: navigatorKey,
         home: SplashScreen(),
       ),
     );

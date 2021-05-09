@@ -6,14 +6,8 @@ import 'package:moor_flutter/moor_flutter.dart' as moor;
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
-// * Notifications Packages
-// ! timezone latest_all.dart is used as latest.dart doesn't work on emulator
-// TODO use latest.dart in export builds
-// import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// *  Notification Service
+import 'package:plutus/services/notification.dart';
 
 //* Custom Widgets
 import 'package:plutus/widgets/category.dart';
@@ -47,7 +41,7 @@ class _CustomScreenState extends State<CustomScreen> {
   DateTime selectedDate = DateTime.now();
   bool isDateChanged = false;
 
-  final notificationsPlugin = FlutterLocalNotificationsPlugin();
+  // final notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   double xAlign;
   Color toggleColor;
@@ -56,29 +50,11 @@ class _CustomScreenState extends State<CustomScreen> {
   @override
   void initState() {
     super.initState();
-    var androidInit = AndroidInitializationSettings('app_icon');
-    var initSettings = InitializationSettings(android: androidInit);
-    notificationsPlugin.initialize(
-      initSettings,
-      onSelectNotification: _selectNotification,
-    );
-    _configureLocalTimeZone();
     controllerDate.text =
         DateFormat('d MMM yyyy, hh:mm a').format(selectedDate).toString();
     xAlign = -1;
     toggleColor = accentExpense;
   }
-
-  // * code to configure and set timezone
-  Future<void> _configureLocalTimeZone() async {
-    tz.initializeTimeZones();
-    final String timezone = await FlutterNativeTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(timezone));
-  }
-
-  // * code that gets executed when the notification is pressed
-  // TODO implement some use for this
-  Future _selectNotification(String payload) async {}
 
   @override
   Widget build(BuildContext context) {
@@ -651,7 +627,8 @@ class _CustomScreenState extends State<CustomScreen> {
             ),
             TextButton(
               onPressed: () {
-                _setNotification(transaction);
+                NotificationService().setNotification(transaction);
+                Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
               child: Text(
@@ -663,38 +640,6 @@ class _CustomScreenState extends State<CustomScreen> {
         );
       },
     );
-  }
-
-  // * creates a new notification instance
-  Future _setNotification(Transaction transaction) async {
-    final androidDetails = new AndroidNotificationDetails(
-      '1',
-      'Plutus',
-      'Upcoming Transactions',
-      importance: Importance.max,
-    );
-    final notificationDetails =
-        new NotificationDetails(android: androidDetails);
-
-    final mainText = 'Pending Upcoming Transaction';
-    final subText = 'Tags: ' +
-        transaction.tags +
-        ', Amount: ' +
-        transaction.amount.toString();
-    final tz.TZDateTime scheduledDate =
-        tz.TZDateTime.from(transaction.selectedDate, tz.local);
-
-    await notificationsPlugin.zonedSchedule(
-      transaction.id,
-      mainText,
-      subText,
-      scheduledDate,
-      notificationDetails,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
-    Navigator.pop(context);
   }
 }
 

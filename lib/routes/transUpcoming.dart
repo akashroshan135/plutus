@@ -6,17 +6,17 @@ import 'package:moor_flutter/moor_flutter.dart' as moor;
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
-// * Notifications Packages
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// * Notifications Service
+import 'package:plutus/services/notification.dart';
 
 //* Data Classes
 import 'package:plutus/data/expenseCat.dart';
 import 'package:plutus/data/incomeCat.dart';
 
 class TransactionUpcomingScreen extends StatefulWidget {
-  final transUpcoming;
+  final String transactionId;
 
-  TransactionUpcomingScreen({Key key, this.transUpcoming}) : super(key: key);
+  TransactionUpcomingScreen({Key key, this.transactionId}) : super(key: key);
 
   @override
   _TransactionUpcomingScreenState createState() =>
@@ -24,28 +24,25 @@ class TransactionUpcomingScreen extends StatefulWidget {
 }
 
 class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
-  final notificationsPlugin = FlutterLocalNotificationsPlugin();
-  bool isIncome;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.transUpcoming.type == 'Income')
-      isIncome = true;
-    else
-      isIncome = false;
-  }
+  Upcoming transaction;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: _getPage(),
-    );
-  }
+    final upcomingDao = Provider.of<UpcomingDao>(context);
 
-  Future _cancelNotification(Upcoming upcoming) async {
-    await notificationsPlugin.cancel(upcoming.id);
+    return FutureBuilder(
+      future: upcomingDao.getUpcoming(int.parse(widget.transactionId)),
+      builder: (BuildContext context, AsyncSnapshot<Upcoming> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          transaction = snapshot.data;
+          return Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            body: _getPage(),
+          );
+        }
+        return Container();
+      },
+    );
   }
 
   Widget _getPage() {
@@ -95,11 +92,9 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
-                  isIncome
-                      ? IncomeCategory
-                          .categoryIcon[widget.transUpcoming.categoryIndex]
-                      : ExpenseCategory
-                          .categoryIcon[widget.transUpcoming.categoryIndex],
+                  transaction.type == 'Income'
+                      ? IncomeCategory.categoryIcon[transaction.categoryIndex]
+                      : ExpenseCategory.categoryIcon[transaction.categoryIndex],
                   height: MediaQuery.of(context).size.height / 4.5,
                   width: MediaQuery.of(context).size.width / 2,
                 ),
@@ -111,16 +106,16 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          isIncome ? 'Income' : 'Expense',
+                          transaction.type == 'Income' ? 'Income' : 'Expense',
                           style: Theme.of(context).textTheme.headline2,
                         ),
                         SizedBox(height: 20),
                         Text(
-                          isIncome
-                              ? IncomeCategory.categoryNames[
-                                  widget.transUpcoming.categoryIndex]
-                              : ExpenseCategory.categoryNames[
-                                  widget.transUpcoming.categoryIndex],
+                          transaction.type == 'Income'
+                              ? IncomeCategory
+                                  .categoryNames[transaction.categoryIndex]
+                              : ExpenseCategory
+                                  .categoryNames[transaction.categoryIndex],
                           style: Theme.of(context).textTheme.headline2,
                         ),
                       ],
@@ -180,22 +175,22 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
                           final profiles = await profileDao.getAllProfile();
                           final profile = profiles[0];
 
-                          if (isIncome) {
+                          if (transaction.type == 'Income') {
                             profileDao.updateProfile(
                               ProfilesCompanion(
                                 id: moor.Value(profile.id),
                                 name: moor.Value(profile.name),
-                                balance: moor.Value(profile.balance +
-                                    widget.transUpcoming.amount),
+                                balance: moor.Value(
+                                    profile.balance + transaction.amount),
                               ),
                             );
                             incomeDao.addIncome(
                               IncomesCompanion(
-                                tags: moor.Value(widget.transUpcoming.tags),
-                                amount: moor.Value(widget.transUpcoming.amount),
-                                date: moor.Value(widget.transUpcoming.date),
-                                categoryIndex: moor.Value(
-                                    widget.transUpcoming.categoryIndex),
+                                tags: moor.Value(transaction.tags),
+                                amount: moor.Value(transaction.amount),
+                                date: moor.Value(transaction.date),
+                                categoryIndex:
+                                    moor.Value(transaction.categoryIndex),
                               ),
                             );
                           } else {
@@ -203,22 +198,22 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
                               ProfilesCompanion(
                                 id: moor.Value(profile.id),
                                 name: moor.Value(profile.name),
-                                balance: moor.Value(profile.balance -
-                                    widget.transUpcoming.amount),
+                                balance: moor.Value(
+                                    profile.balance - transaction.amount),
                               ),
                             );
                             expenseDao.addExpense(
                               ExpensesCompanion(
-                                tags: moor.Value(widget.transUpcoming.tags),
-                                amount: moor.Value(widget.transUpcoming.amount),
-                                date: moor.Value(widget.transUpcoming.date),
-                                categoryIndex: moor.Value(
-                                    widget.transUpcoming.categoryIndex),
+                                tags: moor.Value(transaction.tags),
+                                amount: moor.Value(transaction.amount),
+                                date: moor.Value(transaction.date),
+                                categoryIndex:
+                                    moor.Value(transaction.categoryIndex),
                               ),
                             );
                           }
-                          _cancelNotification(widget.transUpcoming);
-                          upcomingDao.deleteUpcoming(widget.transUpcoming);
+                          NotificationService().cancelNotification(transaction);
+                          upcomingDao.deleteUpcoming(transaction);
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
                         },
@@ -254,16 +249,16 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
         children: [
           _buttonWidget(
             'Tags',
-            widget.transUpcoming.tags,
+            transaction.tags,
           ),
           _buttonWidget(
             'Amount',
-            widget.transUpcoming.amount.toString(),
+            transaction.amount.toString(),
           ),
           _buttonWidget(
             'Date and Time',
             DateFormat('d MMM yyyy, hh:mm a')
-                .format(widget.transUpcoming.date)
+                .format(transaction.date)
                 .toString(),
           ),
           SizedBox(height: 30),

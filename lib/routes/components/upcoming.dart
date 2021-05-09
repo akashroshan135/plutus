@@ -6,8 +6,8 @@ import 'package:moor_flutter/moor_flutter.dart' as moor;
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
-// * Notifications Packages
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//* Notification Service
+import 'package:plutus/services/notification.dart';
 
 //* Routes to other pages
 import 'package:plutus/routes/transUpcoming.dart';
@@ -26,8 +26,6 @@ class UpcomingRoute extends StatefulWidget {
 }
 
 class _UpcomingRouteState extends State<UpcomingRoute> {
-  final notificationsPlugin = FlutterLocalNotificationsPlugin();
-
   @override
   Widget build(BuildContext context) {
     // * calling expense database dao
@@ -64,10 +62,6 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
         );
       },
     );
-  }
-
-  Future _cancelNotification(Upcoming upcoming) async {
-    await notificationsPlugin.cancel(upcoming.id);
   }
 
   // * code to build one transaction item
@@ -197,7 +191,7 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
             );
           }
         }
-        _cancelNotification(upcoming);
+        NotificationService().cancelNotification(upcoming);
         upcomingDao.deleteUpcoming(upcoming);
       },
       child: InkWell(
@@ -205,7 +199,7 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
           context,
           MaterialPageRoute(
             builder: (context) => TransactionUpcomingScreen(
-              transUpcoming: upcoming,
+              transactionId: upcoming.id.toString(),
             ),
           ),
         ),
