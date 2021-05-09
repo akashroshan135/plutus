@@ -22,7 +22,7 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
 
-  bool isCalendar = false;
+  bool isCalendar = true;
 
   @override
   Widget build(BuildContext context) {

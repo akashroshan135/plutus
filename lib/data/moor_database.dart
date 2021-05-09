@@ -75,11 +75,20 @@ class IncomeDao extends DatabaseAccessor<AppDatabase> with _$IncomeDaoMixin {
 
   // * returns income rows
   Future<List<Income>> getAllIncome() => select(incomes).get();
-  Stream<List<Income>> watchAllIncome() => select(incomes).watch();
+  Stream<List<Income>> watchAllIncome() {
+    return (select(incomes)
+          ..orderBy([
+            (row) => OrderingTerm(expression: row.date, mode: OrderingMode.desc)
+          ]))
+        .watch();
+  }
 
   // * streams income rows filtered by seleted date
   Stream<List<Income>> watchDayIncome(DateTime searchDate) {
     return (select(incomes)
+          ..orderBy([
+            (row) => OrderingTerm(expression: row.date, mode: OrderingMode.desc)
+          ])
           ..where((row) =>
               row.date.day.equals(searchDate.day) &
               row.date.month.equals(searchDate.month) &
@@ -127,11 +136,20 @@ class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
 
   // * returns expense rows
   Future<List<Expense>> getAllExpense() => select(expenses).get();
-  Stream<List<Expense>> watchAllExpense() => select(expenses).watch();
+  Stream<List<Expense>> watchAllExpense() {
+    return (select(expenses)
+          ..orderBy([
+            (row) => OrderingTerm(expression: row.date, mode: OrderingMode.desc)
+          ]))
+        .watch();
+  }
 
   // * streams expense rows filtered by seleted date
   Stream<List<Expense>> watchDayExpense(DateTime searchDate) {
     return (select(expenses)
+          ..orderBy([
+            (row) => OrderingTerm(expression: row.date, mode: OrderingMode.desc)
+          ])
           ..where((row) =>
               row.date.day.equals(searchDate.day) &
               row.date.month.equals(searchDate.month) &
@@ -181,11 +199,21 @@ class UpcomingDao extends DatabaseAccessor<AppDatabase>
 
   // * returns upcoming rows
   Future<List<Upcoming>> getAllUpcoming() => select(upcomings).get();
-  Stream<List<Upcoming>> watchAllUpcoming() => select(upcomings).watch();
+
+  Stream<List<Upcoming>> watchAllUpcoming() {
+    return (select(upcomings)
+          ..orderBy([
+            (row) => OrderingTerm(expression: row.date, mode: OrderingMode.desc)
+          ]))
+        .watch();
+  }
 
   // * streams upcoming rows filtered by seleted date
   Stream<List<Upcoming>> watchDayUpcoming(DateTime searchDate) {
     return (select(upcomings)
+          ..orderBy([
+            (row) => OrderingTerm(expression: row.date, mode: OrderingMode.desc)
+          ])
           ..where((row) =>
               row.date.day.equals(searchDate.day) &
               row.date.month.equals(searchDate.month) &

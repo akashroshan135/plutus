@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:plutus/routes/components/all_expenses.dart';
+import 'package:plutus/routes/components/all_incomes.dart';
+import 'package:plutus/routes/components/all_upcoming.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
 // * Database packages
@@ -36,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         children: [
           _getHeader(),
-          // _getBody(),
+          _getBody(),
         ],
       ),
     );
@@ -56,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 30),
+        padding: EdgeInsets.only(top: 50, right: 20, left: 20),
         child: Column(
           children: [
             Row(
@@ -78,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ),
-            SizedBox(height: 25),
+            SizedBox(height: 15),
             _getHeaderData(),
           ],
         ),
@@ -99,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
         return ListView.builder(
           primary: false,
           shrinkWrap: true,
-          itemCount: profile.length,
+          itemCount: 1,
           itemBuilder: (_, index) {
             return Column(
               children: [
@@ -180,8 +183,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               // SizedBox(height: 10),
               // Text(
-              //   // TODO put somthing useful here
-              //   'Credit score: 73.50',
+              //   'Sub-text',
               //   style: Theme.of(context).textTheme.bodyText2,
               // ),
             ],
@@ -226,6 +228,67 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _getBody() {
+    return Padding(
+      padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      child: ListView(
+        primary: false,
+        shrinkWrap: true,
+        children: [
+          _buttonWidget('Show all Upcoming Transactions', Colors.grey, 1),
+          SizedBox(height: 10),
+          _buttonWidget('Show all Expense Transactions', Colors.red, 2),
+          SizedBox(height: 10),
+          _buttonWidget('Show all Income Transactions', Colors.green, 3),
+        ],
+      ),
+    );
+  }
+
+  Widget _buttonWidget(text, buttonColor, index) {
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Container(
+        height: 80,
+        child: Material(
+          borderRadius: BorderRadius.circular(15),
+          color: Theme.of(context).secondaryHeaderColor,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(15),
+            highlightColor: buttonColor[400],
+            splashColor: buttonColor,
+            onTap: () {
+              if (index == 1)
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AllUpcomingRoute()));
+              else if (index == 2)
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AllExpenseRoute()));
+              else
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AllIncomeRoute()));
+            },
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    text,
+                    // style: Theme.of(context).textTheme.headline1,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
