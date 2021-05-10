@@ -261,7 +261,7 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
           ),
           _buttonWidget(
             'Amount:',
-            '₹ ' + transaction.amount.toString(),
+            '\₹ ' + transaction.amount.toString(),
           ),
           _buttonWidget(
             'Date and Time:',

@@ -59,10 +59,10 @@ class NotificationService {
     final notificationDetails =
         new NotificationDetails(android: androidDetails);
 
-    final mainText = 'Pending Upcoming Transaction';
+    final mainText = 'Pending Transaction';
     final subText = 'Tags: ' +
         transaction.tags +
-        ', Amount: ' +
+        ', Amount: \₹' +
         transaction.amount.toString();
     final tz.TZDateTime scheduledDate =
         tz.TZDateTime.from(transaction.selectedDate, tz.local);

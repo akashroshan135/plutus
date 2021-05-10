@@ -138,7 +138,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
           ),
           _buttonWidget(
             'Amount:',
-            '₹ ' + widget.transaction.amount.toString(),
+            '\₹ ' + widget.transaction.amount.toString(),
           ),
           _buttonWidget(
             'Date and Time:',

@@ -39,11 +39,25 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
         var list;
 
         if (expenses.isEmpty) {
-          // TODO make good empty page
-          list = Center(
-            child: Text(
-              'Nothing here',
-              style: Theme.of(context).textTheme.bodyText1,
+          list = Container(
+            padding: EdgeInsets.all(15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/mobile.png',
+                  width: 100,
+                  height: 100,
+                ),
+                SizedBox(height: 20),
+                Center(
+                  child: Text(
+                    'No Transactions Found',
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ),
+              ],
             ),
           );
         } else {
@@ -190,8 +204,8 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                 child: Row(
                   children: [
                     Container(
-                      width: 50,
                       height: 50,
+                      width: 50,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.grey.withOpacity(0.1),
@@ -206,36 +220,24 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                     ),
                     SizedBox(width: 15),
                     Container(
-                      width: (size.width - 90) * 0.5,
+                      height: 50,
+                      width: size.width / 2,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                ExpenseCategory
-                                        .categoryNames[expense.categoryIndex] +
-                                    ' : ',
-                                style: Theme.of(context).textTheme.bodyText1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Flexible(
-                                child: Text(
-                                  expense.tags,
-                                  style: Theme.of(context).textTheme.bodyText2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 5),
                           Text(
-                            DateFormat('hh:mm a')
-                                .format(expense.date)
-                                .toString(),
-                            style: Theme.of(context).textTheme.bodyText2,
+                            ExpenseCategory
+                                .categoryNames[expense.categoryIndex],
+                            style: Theme.of(context).textTheme.bodyText1,
                             overflow: TextOverflow.ellipsis,
+                          ),
+                          Flexible(
+                            child: Text(
+                              expense.tags,
+                              style: Theme.of(context).textTheme.bodyText2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),
@@ -243,17 +245,22 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                   ],
                 ),
               ),
+              Spacer(),
               Container(
-                width: (size.width - 40) * 0.3,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '- \₹' + expense.amount.toString() + ' ',
+                      '- \₹ ' + expense.amount.toString(),
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1
                           .copyWith(color: Colors.red),
+                    ),
+                    Text(
+                      DateFormat('hh:mm a').format(expense.date).toString(),
+                      style: Theme.of(context).textTheme.bodyText2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),

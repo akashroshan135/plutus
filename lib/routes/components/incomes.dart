@@ -39,11 +39,25 @@ class _IncomeRouteState extends State<IncomeRoute> {
         var list;
 
         if (incomes.isEmpty) {
-          // TODO make good empty page
-          list = Center(
-            child: Text(
-              'Nothing here',
-              style: Theme.of(context).textTheme.bodyText1,
+          list = Container(
+            padding: EdgeInsets.all(15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/mobile.png',
+                  width: 100,
+                  height: 100,
+                ),
+                SizedBox(height: 20),
+                Center(
+                  child: Text(
+                    'No Transactions Found',
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ),
+              ],
             ),
           );
         } else {
@@ -183,14 +197,13 @@ class _IncomeRouteState extends State<IncomeRoute> {
         child: Container(
           padding: EdgeInsets.only(top: 12, left: 18, right: 18, bottom: 12),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
                 child: Row(
                   children: [
                     Container(
-                      width: 50,
                       height: 50,
+                      width: 50,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.grey.withOpacity(0.1),
@@ -205,36 +218,23 @@ class _IncomeRouteState extends State<IncomeRoute> {
                     ),
                     SizedBox(width: 15),
                     Container(
-                      width: (size.width - 90) * 0.5,
+                      height: 50,
+                      width: size.width / 2,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                IncomeCategory
-                                        .categoryNames[income.categoryIndex] +
-                                    ' : ',
-                                style: Theme.of(context).textTheme.bodyText1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Flexible(
-                                child: Text(
-                                  income.tags,
-                                  style: Theme.of(context).textTheme.bodyText2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 5),
                           Text(
-                            DateFormat('hh:mm a')
-                                .format(income.date)
-                                .toString(),
-                            style: Theme.of(context).textTheme.bodyText2,
+                            IncomeCategory.categoryNames[income.categoryIndex],
+                            style: Theme.of(context).textTheme.bodyText1,
                             overflow: TextOverflow.ellipsis,
+                          ),
+                          Flexible(
+                            child: Text(
+                              income.tags,
+                              style: Theme.of(context).textTheme.bodyText2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),
@@ -242,17 +242,22 @@ class _IncomeRouteState extends State<IncomeRoute> {
                   ],
                 ),
               ),
+              Spacer(),
               Container(
-                width: (size.width - 40) * 0.3,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '+ \₹' + income.amount.toString() + ' ',
+                      '+ \₹ ' + income.amount.toString(),
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1
                           .copyWith(color: Colors.green),
+                    ),
+                    Text(
+                      DateFormat('hh:mm a').format(income.date).toString(),
+                      style: Theme.of(context).textTheme.bodyText2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),

@@ -111,7 +111,7 @@ class _PieChartScreenState extends State<PieChartScreen> {
                     ),
                     borderData: FlBorderData(show: false),
                     sectionsSpace: 0,
-                    centerSpaceRadius: 0,
+                    centerSpaceRadius: 30,
                     sections: showingSections(),
                   ),
                 ),
@@ -174,7 +174,7 @@ class _PieChartScreenState extends State<PieChartScreen> {
             final width = MediaQuery.of(context).size.width;
             final isTouched = index == touchedIndex;
             final double fontSize = isTouched ? 20 : 16;
-            final double radius = isTouched ? width / 2.7 + 10 : width / 2.7;
+            final double radius = isTouched ? width / 3.2 + 10 : width / 3.2;
             final double widgetSize = isTouched ? 55 : 40;
 
             final value = PieChartSectionData(

@@ -7,6 +7,9 @@ import 'package:moor_flutter/moor_flutter.dart' as moor;
 import 'package:plutus/data/moor_database.dart';
 import 'package:provider/provider.dart';
 
+//* Routes to other pages
+import 'package:plutus/routes/individual/transaction.dart';
+
 //* Custom Widgets
 import 'package:plutus/widgets/edit/edit_expense.dart';
 
@@ -34,11 +37,25 @@ class _AllExpenseRouteState extends State<AllExpenseRoute> {
         var list;
 
         if (expenses.isEmpty) {
-          // TODO make good empty page
-          list = Center(
-            child: Text(
-              'Nothing here',
-              style: Theme.of(context).textTheme.bodyText1,
+          list = Container(
+            height: MediaQuery.of(context).size.height / 1.5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/mobile.png',
+                  width: 150,
+                  height: 150,
+                ),
+                SizedBox(height: 20),
+                Center(
+                  child: Text(
+                    'No Transactions Found',
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
+                ),
+              ],
             ),
           );
         } else {
@@ -201,84 +218,87 @@ class _AllExpenseRouteState extends State<AllExpenseRoute> {
         );
         expenseDao.deleteExpense(expense);
       },
-      child: Container(
-        padding: EdgeInsets.only(top: 12, left: 18, right: 18, bottom: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              child: Row(
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey.withOpacity(0.1),
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        ExpenseCategory.categoryIcon[expense.categoryIndex],
-                        width: 35,
-                        height: 35,
+      child: InkWell(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TransactionScreen(
+              transaction: expense,
+              isIncome: false,
+            ),
+          ),
+        ),
+        child: Container(
+          padding: EdgeInsets.only(top: 12, left: 18, right: 18, bottom: 12),
+          child: Row(
+            children: [
+              Container(
+                child: Row(
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey.withOpacity(0.1),
+                      ),
+                      child: Center(
+                        child: Image.asset(
+                          ExpenseCategory.categoryIcon[expense.categoryIndex],
+                          width: 35,
+                          height: 35,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 15),
-                  Container(
-                    width: (size.width - 90) * 0.5,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              ExpenseCategory
-                                      .categoryNames[expense.categoryIndex] +
-                                  ' : ',
-                              style: Theme.of(context).textTheme.bodyText1,
+                    SizedBox(width: 15),
+                    Container(
+                      height: 50,
+                      width: size.width / 2,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            ExpenseCategory
+                                .categoryNames[expense.categoryIndex],
+                            style: Theme.of(context).textTheme.bodyText1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Flexible(
+                            child: Text(
+                              expense.tags,
+                              style: Theme.of(context).textTheme.bodyText2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            Flexible(
-                              child: Text(
-                                expense.tags,
-                                style: Theme.of(context).textTheme.bodyText2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          DateFormat('d MMM yyyy, hh:mm a')
-                              .format(expense.date)
-                              .toString(),
-                          style: Theme.of(context).textTheme.bodyText2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Container(
-              width: (size.width - 40) * 0.3,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    '- \₹' + expense.amount.toString() + ' ',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        .copyWith(color: Colors.red),
-                  ),
-                ],
+              Spacer(),
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      '- \₹ ' + expense.amount.toString(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          .copyWith(color: Colors.red),
+                    ),
+                    Text(
+                      DateFormat('hh:mm a').format(expense.date).toString(),
+                      style: Theme.of(context).textTheme.bodyText2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
