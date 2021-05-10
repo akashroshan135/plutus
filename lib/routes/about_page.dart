@@ -73,15 +73,14 @@ class _AboutScreenState extends State<AboutScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 25),
+            SizedBox(height: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // TODO insert app logo here
                 Image.asset(
                   'assets/images/app_icon.png',
-                  height: 75,
-                  width: 75,
+                  height: 130,
+                  width: 130,
                 ),
                 SizedBox(height: 15),
                 Text(
@@ -101,11 +100,29 @@ class _AboutScreenState extends State<AboutScreen> {
   }
 
   Widget _getBody() {
+    final _random = new Random();
+    var _inkwellColor = myColors[_random.nextInt(myColors.length)];
+    final iconsCreditList = [
+      'Bills Icon by Rizky Mardika (Iconscout)',
+      'Tax Icon by Iconscout Freebies',
+      'EMI Icon by Iconscout Freebies',
+      'Snack Icon by Iconscout Freebies',
+      'Hoodie Icon by Thossawat Jaikum (IconScout)',
+      'Education Board Icon By Delesign Graphics (Iconscout)',
+      'Multimedia Icon By Blakyta Design (Iconscout)',
+      'Medical Icon By Mohit Gandhi (Iconscout)',
+      'Insurance Icon By Md Moniruzzaman (Iconscout)',
+      'Shopping Bag Icon By Mario Köstl (Iconscout)',
+      'Dog Icon By Iconscout Freebies',
+      'Economy Icon (Income) By Debruder Studio (Iconscout)',
+      'Money Icon (Miscellaneous) By ToZ Icon (Iconscout)',
+    ];
+
     final appDescription = Container(
       padding: EdgeInsets.all(20),
       alignment: Alignment.center,
       child: Text(
-        'A small and simple budget management app that you can use to keep track of your income and expenses',
+        'An open source budget management app that I made for a college project. Even though it started as a college project, I really loved working on this app. So, expect more updates, features and other cool stuff in the future.',
         style: Theme.of(context).textTheme.bodyText1,
       ),
     );
@@ -126,11 +143,26 @@ class _AboutScreenState extends State<AboutScreen> {
           style: Theme.of(context).textTheme.headline1,
         ),
       ),
+      Container(
+        padding: EdgeInsets.only(left: 16, bottom: 8),
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'Akash Roshan',
+          textAlign: TextAlign.left,
+          style: Theme.of(context).textTheme.headline1,
+        ),
+      ),
       _buttonWidget(
         Icon(AntDesign.github),
-        'Akash Roshan',
+        'Github',
         '@akashroshan135',
         'https://github.com/akashroshan135',
+      ),
+      _buttonWidget(
+        Icon(AntDesign.twitter),
+        'Twitter',
+        '@akashroshan135',
+        'https://twitter.com/akashroshan135',
       ),
     ];
 
@@ -155,21 +187,85 @@ class _AboutScreenState extends State<AboutScreen> {
         '@subbu_tutnh',
         'https://twitter.com/subbu_tutnh',
       ),
+      Padding(
+        padding: EdgeInsets.all(8),
+        child: Container(
+          height: 80,
+          child: Material(
+            borderRadius: BorderRadius.circular(15),
+            color: Theme.of(context).secondaryHeaderColor,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(15),
+              highlightColor: _inkwellColor,
+              splashColor: _inkwellColor,
+              onTap: () {
+                return showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
+                      title: Text(
+                        'Icon Credits',
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                      content: Container(
+                        height: MediaQuery.of(context).size.height - 300,
+                        width: MediaQuery.of(context).size.width - 60,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: iconsCreditList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                              title: Text(
+                                iconsCreditList[index],
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+              child: Row(
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 25),
+                        child: Text(
+                          'Icon Credits',
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     ];
 
     return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-      child: ListView(
-        primary: false,
-        shrinkWrap: true,
+      padding: EdgeInsets.all(16),
+      child: Column(
         children: [
           appDescription,
           appGithub,
           developer[0],
           developer[1],
+          developer[2],
+          developer[3],
           contributors[0],
           contributors[1],
           contributors[2],
+          contributors[3],
         ],
       ),
     );
@@ -211,13 +307,17 @@ class _AboutScreenState extends State<AboutScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      mainText,
-                      style: Theme.of(context).textTheme.bodyText1,
+                    Flexible(
+                      child: Text(
+                        mainText,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
                     ),
-                    Text(
-                      subText,
-                      style: Theme.of(context).textTheme.bodyText2,
+                    Flexible(
+                      child: Text(
+                        subText,
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
                     ),
                   ],
                 ),

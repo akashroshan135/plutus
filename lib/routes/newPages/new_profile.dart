@@ -43,6 +43,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               width: size.width * 0.35,
             ),
           ),
+          _getInputScreen(),
           Positioned(
             bottom: 0,
             right: 0,
@@ -51,60 +52,61 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               width: size.width * 0.4,
             ),
           ),
-          _getInputScreen(),
         ],
       ),
     );
   }
 
   // * renders the input screen
-  // TODO make it look better. maybe?
   Widget _getInputScreen() {
-    Size size = MediaQuery.of(context).size;
-
     return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'PLUTUS',
-            style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
-          ),
-          SizedBox(height: size.height * 0.03),
-          Text(
-            'Create a profile',
-            style: Theme.of(context).textTheme.headline1,
-          ),
-          SizedBox(height: size.height * 0.03),
-          Image.asset(
-            'assets/images/profile_center.png',
-            fit: BoxFit.fitWidth,
-            width: 220,
-            alignment: Alignment.bottomCenter,
-          ),
-          SizedBox(height: size.height * 0.03),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: TextField(
-              controller: controllerName,
-              cursorColor: Theme.of(context).buttonColor,
-              style: Theme.of(context).textTheme.bodyText1,
-              decoration: _decoratorInputWidget('Name'),
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'PLUTUS',
+              style:
+                  Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: TextField(
-              controller: controllerAmount,
-              keyboardType: TextInputType.number,
-              cursorColor: Theme.of(context).buttonColor,
-              style: Theme.of(context).textTheme.bodyText1,
-              decoration: _decoratorInputWidget('Savings'),
+            SizedBox(height: 10),
+            Text(
+              'Create a profile',
+              style: Theme.of(context).textTheme.headline1,
             ),
-          ),
-          _getSubmit(),
-          SizedBox(height: size.height * 0.03),
-        ],
+            SizedBox(height: 20),
+            Image.asset(
+              'assets/images/app_icon.png',
+              fit: BoxFit.fitWidth,
+              width: 220,
+              alignment: Alignment.bottomCenter,
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: TextField(
+                controller: controllerName,
+                maxLength: 50,
+                cursorColor: Theme.of(context).buttonColor,
+                style: Theme.of(context).textTheme.bodyText1,
+                decoration: _decoratorInputWidget('Name'),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: TextField(
+                controller: controllerAmount,
+                keyboardType: TextInputType.number,
+                cursorColor: Theme.of(context).buttonColor,
+                style: Theme.of(context).textTheme.bodyText1,
+                decoration: _decoratorInputWidget('Savings'),
+              ),
+            ),
+            _getSubmit(),
+          ],
+        ),
       ),
     );
   }
@@ -114,7 +116,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
     final profileeDao = Provider.of<ProfileDao>(context);
 
     return Padding(
-      padding: EdgeInsets.only(top: 16, left: 100, right: 100, bottom: 50),
+      padding: EdgeInsets.only(top: 16, left: 100, right: 100),
       child: Container(
         height: 50,
         child: Material(
@@ -122,48 +124,34 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
           color: Theme.of(context).primaryColor,
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
-            highlightColor: Colors.pink[400],
-            splashColor: Colors.pink,
             onTap: () {
               if (controllerName.text == '' || controllerAmount.text == '') {
-                return showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: Text('Warning',
-                          style: Theme.of(context).textTheme.headline1),
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      content: Text(
-                        'Please enter all the fields',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: Text(
-                            'OK',
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                );
+                return _getWarning('Please enter all the fields');
               } else {
-                profileeDao.addProfile(
-                  ProfilesCompanion(
-                    name: moor.Value(controllerName.text),
-                    balance: moor.Value(double.parse(controllerAmount.text)),
-                  ),
-                );
+                double amount;
+                try {
+                  amount = double.parse(controllerAmount.text);
+                  if (amount > 100000) {
+                    return _getEasterEgg();
+                  } else {
+                    profileeDao.addProfile(
+                      ProfilesCompanion(
+                        name: moor.Value(controllerName.text),
+                        balance:
+                            moor.Value(double.parse(controllerAmount.text)),
+                      ),
+                    );
+                  }
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Homepage(),
+                    ),
+                  );
+                } catch (FormatException) {
+                  return _getWarning('Please enter number data for amount');
+                }
               }
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Homepage(),
-                ),
-              );
             },
             child: Center(
               child: Text(
@@ -194,6 +182,64 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(color: Theme.of(context).buttonColor, width: 1),
       ),
+    );
+  }
+
+  // * renders a warning dialog box
+  Future _getWarning(String text) {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            'Warning',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          content: Text(
+            text,
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'OK',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // * renders an easter egg
+  Future _getEasterEgg() {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            'Get an Accountant',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          content: Text(
+            'If you\'re dealing with so much money then you need an accountant, not an app',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'OK',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

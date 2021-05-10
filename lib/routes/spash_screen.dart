@@ -94,7 +94,6 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // TODO insert app logo here
                       Image.asset(
                         'assets/images/app_icon.png',
                         height: 250,
