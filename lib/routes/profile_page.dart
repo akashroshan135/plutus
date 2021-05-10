@@ -100,9 +100,10 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (context, AsyncSnapshot<List<Profile>> snapshot) {
         final profile = snapshot.data ?? [];
         return ListView.builder(
+          padding: EdgeInsets.only(top: 20, bottom: 40),
           primary: false,
           shrinkWrap: true,
-          itemCount: 1,
+          itemCount: profile.length,
           itemBuilder: (_, index) {
             return Column(
               children: [
@@ -152,7 +153,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             backgroundColor:
                                 Theme.of(context).scaffoldBackgroundColor,
                             content: Text(
-                              'Are you sure you want to update your Profile Name?',
+                              'Are you sure you want to update your profile name?',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             actions: <Widget>[
@@ -218,7 +219,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Text(
                   'Total Savings',
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
                 SizedBox(height: 10),
                 Text(
@@ -234,11 +235,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _getBody() {
-    return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-      child: ListView(
-        primary: false,
-        shrinkWrap: true,
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Column(
         children: [
           _buttonWidget('Show all Upcoming Transactions', Colors.grey, 1),
           SizedBox(height: 10),
@@ -282,8 +281,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: <Widget>[
                   Text(
                     text,
-                    // style: Theme.of(context).textTheme.headline1,
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.headline1,
                   ),
                 ],
               ),

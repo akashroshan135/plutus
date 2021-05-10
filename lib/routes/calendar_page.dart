@@ -71,21 +71,45 @@ class _CalendarPageState extends State<CalendarPage> {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
                   'Calendar',
                   style: Theme.of(context).textTheme.headline1,
                 ),
-                Switch(
-                  value: isCalendar,
-                  activeColor: Colors.blue,
-                  activeTrackColor: Colors.yellow,
-                  inactiveThumbColor: Colors.redAccent,
-                  inactiveTrackColor: Colors.orange,
-                  onChanged: (value) => setState(() {
-                    isCalendar = value;
-                  }),
+                Spacer(),
+                Tooltip(
+                  message: 'Change View',
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 15),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isCalendar = !isCalendar;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Theme.of(context).iconTheme.color,
+                            width: 2,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: 2, bottom: 2, left: 5, right: 5),
+                          child: Text(
+                            isCalendar ? 'Month' : 'Day',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 InkWell(
                   child: Tooltip(
@@ -213,7 +237,7 @@ class _CalendarPageState extends State<CalendarPage> {
         lastDate: DateTime.utc(2030, 3, 14),
         datePickerStyles: styles,
         datePickerLayoutSettings:
-            dp.DatePickerLayoutSettings(monthPickerPortraitWidth: 350),
+            dp.DatePickerLayoutSettings(monthPickerPortraitWidth: 360),
       ),
     );
   }

@@ -103,12 +103,21 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
                     height: MediaQuery.of(context).size.height / 4,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          transaction.type == 'Income' ? 'Income' : 'Expense',
-                          style: Theme.of(context).textTheme.headline2,
-                        ),
+                            transaction.type == 'Income' ? 'Income' : 'Expense',
+                            style: transaction.type == 'Income'
+                                ? Theme.of(context)
+                                    .textTheme
+                                    .headline2
+                                    .copyWith(color: Colors.green)
+                                : Theme.of(context)
+                                    .textTheme
+                                    .headline2
+                                    .copyWith(color: Colors.red)
+                            // style: Theme.of(context).textTheme.headline2,
+                            ),
                         SizedBox(height: 20),
                         Text(
                           transaction.type == 'Income'
@@ -116,7 +125,7 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
                                   .categoryNames[transaction.categoryIndex]
                               : ExpenseCategory
                                   .categoryNames[transaction.categoryIndex],
-                          style: Theme.of(context).textTheme.headline2,
+                          style: Theme.of(context).textTheme.headline1,
                         ),
                       ],
                     ),
@@ -137,7 +146,7 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
     final expenseDao = Provider.of<ExpenseDao>(context);
 
     final submit = Padding(
-      padding: EdgeInsets.only(top: 16, left: 20, right: 20, bottom: 50),
+      padding: EdgeInsets.only(top: 16, left: 20, right: 20),
       child: Container(
         height: 50,
         width: MediaQuery.of(context).size.width,
@@ -241,11 +250,10 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
       ),
     );
 
-    return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-      child: ListView(
-        primary: false,
-        shrinkWrap: true,
+    return Container(
+      height: MediaQuery.of(context).size.height / 1.75,
+      padding: EdgeInsets.all(16),
+      child: Column(
         children: [
           _buttonWidget(
             'Tags:',
@@ -261,7 +269,7 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
                 .format(transaction.date)
                 .toString(),
           ),
-          SizedBox(height: 30),
+          Spacer(),
           submit,
         ],
       ),

@@ -326,7 +326,7 @@ class _AllUpcomingRouteState extends State<AllUpcomingRoute> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      '\₹ ' + upcoming.amount.toString() + ' ',
+                      '\₹' + upcoming.amount.toString() + ' ',
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1

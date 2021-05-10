@@ -89,10 +89,7 @@ class IncomeDao extends DatabaseAccessor<AppDatabase> with _$IncomeDaoMixin {
           ..orderBy([
             (row) => OrderingTerm(expression: row.date, mode: OrderingMode.desc)
           ])
-          ..where((row) =>
-              row.date.day.equals(searchDate.day) &
-              row.date.month.equals(searchDate.month) &
-              row.date.year.equals(searchDate.year)))
+          ..where((row) => row.date.dateLocalEquals(searchDate)))
         .watch();
   }
 
@@ -150,10 +147,7 @@ class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
           ..orderBy([
             (row) => OrderingTerm(expression: row.date, mode: OrderingMode.desc)
           ])
-          ..where((row) =>
-              row.date.day.equals(searchDate.day) &
-              row.date.month.equals(searchDate.month) &
-              row.date.year.equals(searchDate.year)))
+          ..where((row) => row.date.dateLocalEquals(searchDate)))
         .watch();
   }
 
@@ -214,10 +208,7 @@ class UpcomingDao extends DatabaseAccessor<AppDatabase>
           ..orderBy([
             (row) => OrderingTerm(expression: row.date, mode: OrderingMode.desc)
           ])
-          ..where((row) =>
-              row.date.day.equals(searchDate.day) &
-              row.date.month.equals(searchDate.month) &
-              row.date.year.equals(searchDate.year)))
+          ..where((row) => row.date.dateLocalEquals(searchDate)))
         .watch();
   }
 
@@ -237,4 +228,23 @@ class UpcomingDao extends DatabaseAccessor<AppDatabase>
   // * deletes an upcoming transaction with a matching primary key
   Future deleteUpcoming(Insertable<Upcoming> entry) =>
       delete(upcomings).delete(entry);
+}
+
+extension LocalDateTimeExpressions on Expression<DateTime> {
+  Expression<String> get dateLocal {
+    return FunctionCallExpression(
+      'DATE', // or DATETIME for date + time
+      [
+        this,
+        const Constant<String>('unixepoch'),
+        const Constant<String>('localtime')
+      ],
+    );
+  }
+}
+
+extension LocalCompareDateDB on GeneratedDateTimeColumn {
+  Expression<bool> dateLocalEquals(DateTime value) {
+    return this.dateLocal.equals(value.toIso8601String().substring(0, 10));
+  }
 }

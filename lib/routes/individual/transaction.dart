@@ -90,11 +90,21 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     height: MediaQuery.of(context).size.height / 4,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           widget.isIncome ? 'Income' : 'Expense',
-                          style: Theme.of(context).textTheme.headline2,
+                          style: widget.isIncome
+                              ? Theme.of(context)
+                                  .textTheme
+                                  .headline2
+                                  .copyWith(color: Colors.green)
+                              : Theme.of(context)
+                                  .textTheme
+                                  .headline2
+                                  .copyWith(color: Colors.red),
+
+                          // style: Theme.of(context).textTheme.headline2,
                         ),
                         SizedBox(height: 20),
                         Text(
@@ -118,11 +128,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
   }
 
   Widget _getBody() {
-    return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-      child: ListView(
-        primary: false,
-        shrinkWrap: true,
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Column(
         children: [
           _buttonWidget(
             'Tags:',
@@ -138,7 +146,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 .format(widget.transaction.date)
                 .toString(),
           ),
-          SizedBox(height: 30),
         ],
       ),
     );
