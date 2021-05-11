@@ -264,22 +264,27 @@ class _CustomScreenState extends State<CustomScreen> {
                           ),
                         );
                       } else {
-                        profileDao.updateProfile(
-                          ProfilesCompanion(
-                            id: moor.Value(profile.id),
-                            name: moor.Value(profile.name),
-                            balance: moor.Value(profile.balance - amount),
-                          ),
-                        );
-                        expenseDao.addExpense(
-                          ExpensesCompanion(
-                            tags: moor.Value(controllerTags.text),
-                            amount: moor.Value(amount),
-                            date: moor.Value(selectedDate),
-                            categoryIndex: moor.Value(categoryIndex),
-                          ),
-                        );
-                        Navigator.pop(context);
+                        if (amount > profile.balance) {
+                          return _getWarning(
+                              'You do not have enough balance to perform this transaction');
+                        } else {
+                          profileDao.updateProfile(
+                            ProfilesCompanion(
+                              id: moor.Value(profile.id),
+                              name: moor.Value(profile.name),
+                              balance: moor.Value(profile.balance - amount),
+                            ),
+                          );
+                          expenseDao.addExpense(
+                            ExpensesCompanion(
+                              tags: moor.Value(controllerTags.text),
+                              amount: moor.Value(amount),
+                              date: moor.Value(selectedDate),
+                              categoryIndex: moor.Value(categoryIndex),
+                            ),
+                          );
+                          Navigator.pop(context);
+                        }
                       }
                     }
                   }

@@ -131,7 +131,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
                 double amount;
                 try {
                   amount = double.parse(controllerAmount.text);
-                  if (amount > 100000) {
+                  if (amount > 1000000) {
                     return _getEasterEgg();
                   } else {
                     profileeDao.addProfile(

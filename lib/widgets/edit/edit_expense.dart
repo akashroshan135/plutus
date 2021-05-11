@@ -141,24 +141,31 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
                   } else {
                     final profiles = await profileDao.getAllProfile();
                     final profile = profiles[0];
-                    profileDao.updateProfile(
-                      ProfilesCompanion(
-                        id: Value(profile.id),
-                        name: Value(profile.name),
-                        balance: Value(
-                            (profile.balance + widget.expense.amount) - amount),
-                      ),
-                    );
-                    expenseDao.updateExpense(
-                      ExpensesCompanion(
-                        id: Value(widget.expense.id),
-                        tags: Value(controllerTags.text),
-                        amount: Value(amount),
-                        date: Value(widget.expense.date),
-                        categoryIndex: Value(categoryIndex),
-                      ),
-                    );
-                    Navigator.pop(context);
+
+                    if (amount > profile.balance) {
+                      return _getWarning(
+                          'You do not have enough balance to perform this transaction');
+                    } else {
+                      profileDao.updateProfile(
+                        ProfilesCompanion(
+                          id: Value(profile.id),
+                          name: Value(profile.name),
+                          balance: Value(
+                              (profile.balance + widget.expense.amount) -
+                                  amount),
+                        ),
+                      );
+                      expenseDao.updateExpense(
+                        ExpensesCompanion(
+                          id: Value(widget.expense.id),
+                          tags: Value(controllerTags.text),
+                          amount: Value(amount),
+                          date: Value(widget.expense.date),
+                          categoryIndex: Value(categoryIndex),
+                        ),
+                      );
+                      Navigator.pop(context);
+                    }
                   }
                 } catch (FormatException) {
                   return _getWarning('Please enter number data for amount');

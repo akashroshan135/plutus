@@ -130,22 +130,27 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
                     final profiles = await profileDao.getAllProfile();
                     final profile = profiles[0];
 
-                    profileDao.updateProfile(
-                      ProfilesCompanion(
-                        id: Value(profile.id),
-                        name: Value(profile.name),
-                        balance: Value(profile.balance - amount),
-                      ),
-                    );
-                    expenseDao.addExpense(
-                      ExpensesCompanion(
-                        tags: Value(controllerTags.text),
-                        amount: Value(amount),
-                        date: Value(DateTime.now()),
-                        categoryIndex: Value(categoryIndex),
-                      ),
-                    );
-                    Navigator.pop(context);
+                    if (amount > profile.balance) {
+                      return _getWarning(
+                          'You do not have enough balance to perform this transaction');
+                    } else {
+                      profileDao.updateProfile(
+                        ProfilesCompanion(
+                          id: Value(profile.id),
+                          name: Value(profile.name),
+                          balance: Value(profile.balance - amount),
+                        ),
+                      );
+                      expenseDao.addExpense(
+                        ExpensesCompanion(
+                          tags: Value(controllerTags.text),
+                          amount: Value(amount),
+                          date: Value(DateTime.now()),
+                          categoryIndex: Value(categoryIndex),
+                        ),
+                      );
+                      Navigator.pop(context);
+                    }
                   }
                 } catch (FormatException) {
                   return _getWarning('Please enter number data for amount');
