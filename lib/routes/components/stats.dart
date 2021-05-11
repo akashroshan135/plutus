@@ -64,7 +64,7 @@ class _StatsDetailsPageState extends State<StatsDetailsPage> {
     return Column(
       children: [
         Container(
-          height: MediaQuery.of(context).size.height / 2.5,
+          height: 310,
           child: PageView.builder(
             itemCount: widget.selectedMonth.month == 2 ? 4 : 5,
             onPageChanged: (int index) {

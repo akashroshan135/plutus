@@ -96,7 +96,7 @@ class IncomeDao extends DatabaseAccessor<AppDatabase> with _$IncomeDaoMixin {
   // * streams income rows filtered by seleted date
   Stream<List<Income>> watchMonthIncome(DateTime searchDate) {
     return (select(incomes)
-          ..where((row) => row.date.month.equals(searchDate.month)))
+          ..where((row) => row.date.dateYearMonthEquals(searchDate)))
         .watch();
   }
 
@@ -154,7 +154,7 @@ class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
   // * streams expense rows filtered by seleted month
   Stream<List<Expense>> watchMonthExpense(DateTime searchDate) {
     return (select(expenses)
-          ..where((row) => row.date.month.equals(searchDate.month)))
+          ..where((row) => row.date.dateYearMonthEquals(searchDate)))
         .watch();
   }
 
@@ -246,5 +246,9 @@ extension LocalDateTimeExpressions on Expression<DateTime> {
 extension LocalCompareDateDB on GeneratedDateTimeColumn {
   Expression<bool> dateLocalEquals(DateTime value) {
     return this.dateLocal.equals(value.toIso8601String().substring(0, 10));
+  }
+
+  Expression<bool> dateYearMonthEquals(DateTime value) {
+    return this.dateLocal.like('${value.toIso8601String().substring(0, 7)}%');
   }
 }

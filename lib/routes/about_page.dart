@@ -22,7 +22,7 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
-  String _versionName = 'V. somewhere-alpha';
+  String _versionName = 'V. almost-done';
 
   @override
   Widget build(BuildContext context) {

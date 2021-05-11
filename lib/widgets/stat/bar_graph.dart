@@ -31,37 +31,32 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
       padding: EdgeInsets.all(12),
       child: Container(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height / 2,
         decoration: BoxDecoration(
           color: Theme.of(context).accentColor,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: Text(
-                  widget.mainText +
-                      ' of ' +
-                      DateFormat('MMMM')
-                          .format(widget.selectedMonth)
-                          .toString(),
-                  style: Theme.of(context).textTheme.headline2,
-                ),
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Text(
+                widget.mainText +
+                    ' of ' +
+                    DateFormat('MMMM').format(widget.selectedMonth).toString(),
+                style: Theme.of(context).textTheme.headline2,
               ),
-              SizedBox(height: 10),
-              Container(
-                width: MediaQuery.of(context).size.width - 40,
-                height: MediaQuery.of(context).size.height / 4.1,
-                child: BarGraphWidget(
-                  seriesList: _getData(),
-                ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              width: MediaQuery.of(context).size.width - 40,
+              height: 200,
+              child: BarGraphWidget(
+                seriesList: _getData(),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
