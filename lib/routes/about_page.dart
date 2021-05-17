@@ -303,23 +303,28 @@ class _AboutScreenState extends State<AboutScreen> {
                     ),
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        mainText,
-                        style: Theme.of(context).textTheme.bodyText1,
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          mainText,
+                          style: Theme.of(context).textTheme.bodyText1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      child: Text(
-                        subText,
-                        style: Theme.of(context).textTheme.bodyText2,
+                      Flexible(
+                        child: Text(
+                          subText,
+                          style: Theme.of(context).textTheme.bodyText2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

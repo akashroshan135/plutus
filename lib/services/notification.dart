@@ -3,7 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:plutus/main.dart';
 
 //* Routes to other pages
-import 'package:plutus/routes/individual/transUpcoming.dart';
+import 'package:plutus/routes/individual/transPending.dart';
 
 // *  Notification Packages
 // ! timezone latest_all.dart is used as latest.dart doesn't work on emulator
@@ -54,7 +54,7 @@ class NotificationService {
     final androidDetails = new AndroidNotificationDetails(
       '1',
       'Plutus',
-      'Upcoming Transactions',
+      'Pending Transactions',
       importance: Importance.max,
     );
     final notificationDetails =
@@ -86,14 +86,14 @@ class NotificationService {
   Future selectNotification(String payload) async {
     MyApp.navigatorKey.currentState.push(
       MaterialPageRoute(
-        builder: (context) => TransactionUpcomingScreen(
+        builder: (context) => TransactionPendingScreen(
           transactionId: payload,
         ),
       ),
     );
   }
 
-  Future cancelNotification(upcoming) async {
-    await flutterLocalNotificationsPlugin.cancel(upcoming.id);
+  Future cancelNotification(pending) async {
+    await flutterLocalNotificationsPlugin.cancel(pending.id);
   }
 }

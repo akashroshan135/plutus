@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
         Provider<ProfileDao>(create: (_) => db.profileDao),
         Provider<IncomeDao>(create: (_) => db.incomeDao),
         Provider<ExpenseDao>(create: (_) => db.expenseDao),
-        Provider<UpcomingDao>(create: (_) => db.upcomingDao),
+        Provider<PendingDao>(create: (_) => db.pendingDao),
       ],
       child: MaterialApp(
         title: 'Plutus',

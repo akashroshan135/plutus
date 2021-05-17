@@ -911,28 +911,28 @@ class $ExpensesTable extends Expenses with TableInfo<$ExpensesTable, Expense> {
   }
 }
 
-class Upcoming extends DataClass implements Insertable<Upcoming> {
+class Pending extends DataClass implements Insertable<Pending> {
   final int id;
   final String tags;
   final DateTime date;
   final double amount;
   final int categoryIndex;
   final String type;
-  Upcoming(
+  Pending(
       {@required this.id,
       @required this.tags,
       @required this.date,
       @required this.amount,
       @required this.categoryIndex,
       @required this.type});
-  factory Upcoming.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory Pending.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
     final doubleType = db.typeSystem.forDartType<double>();
-    return Upcoming(
+    return Pending(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       tags: stringType.mapFromDatabaseResponse(data['${effectivePrefix}tags']),
       date:
@@ -968,8 +968,8 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
     return map;
   }
 
-  UpcomingsCompanion toCompanion(bool nullToAbsent) {
-    return UpcomingsCompanion(
+  PendingsCompanion toCompanion(bool nullToAbsent) {
+    return PendingsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       tags: tags == null && nullToAbsent ? const Value.absent() : Value(tags),
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
@@ -982,10 +982,10 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
     );
   }
 
-  factory Upcoming.fromJson(Map<String, dynamic> json,
+  factory Pending.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return Upcoming(
+    return Pending(
       id: serializer.fromJson<int>(json['id']),
       tags: serializer.fromJson<String>(json['tags']),
       date: serializer.fromJson<DateTime>(json['date']),
@@ -1007,14 +1007,14 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
     };
   }
 
-  Upcoming copyWith(
+  Pending copyWith(
           {int id,
           String tags,
           DateTime date,
           double amount,
           int categoryIndex,
           String type}) =>
-      Upcoming(
+      Pending(
         id: id ?? this.id,
         tags: tags ?? this.tags,
         date: date ?? this.date,
@@ -1024,7 +1024,7 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
       );
   @override
   String toString() {
-    return (StringBuffer('Upcoming(')
+    return (StringBuffer('Pending(')
           ..write('id: $id, ')
           ..write('tags: $tags, ')
           ..write('date: $date, ')
@@ -1047,7 +1047,7 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is Upcoming &&
+      (other is Pending &&
           other.id == this.id &&
           other.tags == this.tags &&
           other.date == this.date &&
@@ -1056,14 +1056,14 @@ class Upcoming extends DataClass implements Insertable<Upcoming> {
           other.type == this.type);
 }
 
-class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
+class PendingsCompanion extends UpdateCompanion<Pending> {
   final Value<int> id;
   final Value<String> tags;
   final Value<DateTime> date;
   final Value<double> amount;
   final Value<int> categoryIndex;
   final Value<String> type;
-  const UpcomingsCompanion({
+  const PendingsCompanion({
     this.id = const Value.absent(),
     this.tags = const Value.absent(),
     this.date = const Value.absent(),
@@ -1071,7 +1071,7 @@ class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
     this.categoryIndex = const Value.absent(),
     this.type = const Value.absent(),
   });
-  UpcomingsCompanion.insert({
+  PendingsCompanion.insert({
     this.id = const Value.absent(),
     @required String tags,
     @required DateTime date,
@@ -1083,7 +1083,7 @@ class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
         amount = Value(amount),
         categoryIndex = Value(categoryIndex),
         type = Value(type);
-  static Insertable<Upcoming> custom({
+  static Insertable<Pending> custom({
     Expression<int> id,
     Expression<String> tags,
     Expression<DateTime> date,
@@ -1101,14 +1101,14 @@ class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
     });
   }
 
-  UpcomingsCompanion copyWith(
+  PendingsCompanion copyWith(
       {Value<int> id,
       Value<String> tags,
       Value<DateTime> date,
       Value<double> amount,
       Value<int> categoryIndex,
       Value<String> type}) {
-    return UpcomingsCompanion(
+    return PendingsCompanion(
       id: id ?? this.id,
       tags: tags ?? this.tags,
       date: date ?? this.date,
@@ -1144,7 +1144,7 @@ class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
 
   @override
   String toString() {
-    return (StringBuffer('UpcomingsCompanion(')
+    return (StringBuffer('PendingsCompanion(')
           ..write('id: $id, ')
           ..write('tags: $tags, ')
           ..write('date: $date, ')
@@ -1156,11 +1156,10 @@ class UpcomingsCompanion extends UpdateCompanion<Upcoming> {
   }
 }
 
-class $UpcomingsTable extends Upcomings
-    with TableInfo<$UpcomingsTable, Upcoming> {
+class $PendingsTable extends Pendings with TableInfo<$PendingsTable, Pending> {
   final GeneratedDatabase _db;
   final String _alias;
-  $UpcomingsTable(this._db, [this._alias]);
+  $PendingsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedIntColumn _id;
   @override
@@ -1230,13 +1229,13 @@ class $UpcomingsTable extends Upcomings
   List<GeneratedColumn> get $columns =>
       [id, tags, date, amount, categoryIndex, type];
   @override
-  $UpcomingsTable get asDslTable => this;
+  $PendingsTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'upcomings';
+  String get $tableName => _alias ?? 'pendings';
   @override
-  final String actualTableName = 'upcomings';
+  final String actualTableName = 'pendings';
   @override
-  VerificationContext validateIntegrity(Insertable<Upcoming> instance,
+  VerificationContext validateIntegrity(Insertable<Pending> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1281,14 +1280,14 @@ class $UpcomingsTable extends Upcomings
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Upcoming map(Map<String, dynamic> data, {String tablePrefix}) {
+  Pending map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Upcoming.fromData(data, _db, prefix: effectivePrefix);
+    return Pending.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override
-  $UpcomingsTable createAlias(String alias) {
-    return $UpcomingsTable(_db, alias);
+  $PendingsTable createAlias(String alias) {
+    return $PendingsTable(_db, alias);
   }
 }
 
@@ -1300,22 +1299,21 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $IncomesTable get incomes => _incomes ??= $IncomesTable(this);
   $ExpensesTable _expenses;
   $ExpensesTable get expenses => _expenses ??= $ExpensesTable(this);
-  $UpcomingsTable _upcomings;
-  $UpcomingsTable get upcomings => _upcomings ??= $UpcomingsTable(this);
+  $PendingsTable _pendings;
+  $PendingsTable get pendings => _pendings ??= $PendingsTable(this);
   ProfileDao _profileDao;
   ProfileDao get profileDao => _profileDao ??= ProfileDao(this as AppDatabase);
   IncomeDao _incomeDao;
   IncomeDao get incomeDao => _incomeDao ??= IncomeDao(this as AppDatabase);
   ExpenseDao _expenseDao;
   ExpenseDao get expenseDao => _expenseDao ??= ExpenseDao(this as AppDatabase);
-  UpcomingDao _upcomingDao;
-  UpcomingDao get upcomingDao =>
-      _upcomingDao ??= UpcomingDao(this as AppDatabase);
+  PendingDao _pendingDao;
+  PendingDao get pendingDao => _pendingDao ??= PendingDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [profiles, incomes, expenses, upcomings];
+      [profiles, incomes, expenses, pendings];
 }
 
 // **************************************************************************
@@ -1331,6 +1329,6 @@ mixin _$IncomeDaoMixin on DatabaseAccessor<AppDatabase> {
 mixin _$ExpenseDaoMixin on DatabaseAccessor<AppDatabase> {
   $ExpensesTable get expenses => attachedDatabase.expenses;
 }
-mixin _$UpcomingDaoMixin on DatabaseAccessor<AppDatabase> {
-  $UpcomingsTable get upcomings => attachedDatabase.upcomings;
+mixin _$PendingDaoMixin on DatabaseAccessor<AppDatabase> {
+  $PendingsTable get pendings => attachedDatabase.pendings;
 }

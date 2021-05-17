@@ -6,8 +6,8 @@ part 'moor_database.g.dart';
   Main App Database
 -------------------------------------------------------------- */
 @UseMoor(
-  tables: [Profiles, Incomes, Expenses, Upcomings],
-  daos: [ProfileDao, IncomeDao, ExpenseDao, UpcomingDao],
+  tables: [Profiles, Incomes, Expenses, Pendings],
+  daos: [ProfileDao, IncomeDao, ExpenseDao, PendingDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase()
@@ -172,9 +172,9 @@ class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
 }
 
 /* --------------------------------------------------------------
-  Upcomings Table and DAO
+  Pendings Table and DAO
 -------------------------------------------------------------- */
-class Upcomings extends Table {
+class Pendings extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get tags => text().withLength(min: 1, max: 50)();
   DateTimeColumn get date => dateTime()();
@@ -183,28 +183,27 @@ class Upcomings extends Table {
   TextColumn get type => text().withLength(min: 1, max: 10)();
 }
 
-@UseDao(tables: [Upcomings])
-class UpcomingDao extends DatabaseAccessor<AppDatabase>
-    with _$UpcomingDaoMixin {
+@UseDao(tables: [Pendings])
+class PendingDao extends DatabaseAccessor<AppDatabase> with _$PendingDaoMixin {
   final AppDatabase db;
 
   // * gets database object
-  UpcomingDao(this.db) : super(db);
+  PendingDao(this.db) : super(db);
 
-  // * returns upcoming rows
-  Future<List<Upcoming>> getAllUpcoming() => select(upcomings).get();
+  // * returns pending rows
+  Future<List<Pending>> getAllPending() => select(pendings).get();
 
-  Stream<List<Upcoming>> watchAllUpcoming() {
-    return (select(upcomings)
+  Stream<List<Pending>> watchAllPending() {
+    return (select(pendings)
           ..orderBy([
             (row) => OrderingTerm(expression: row.date, mode: OrderingMode.desc)
           ]))
         .watch();
   }
 
-  // * streams upcoming rows filtered by seleted date
-  Stream<List<Upcoming>> watchDayUpcoming(DateTime searchDate) {
-    return (select(upcomings)
+  // * streams pending rows filtered by seleted date
+  Stream<List<Pending>> watchDayPending(DateTime searchDate) {
+    return (select(pendings)
           ..orderBy([
             (row) => OrderingTerm(expression: row.date, mode: OrderingMode.desc)
           ])
@@ -212,22 +211,22 @@ class UpcomingDao extends DatabaseAccessor<AppDatabase>
         .watch();
   }
 
-  // * gets upcoming row filtered by id
-  Future<Upcoming> getUpcoming(int id) {
-    return (select(upcomings)..where((row) => row.id.equals(id))).getSingle();
+  // * gets pending row filtered by id
+  Future<Pending> getPending(int id) {
+    return (select(pendings)..where((row) => row.id.equals(id))).getSingle();
   }
 
-  // * add an upcoming transaction
-  Future<int> addUpcoming(Insertable<Upcoming> entry) =>
-      into(upcomings).insert(entry);
+  // * add an pending transaction
+  Future<int> addPending(Insertable<Pending> entry) =>
+      into(pendings).insert(entry);
 
-  // * updates an upcoming transaction with a matching primary key
-  Future updateUpcoming(Insertable<Upcoming> entry) =>
-      update(upcomings).replace(entry);
+  // * updates an pending transaction with a matching primary key
+  Future updatePending(Insertable<Pending> entry) =>
+      update(pendings).replace(entry);
 
-  // * deletes an upcoming transaction with a matching primary key
-  Future deleteUpcoming(Insertable<Upcoming> entry) =>
-      delete(upcomings).delete(entry);
+  // * deletes an pending transaction with a matching primary key
+  Future deletePending(Insertable<Pending> entry) =>
+      delete(pendings).delete(entry);
 }
 
 extension LocalDateTimeExpressions on Expression<DateTime> {

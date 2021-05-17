@@ -4,7 +4,7 @@ import 'package:jiffy/jiffy.dart';
 //* Routes to other pages
 import 'package:plutus/routes/components/incomes.dart';
 import 'package:plutus/routes/components/expenses.dart';
-import 'package:plutus/routes/components/upcoming.dart';
+import 'package:plutus/routes/components/pending.dart';
 
 class DailyPage extends StatefulWidget {
   @override
@@ -29,7 +29,7 @@ class _DailyPageState extends State<DailyPage> {
       child: Column(
         children: [
           _getHeader(),
-          UpcomingRoute(selectedDate: _selectedDay),
+          PendingRoute(selectedDate: _selectedDay),
           ExpenseRoute(selectedDate: _selectedDay),
           IncomeRoute(selectedDate: _selectedDay),
         ],

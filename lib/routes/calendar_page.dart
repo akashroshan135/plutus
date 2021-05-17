@@ -5,7 +5,7 @@ import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 //* Routes to other pages
 import 'package:plutus/routes/components/expenses.dart';
 import 'package:plutus/routes/components/incomes.dart';
-import 'package:plutus/routes/components/upcoming.dart';
+import 'package:plutus/routes/components/pending.dart';
 
 //* Custom Widgets
 import 'package:plutus/routes/components/stats.dart';
@@ -36,7 +36,7 @@ class _CalendarPageState extends State<CalendarPage> {
     final calendar = Column(
       children: [
         _getHeader(),
-        UpcomingRoute(selectedDate: _selectedDay),
+        PendingRoute(selectedDate: _selectedDay),
         ExpenseRoute(selectedDate: _selectedDay),
         IncomeRoute(selectedDate: _selectedDay),
       ],

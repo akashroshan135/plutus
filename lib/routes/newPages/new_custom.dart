@@ -104,11 +104,11 @@ class _CustomScreenState extends State<CustomScreen> {
   }
 
   Widget _getBody() {
-    // * calling profile, income, expense and upcoming database dao
+    // * calling profile, income, expense and pending database dao
     final profileDao = Provider.of<ProfileDao>(context);
     final incomeDao = Provider.of<IncomeDao>(context);
     final expenseDao = Provider.of<ExpenseDao>(context);
-    final upcomingDao = Provider.of<UpcomingDao>(context);
+    final pendingDao = Provider.of<PendingDao>(context);
 
     // * field for category. shows a dialog box
     final inputCategory = Padding(
@@ -226,8 +226,8 @@ class _CustomScreenState extends State<CustomScreen> {
                     return _getEasterEgg();
                   } else {
                     if (selectedDate.compareTo(DateTime.now()) == 1) {
-                      int id = await upcomingDao.addUpcoming(
-                        UpcomingsCompanion(
+                      int id = await pendingDao.addPending(
+                        PendingsCompanion(
                           tags: moor.Value(controllerTags.text),
                           amount: moor.Value(amount),
                           date: moor.Value(selectedDate),

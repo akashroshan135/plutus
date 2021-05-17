@@ -13,26 +13,26 @@ import 'package:plutus/services/notification.dart';
 import 'package:plutus/data/expenseCat.dart';
 import 'package:plutus/data/incomeCat.dart';
 
-class TransactionUpcomingScreen extends StatefulWidget {
+class TransactionPendingScreen extends StatefulWidget {
   final String transactionId;
 
-  TransactionUpcomingScreen({Key key, this.transactionId}) : super(key: key);
+  TransactionPendingScreen({Key key, this.transactionId}) : super(key: key);
 
   @override
-  _TransactionUpcomingScreenState createState() =>
-      _TransactionUpcomingScreenState();
+  _TransactionPendingScreenState createState() =>
+      _TransactionPendingScreenState();
 }
 
-class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
-  Upcoming transaction;
+class _TransactionPendingScreenState extends State<TransactionPendingScreen> {
+  Pending transaction;
 
   @override
   Widget build(BuildContext context) {
-    final upcomingDao = Provider.of<UpcomingDao>(context);
+    final pendingDao = Provider.of<PendingDao>(context);
 
     return FutureBuilder(
-      future: upcomingDao.getUpcoming(int.parse(widget.transactionId)),
-      builder: (BuildContext context, AsyncSnapshot<Upcoming> snapshot) {
+      future: pendingDao.getPending(int.parse(widget.transactionId)),
+      builder: (BuildContext context, AsyncSnapshot<Pending> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           transaction = snapshot.data;
           return Scaffold(
@@ -81,7 +81,7 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
                 ),
                 SizedBox(width: 25),
                 Text(
-                  'Upcoming Transaction Details',
+                  'Pending Transaction Details',
                   style: Theme.of(context).textTheme.headline1,
                 ),
               ],
@@ -140,7 +140,7 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
   }
 
   Widget _getBody() {
-    final upcomingDao = Provider.of<UpcomingDao>(context);
+    final pendingDao = Provider.of<PendingDao>(context);
     final profileDao = Provider.of<ProfileDao>(context);
     final incomeDao = Provider.of<IncomeDao>(context);
     final expenseDao = Provider.of<ExpenseDao>(context);
@@ -222,7 +222,7 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
                             );
                           }
                           NotificationService().cancelNotification(transaction);
-                          upcomingDao.deleteUpcoming(transaction);
+                          pendingDao.deletePending(transaction);
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
                         },
@@ -258,16 +258,19 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
           _buttonWidget(
             'Tags:',
             transaction.tags,
+            100,
           ),
           _buttonWidget(
             'Amount:',
             '\₹ ' + transaction.amount.toString(),
+            80,
           ),
           _buttonWidget(
             'Date and Time:',
             DateFormat('d MMM yyyy, hh:mm a')
                 .format(transaction.date)
                 .toString(),
+            80,
           ),
           Spacer(),
           submit,
@@ -276,11 +279,11 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
     );
   }
 
-  Widget _buttonWidget(mainText, subText) {
+  Widget _buttonWidget(mainText, subText, size) {
     return Padding(
       padding: EdgeInsets.all(8),
       child: Container(
-        height: 80,
+        height: size.toDouble(),
         child: Material(
           borderRadius: BorderRadius.circular(15),
           color: Theme.of(context).secondaryHeaderColor,
@@ -288,25 +291,28 @@ class _TransactionUpcomingScreenState extends State<TransactionUpcomingScreen> {
             padding: EdgeInsets.all(16),
             child: Row(
               children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      mainText,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1
-                          .copyWith(fontSize: 18),
-                    ),
-                    Text(
-                      subText,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2
-                          .copyWith(fontSize: 15),
-                    ),
-                  ],
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        mainText,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1
+                            .copyWith(fontSize: 18),
+                      ),
+                      Text(
+                        subText,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            .copyWith(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

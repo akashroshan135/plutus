@@ -10,33 +10,33 @@ import 'package:provider/provider.dart';
 import 'package:plutus/services/notification.dart';
 
 //* Routes to other pages
-import 'package:plutus/routes/individual/transUpcoming.dart';
+import 'package:plutus/routes/individual/transPending.dart';
 
 //* Data Classes
 import 'package:plutus/data/expenseCat.dart';
 import 'package:plutus/data/incomeCat.dart';
 
-class UpcomingRoute extends StatefulWidget {
+class PendingRoute extends StatefulWidget {
   final DateTime selectedDate;
 
-  UpcomingRoute({Key key, this.selectedDate}) : super(key: key);
+  PendingRoute({Key key, this.selectedDate}) : super(key: key);
 
   @override
-  _UpcomingRouteState createState() => _UpcomingRouteState();
+  _PendingRouteState createState() => _PendingRouteState();
 }
 
-class _UpcomingRouteState extends State<UpcomingRoute> {
+class _PendingRouteState extends State<PendingRoute> {
   @override
   Widget build(BuildContext context) {
-    // * calling expense database dao
-    final upcomingDao = Provider.of<UpcomingDao>(context);
+    // * calling pending database dao
+    final pendingDao = Provider.of<PendingDao>(context);
 
     // * StreamBuilder used to build list of all objects
     return StreamBuilder(
-      stream: upcomingDao.watchDayUpcoming(widget.selectedDate),
-      builder: (context, AsyncSnapshot<List<Upcoming>> snapshot) {
-        final upcoming = snapshot.data ?? [];
-        if (upcoming.isEmpty) {
+      stream: pendingDao.watchDayPending(widget.selectedDate),
+      builder: (context, AsyncSnapshot<List<Pending>> snapshot) {
+        final pending = snapshot.data ?? [];
+        if (pending.isEmpty) {
           return Container();
         }
         return Column(
@@ -45,7 +45,7 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
             Padding(
               padding: EdgeInsets.only(top: 10, bottom: 8, left: 18),
               child: Text(
-                'Upcoming',
+                'Pending',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ),
@@ -53,9 +53,9 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
               padding: EdgeInsets.all(0),
               primary: false,
               shrinkWrap: true,
-              itemCount: upcoming.length,
+              itemCount: pending.length,
               itemBuilder: (_, index) {
-                return _buildItem(upcoming[index], upcomingDao);
+                return _buildItem(pending[index], pendingDao);
               },
             ),
           ],
@@ -65,7 +65,7 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
   }
 
   // * code to build one transaction item
-  Widget _buildItem(Upcoming upcoming, UpcomingDao upcomingDao) {
+  Widget _buildItem(Pending pending, PendingDao pendingDao) {
     // * calling profile database dao
     final profileDao = Provider.of<ProfileDao>(context);
     final incomeDao = Provider.of<IncomeDao>(context);
@@ -74,13 +74,13 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
     var size = MediaQuery.of(context).size;
     var isIncome;
 
-    if (upcoming.type == 'Income')
+    if (pending.type == 'Income')
       isIncome = true;
     else
       isIncome = false;
 
     return Dismissible(
-      key: Key(upcoming.toString()),
+      key: Key(pending.toString()),
       background: _slideRightBackground(),
       secondaryBackground: _slideLeftBackground(),
       confirmDismiss: (DismissDirection direction) async {
@@ -162,15 +162,15 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
               ProfilesCompanion(
                 id: moor.Value(profile.id),
                 name: moor.Value(profile.name),
-                balance: moor.Value(profile.balance + upcoming.amount),
+                balance: moor.Value(profile.balance + pending.amount),
               ),
             );
             incomeDao.addIncome(
               IncomesCompanion(
-                tags: moor.Value(upcoming.tags),
-                amount: moor.Value(upcoming.amount),
-                date: moor.Value(upcoming.date),
-                categoryIndex: moor.Value(upcoming.categoryIndex),
+                tags: moor.Value(pending.tags),
+                amount: moor.Value(pending.amount),
+                date: moor.Value(pending.date),
+                categoryIndex: moor.Value(pending.categoryIndex),
               ),
             );
           } else {
@@ -178,28 +178,28 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
               ProfilesCompanion(
                 id: moor.Value(profile.id),
                 name: moor.Value(profile.name),
-                balance: moor.Value(profile.balance - upcoming.amount),
+                balance: moor.Value(profile.balance - pending.amount),
               ),
             );
             expenseDao.addExpense(
               ExpensesCompanion(
-                tags: moor.Value(upcoming.tags),
-                amount: moor.Value(upcoming.amount),
-                date: moor.Value(upcoming.date),
-                categoryIndex: moor.Value(upcoming.categoryIndex),
+                tags: moor.Value(pending.tags),
+                amount: moor.Value(pending.amount),
+                date: moor.Value(pending.date),
+                categoryIndex: moor.Value(pending.categoryIndex),
               ),
             );
           }
         }
-        NotificationService().cancelNotification(upcoming);
-        upcomingDao.deleteUpcoming(upcoming);
+        NotificationService().cancelNotification(pending);
+        pendingDao.deletePending(pending);
       },
       child: InkWell(
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => TransactionUpcomingScreen(
-              transactionId: upcoming.id.toString(),
+            builder: (context) => TransactionPendingScreen(
+              transactionId: pending.id.toString(),
             ),
           ),
         ),
@@ -240,16 +240,16 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
                             isIncome
                                 ? 'Income : ' +
                                     IncomeCategory
-                                        .categoryNames[upcoming.categoryIndex]
+                                        .categoryNames[pending.categoryIndex]
                                 : 'Expense : ' +
                                     ExpenseCategory
-                                        .categoryNames[upcoming.categoryIndex],
+                                        .categoryNames[pending.categoryIndex],
                             style: Theme.of(context).textTheme.bodyText1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Flexible(
                             child: Text(
-                              upcoming.tags,
+                              pending.tags,
                               style: Theme.of(context).textTheme.bodyText2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -265,14 +265,14 @@ class _UpcomingRouteState extends State<UpcomingRoute> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '\₹ ' + upcoming.amount.toString(),
+                      '\₹ ' + pending.amount.toString(),
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1
                           .copyWith(color: Colors.grey),
                     ),
                     Text(
-                      DateFormat('hh:mm a').format(upcoming.date).toString(),
+                      DateFormat('hh:mm a').format(pending.date).toString(),
                       style: Theme.of(context).textTheme.bodyText2,
                       overflow: TextOverflow.ellipsis,
                     ),

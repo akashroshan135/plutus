@@ -135,27 +135,30 @@ class _TransactionScreenState extends State<TransactionScreen> {
           _buttonWidget(
             'Tags:',
             widget.transaction.tags,
+            100,
           ),
           _buttonWidget(
             'Amount:',
             '\₹ ' + widget.transaction.amount.toString(),
+            80,
           ),
           _buttonWidget(
             'Date and Time:',
             DateFormat('d MMM yyyy, hh:mm a')
                 .format(widget.transaction.date)
                 .toString(),
+            80,
           ),
         ],
       ),
     );
   }
 
-  Widget _buttonWidget(mainText, subText) {
+  Widget _buttonWidget(mainText, subText, size) {
     return Padding(
       padding: EdgeInsets.all(8),
       child: Container(
-        height: 80,
+        height: size.toDouble(),
         child: Material(
           borderRadius: BorderRadius.circular(15),
           color: Theme.of(context).secondaryHeaderColor,
@@ -163,25 +166,28 @@ class _TransactionScreenState extends State<TransactionScreen> {
             padding: EdgeInsets.all(16),
             child: Row(
               children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      mainText,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1
-                          .copyWith(fontSize: 18),
-                    ),
-                    Text(
-                      subText,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2
-                          .copyWith(fontSize: 15),
-                    ),
-                  ],
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        mainText,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1
+                            .copyWith(fontSize: 18),
+                      ),
+                      Text(
+                        subText,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            .copyWith(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

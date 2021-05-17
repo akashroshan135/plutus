@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:plutus/routes/components/all_expenses.dart';
-import 'package:plutus/routes/components/all_incomes.dart';
-import 'package:plutus/routes/components/all_upcoming.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
 // * Database packages
@@ -11,6 +8,9 @@ import 'package:provider/provider.dart';
 
 //* Routes to other pages
 import 'package:plutus/routes/about_page.dart';
+import 'package:plutus/routes/components/all_expenses.dart';
+import 'package:plutus/routes/components/all_incomes.dart';
+import 'package:plutus/routes/components/all_pending.dart';
 
 //* Custom Widgets
 import 'package:plutus/widgets/edit/edit_profile.dart';
@@ -132,53 +132,60 @@ class _ProfilePageState extends State<ProfilePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    profile.name,
-                    style: Theme.of(context).textTheme.headline2,
-                  ),
-                  InkWell(
-                    child: Tooltip(
-                      message: 'Edit Profile Name',
-                      child: Icon(Icons.edit),
+                  Flexible(
+                    child: Text(
+                      profile.name,
+                      style: Theme.of(context).textTheme.headline2,
                     ),
-                    onTap: () {
-                      return showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(
-                              'Update Profile Name',
-                              style: Theme.of(context).textTheme.headline1,
-                            ),
-                            backgroundColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            content: Text(
-                              'Are you sure you want to update your profile name?',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: Text(
-                                  'No',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8),
+                    child: InkWell(
+                      child: Tooltip(
+                        message: 'Edit Profile Name',
+                        child: Icon(Icons.edit),
+                      ),
+                      onTap: () {
+                        return showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                'Update Profile Name',
+                                style: Theme.of(context).textTheme.headline1,
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  _showEditSceen(profile);
-                                },
-                                child: Text(
-                                  'Yes',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                ),
+                              backgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              content: Text(
+                                'Are you sure you want to update your profile name?',
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
-                            ],
-                          );
-                        },
-                      );
-                    },
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text(
+                                    'No',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    _showEditSceen(profile);
+                                  },
+                                  child: Text(
+                                    'Yes',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -239,11 +246,23 @@ class _ProfilePageState extends State<ProfilePage> {
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
-          _buttonWidget('Show all Upcoming Transactions', Colors.grey, 1),
+          _buttonWidget(
+            'Show all Pending Transactions',
+            Colors.grey,
+            1,
+          ),
           SizedBox(height: 10),
-          _buttonWidget('Show all Expense Transactions', Colors.red, 2),
+          _buttonWidget(
+            'Show all Expense Transactions',
+            Colors.red,
+            2,
+          ),
           SizedBox(height: 10),
-          _buttonWidget('Show all Income Transactions', Colors.green, 3),
+          _buttonWidget(
+            'Show all Income Transactions',
+            Colors.green,
+            3,
+          ),
         ],
       ),
     );
@@ -263,10 +282,8 @@ class _ProfilePageState extends State<ProfilePage> {
             splashColor: buttonColor,
             onTap: () {
               if (index == 1)
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AllUpcomingRoute()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AllPendingRoute()));
               else if (index == 2)
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => AllExpenseRoute()));
