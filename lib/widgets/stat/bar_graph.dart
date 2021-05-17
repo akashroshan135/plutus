@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 class BarGraphScreen extends StatefulWidget {
   final DateTime selectedMonth;
@@ -24,6 +24,7 @@ class BarGraphScreen extends StatefulWidget {
 
 class _BarGraphScreenState extends State<BarGraphScreen> {
   List transIncome;
+  double interval;
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +49,34 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
                 style: Theme.of(context).textTheme.headline2,
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 15),
             Container(
-              width: MediaQuery.of(context).size.width - 40,
+              width: MediaQuery.of(context).size.width - 70,
               height: 200,
-              child: BarGraphWidget(
-                seriesList: _getData(),
+              child: BarChart(
+                BarChartData(
+                  barGroups: _getData(),
+                  titlesData: FlTitlesData(
+                    leftTitles: SideTitles(
+                      showTitles: true,
+                      interval: interval == 0 ? 100 : interval,
+                      getTextStyles: (value) =>
+                          Theme.of(context).textTheme.bodyText2,
+                    ),
+                    bottomTitles: SideTitles(
+                      showTitles: true,
+                      getTextStyles: (value) =>
+                          Theme.of(context).textTheme.bodyText2,
+                    ),
+                  ),
+                  gridData: FlGridData(
+                    checkToShowHorizontalLine: (value) => value % interval == 0,
+                  ),
+                  borderData: FlBorderData(
+                    border:
+                        Border.all(color: Theme.of(context).iconTheme.color),
+                  ),
+                ),
               ),
             ),
           ],
@@ -62,10 +85,11 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
     );
   }
 
-  List<charts.Series<PerDayTransactions, String>> _getData() {
+  List<BarChartGroupData> _getData() {
     List<PerDayTransactions> incomeData = [];
     List<PerDayTransactions> expenseData = [];
     int endDate = widget.startDate + 7;
+    double max = 0;
 
     if (widget.startDate == 29) {
       endDate = new DateTime(
@@ -80,12 +104,8 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
           if (item.date.day == i) amount = amount + item.amount;
         }
       }
-      expenseData.add(
-        PerDayTransactions(
-          i.toString() + '/' + widget.selectedMonth.month.toString(),
-          amount,
-        ),
-      );
+      max = max < amount ? amount : max;
+      expenseData.add(PerDayTransactions(i.toString(), amount));
     }
     for (var i = widget.startDate; i < endDate; i++) {
       double amount = 0;
@@ -94,84 +114,47 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
           if (item.date.day == i) amount = amount + item.amount;
         }
       }
-      incomeData.add(
-        PerDayTransactions(
-          i.toString() + '/' + widget.selectedMonth.month.toString(),
-          amount,
-        ),
-      );
+      max = max < amount ? amount : max;
+      incomeData.add(PerDayTransactions(i.toString(), amount));
     }
 
-    return [
-      charts.Series<PerDayTransactions, String>(
-        id: 'expense',
-        domainFn: (PerDayTransactions transaction, _) => transaction.date,
-        measureFn: (PerDayTransactions transaction, _) => transaction.amount,
-        data: expenseData,
-        colorFn: (_, __) => charts.ColorUtil.fromDartColor(Color(0xffe32012)),
-        displayName: 'Expense',
-      ),
-      charts.Series<PerDayTransactions, String>(
-        id: 'income',
-        domainFn: (PerDayTransactions transaction, _) => transaction.date,
-        measureFn: (PerDayTransactions transaction, _) => transaction.amount,
-        data: incomeData,
-        colorFn: (_, __) => charts.ColorUtil.fromDartColor(Colors.green),
-        displayName: 'Income',
-      )
-    ];
-  }
-}
-
-class BarGraphWidget extends StatelessWidget {
-  final List<charts.Series> seriesList;
-
-  const BarGraphWidget({Key key, this.seriesList}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return charts.BarChart(
-      seriesList,
-      animate: true,
-      barGroupingType: charts.BarGroupingType.groupedStacked,
-      defaultRenderer: charts.BarRendererConfig(
-        cornerStrategy: charts.ConstCornerStrategy(50),
-        strokeWidthPx: 5,
-      ),
-      domainAxis: new charts.OrdinalAxisSpec(
-        renderSpec: new charts.SmallTickRendererSpec(
-          labelStyle: new charts.TextStyleSpec(
-            fontSize: 13,
-            color: charts.ColorUtil.fromDartColor(
-                Theme.of(context).textTheme.bodyText1.color),
-          ),
+    List<BarChartGroupData> data = [];
+    int j = 0;
+    for (var i = widget.startDate; i < endDate; i++) {
+      data.add(
+        BarChartGroupData(
+          x: i,
+          barRods: [
+            BarChartRodData(
+              y: expenseData[j].amount,
+              colors: [Color(0xffe32012)],
+              width: 15,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(6),
+                topRight: Radius.circular(6),
+                bottomLeft: Radius.zero,
+                bottomRight: Radius.zero,
+              ),
+            ),
+            BarChartRodData(
+              y: incomeData[j].amount,
+              colors: [Colors.green],
+              width: 15,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(6),
+                topRight: Radius.circular(6),
+                bottomLeft: Radius.zero,
+                bottomRight: Radius.zero,
+              ),
+            )
+          ],
         ),
-      ),
-      primaryMeasureAxis: charts.NumericAxisSpec(
-        tickProviderSpec: charts.BasicNumericTickProviderSpec(
-          desiredMinTickCount: 6,
-          desiredMaxTickCount: 10,
-        ),
-        renderSpec: new charts.GridlineRendererSpec(
-          labelStyle: new charts.TextStyleSpec(
-            fontSize: 13,
-            color: charts.ColorUtil.fromDartColor(
-                Theme.of(context).textTheme.bodyText1.color),
-          ),
-        ),
-      ),
-      secondaryMeasureAxis: null,
-      selectionModels: [
-        charts.SelectionModelConfig(
-          changedListener: (charts.SelectionModel model) {
-            if (model.hasDatumSelection)
-              print(
-                model.selectedSeries[0].measureFn(model.selectedDatum[0].index),
-              );
-          },
-        )
-      ],
-    );
+      );
+      j++;
+    }
+
+    interval = (((max / 5) / 50).floor() * 50).toDouble();
+    return data;
   }
 }
 

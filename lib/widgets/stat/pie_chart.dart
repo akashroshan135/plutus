@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 
 // * Data Classes
@@ -111,7 +111,7 @@ class _PieChartScreenState extends State<PieChartScreen> {
                     ),
                     borderData: FlBorderData(show: false),
                     sectionsSpace: 0,
-                    centerSpaceRadius: 30,
+                    centerSpaceRadius: 0,
                     sections: showingSections(),
                   ),
                 ),
@@ -174,7 +174,7 @@ class _PieChartScreenState extends State<PieChartScreen> {
             final width = MediaQuery.of(context).size.width;
             final isTouched = index == touchedIndex;
             final double fontSize = isTouched ? 20 : 16;
-            final double radius = isTouched ? width / 3.2 + 10 : width / 3.2;
+            final double radius = isTouched ? width / 2.7 + 10 : width / 2.7;
             final double widgetSize = isTouched ? 55 : 40;
 
             final value = PieChartSectionData(
