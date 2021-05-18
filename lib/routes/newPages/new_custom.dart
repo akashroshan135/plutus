@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 // * Database packages
@@ -281,6 +282,8 @@ class _CustomScreenState extends State<CustomScreen> {
                               categoryIndex: moor.Value(categoryIndex),
                             ),
                           );
+                          Fluttertoast.showToast(
+                              msg: 'Transaction has been added');
                           Navigator.pop(context);
                         }
                       }
@@ -424,7 +427,9 @@ class _CustomScreenState extends State<CustomScreen> {
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(
-            color: isIncome ? accentIncome : accentExpense, width: 1),
+          color: isIncome ? accentIncome : accentExpense,
+          width: 1,
+        ),
       ),
     );
   }
@@ -620,6 +625,8 @@ class _CustomScreenState extends State<CustomScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
+                Fluttertoast.showToast(
+                    msg: 'Pending Transaction has been added');
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
@@ -630,6 +637,8 @@ class _CustomScreenState extends State<CustomScreen> {
             ),
             TextButton(
               onPressed: () {
+                Fluttertoast.showToast(
+                    msg: 'Pending Transaction has been added');
                 NotificationService().setNotification(transaction);
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();

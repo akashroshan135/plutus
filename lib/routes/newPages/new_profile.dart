@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // * Database packages
 import 'package:moor_flutter/moor_flutter.dart' as moor;
@@ -17,10 +18,12 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
   final controllerName = TextEditingController();
   final controllerAmount = TextEditingController();
 
+  DateTime currentBackPressTime;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _getBody(),
+      body: WillPopScope(child: _getBody(), onWillPop: onWillPop),
     );
   }
 
@@ -251,5 +254,16 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
         );
       },
     );
+  }
+
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(msg: 'Press back again to exit');
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 }

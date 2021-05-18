@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // * Database packages
 import 'package:moor_flutter/moor_flutter.dart';
@@ -150,6 +151,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
                         ),
                       );
                       Navigator.pop(context);
+                      Fluttertoast.showToast(msg: 'Expense Transaction Added');
                     }
                   }
                 } catch (FormatException) {

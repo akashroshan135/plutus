@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 //* Routes to other pages
 import 'package:plutus/routes/daily_page.dart';
@@ -32,10 +33,12 @@ class _HomepageState extends State<Homepage> {
     CalendarPage(),
     ProfilePage(),
   ];
+  // * used for back to exit
+  DateTime currentBackPressTime;
 
   @override
   Widget build(BuildContext context) {
-    return _getBody();
+    return WillPopScope(child: _getBody(), onWillPop: onWillPop);
   }
 
   // * returns one of the pages
@@ -182,5 +185,16 @@ class _HomepageState extends State<Homepage> {
       context,
       MaterialPageRoute(builder: (context) => CustomScreen()),
     );
+  }
+
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(msg: 'Press back again to exit');
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 }

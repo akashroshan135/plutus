@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // * Database packages
 import 'package:moor_flutter/moor_flutter.dart';
@@ -165,6 +166,8 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
                         ),
                       );
                       Navigator.pop(context);
+                      Fluttertoast.showToast(
+                          msg: 'Transaction has been edited');
                     }
                   }
                 } catch (FormatException) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 // * Database packages
@@ -225,6 +226,8 @@ class _TransactionPendingScreenState extends State<TransactionPendingScreen> {
                           pendingDao.deletePending(transaction);
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
+                          Fluttertoast.showToast(
+                              msg: 'Transaction has been added');
                         },
                         child: Text(
                           'Yes',

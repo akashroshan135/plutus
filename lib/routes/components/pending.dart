@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 // * Database packages
@@ -190,6 +191,9 @@ class _PendingRouteState extends State<PendingRoute> {
               ),
             );
           }
+          Fluttertoast.showToast(msg: 'Transaction has been added');
+        } else {
+          Fluttertoast.showToast(msg: 'Transaction has been deleted');
         }
         NotificationService().cancelNotification(pending);
         pendingDao.deletePending(pending);

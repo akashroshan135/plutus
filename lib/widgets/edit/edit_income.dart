@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // * Database packages
 import 'package:moor_flutter/moor_flutter.dart';
@@ -160,6 +161,7 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
                       ),
                     );
                     Navigator.pop(context);
+                    Fluttertoast.showToast(msg: 'Transaction has been edited');
                   }
                 } catch (FormatException) {
                   return _getWarning('Please enter number data for amount');

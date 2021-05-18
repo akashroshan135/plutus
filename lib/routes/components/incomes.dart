@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 // * Database packages
@@ -183,6 +184,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
           ),
         );
         incomeDao.deleteIncome(income);
+        Fluttertoast.showToast(msg: 'Transaction has been deleted');
       },
       child: InkWell(
         onTap: () => Navigator.push(
