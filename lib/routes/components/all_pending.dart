@@ -85,6 +85,7 @@ class _AllPendingRouteState extends State<AllPendingRoute> {
     );
   }
 
+  // * header data
   Widget _getHeader() {
     return Container(
       decoration: BoxDecoration(
@@ -123,7 +124,7 @@ class _AllPendingRouteState extends State<AllPendingRoute> {
 
   // * code to build one transaction item
   Widget _buildItem(Pending pending, PendingDao pendingDao) {
-    // * calling profile database dao
+    // * calling profile, income and expense database dao
     final profileDao = Provider.of<ProfileDao>(context);
     final incomeDao = Provider.of<IncomeDao>(context);
     final expenseDao = Provider.of<ExpenseDao>(context);
@@ -293,16 +294,18 @@ class _AllPendingRouteState extends State<AllPendingRoute> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            isIncome
-                                ? 'Income : ' +
-                                    IncomeCategory
-                                        .categoryNames[pending.categoryIndex]
-                                : 'Expense : ' +
-                                    ExpenseCategory
-                                        .categoryNames[pending.categoryIndex],
-                            style: Theme.of(context).textTheme.bodyText1,
-                            overflow: TextOverflow.ellipsis,
+                          Flexible(
+                            child: Text(
+                              isIncome
+                                  ? 'Income : ' +
+                                      IncomeCategory
+                                          .categoryNames[pending.categoryIndex]
+                                  : 'Expense : ' +
+                                      ExpenseCategory
+                                          .categoryNames[pending.categoryIndex],
+                              style: Theme.of(context).textTheme.bodyText1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Flexible(
                             child: Text(

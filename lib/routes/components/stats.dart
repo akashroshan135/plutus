@@ -60,6 +60,7 @@ class _StatsDetailsPageState extends State<StatsDetailsPage> {
     );
   }
 
+  // * renders page
   Widget _getPage() {
     return Column(
       children: [

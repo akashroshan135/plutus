@@ -93,7 +93,6 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
   Widget _buildItem(Expense expense, ExpenseDao expenseDao) {
     // * calling profile database dao
     final profileDao = Provider.of<ProfileDao>(context);
-
     var size = MediaQuery.of(context).size;
 
     return Dismissible(
@@ -226,11 +225,13 @@ class _ExpenseRouteState extends State<ExpenseRoute> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            ExpenseCategory
-                                .categoryNames[expense.categoryIndex],
-                            style: Theme.of(context).textTheme.bodyText1,
-                            overflow: TextOverflow.ellipsis,
+                          Flexible(
+                            child: Text(
+                              ExpenseCategory
+                                  .categoryNames[expense.categoryIndex],
+                              style: Theme.of(context).textTheme.bodyText1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Flexible(
                             child: Text(

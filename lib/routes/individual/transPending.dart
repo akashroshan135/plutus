@@ -89,7 +89,7 @@ class _TransactionPendingScreenState extends State<TransactionPendingScreen> {
             SizedBox(height: 25),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
                   transaction.type == 'Income'

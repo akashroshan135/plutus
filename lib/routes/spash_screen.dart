@@ -80,6 +80,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget _getBody() {
+    bool isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: InkWell(
@@ -99,11 +102,19 @@ class _SplashScreenState extends State<SplashScreen> {
                         height: 250,
                         width: 250,
                       ),
-                      SizedBox(height: 20),
-                      Text(
-                        'Plutus',
-                        style: Theme.of(context).textTheme.headline2,
+                      SizedBox(height: 10),
+                      Image.asset(
+                        isDarkMode
+                            ? 'assets/images/plutus_white.png'
+                            : 'assets/images/plutus_black.png',
+                        height: 60,
+                        width: 200,
                       ),
+                      SizedBox(height: 20),
+                      // Text(
+                      //   'Plutus',
+                      //   style: Theme.of(context).textTheme.headline2,
+                      // ),
                       Text(
                         _versionName,
                         style: Theme.of(context).textTheme.bodyText1,

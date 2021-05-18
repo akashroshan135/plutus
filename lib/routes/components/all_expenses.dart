@@ -86,6 +86,7 @@ class _AllExpenseRouteState extends State<AllExpenseRoute> {
     );
   }
 
+  // * header data
   Widget _getHeader() {
     return Container(
       decoration: BoxDecoration(
@@ -126,7 +127,6 @@ class _AllExpenseRouteState extends State<AllExpenseRoute> {
   Widget _buildItem(Expense expense, ExpenseDao expenseDao) {
     // * calling profile database dao
     final profileDao = Provider.of<ProfileDao>(context);
-
     var size = MediaQuery.of(context).size;
 
     return Dismissible(
@@ -258,11 +258,13 @@ class _AllExpenseRouteState extends State<AllExpenseRoute> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            ExpenseCategory
-                                .categoryNames[expense.categoryIndex],
-                            style: Theme.of(context).textTheme.bodyText1,
-                            overflow: TextOverflow.ellipsis,
+                          Flexible(
+                            child: Text(
+                              ExpenseCategory
+                                  .categoryNames[expense.categoryIndex],
+                              style: Theme.of(context).textTheme.bodyText1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Flexible(
                             child: Text(

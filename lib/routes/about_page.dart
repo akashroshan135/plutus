@@ -44,6 +44,9 @@ class _AboutScreenState extends State<AboutScreen> {
   }
 
   Widget _getHeader() {
+    bool isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).secondaryHeaderColor,
@@ -82,11 +85,18 @@ class _AboutScreenState extends State<AboutScreen> {
                   height: 130,
                   width: 130,
                 ),
-                SizedBox(height: 15),
-                Text(
-                  'Plutus',
-                  style: Theme.of(context).textTheme.headline2,
+                Image.asset(
+                  isDarkMode
+                      ? 'assets/images/plutus_white.png'
+                      : 'assets/images/plutus_black.png',
+                  height: 50,
+                  width: 130,
                 ),
+                // Text(
+                //   'Plutus',
+                //   style: Theme.of(context).textTheme.headline2,
+                // ),
+                SizedBox(height: 5),
                 Text(
                   _versionName,
                   style: Theme.of(context).textTheme.bodyText1,

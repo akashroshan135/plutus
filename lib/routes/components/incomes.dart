@@ -57,6 +57,7 @@ class _IncomeRouteState extends State<IncomeRoute> {
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
+                SizedBox(height: 75),
               ],
             ),
           );
@@ -92,7 +93,6 @@ class _IncomeRouteState extends State<IncomeRoute> {
   Widget _buildItem(Income income, IncomeDao incomeDao) {
     // * calling profile database dao
     final profileDao = Provider.of<ProfileDao>(context);
-
     var size = MediaQuery.of(context).size;
 
     return Dismissible(
@@ -224,10 +224,13 @@ class _IncomeRouteState extends State<IncomeRoute> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            IncomeCategory.categoryNames[income.categoryIndex],
-                            style: Theme.of(context).textTheme.bodyText1,
-                            overflow: TextOverflow.ellipsis,
+                          Flexible(
+                            child: Text(
+                              IncomeCategory
+                                  .categoryNames[income.categoryIndex],
+                              style: Theme.of(context).textTheme.bodyText1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Flexible(
                             child: Text(

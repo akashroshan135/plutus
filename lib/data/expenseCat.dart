@@ -1,3 +1,5 @@
+// * Contains all categories used for expenses
+
 class ExpenseCategory {
   static const categoryNames = <String>[
     'Rent',

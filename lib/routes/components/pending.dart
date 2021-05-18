@@ -31,7 +31,7 @@ class _PendingRouteState extends State<PendingRoute> {
     // * calling pending database dao
     final pendingDao = Provider.of<PendingDao>(context);
 
-    // * StreamBuilder used to build list of all objects
+    // * StreamBuilder used to build list of all objects filtered by date
     return StreamBuilder(
       stream: pendingDao.watchDayPending(widget.selectedDate),
       builder: (context, AsyncSnapshot<List<Pending>> snapshot) {
@@ -236,16 +236,18 @@ class _PendingRouteState extends State<PendingRoute> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            isIncome
-                                ? 'Income : ' +
-                                    IncomeCategory
-                                        .categoryNames[pending.categoryIndex]
-                                : 'Expense : ' +
-                                    ExpenseCategory
-                                        .categoryNames[pending.categoryIndex],
-                            style: Theme.of(context).textTheme.bodyText1,
-                            overflow: TextOverflow.ellipsis,
+                          Flexible(
+                            child: Text(
+                              isIncome
+                                  ? 'Income : ' +
+                                      IncomeCategory
+                                          .categoryNames[pending.categoryIndex]
+                                  : 'Expense : ' +
+                                      ExpenseCategory
+                                          .categoryNames[pending.categoryIndex],
+                              style: Theme.of(context).textTheme.bodyText1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Flexible(
                             child: Text(

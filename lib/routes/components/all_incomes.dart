@@ -85,6 +85,7 @@ class _AllIncomeRouteState extends State<AllIncomeRoute> {
     );
   }
 
+  // * header data
   Widget _getHeader() {
     return Container(
       decoration: BoxDecoration(
@@ -125,7 +126,6 @@ class _AllIncomeRouteState extends State<AllIncomeRoute> {
   Widget _buildItem(Income income, IncomeDao incomeDao) {
     // * calling profile database dao
     final profileDao = Provider.of<ProfileDao>(context);
-
     var size = MediaQuery.of(context).size;
 
     return Dismissible(
@@ -257,10 +257,13 @@ class _AllIncomeRouteState extends State<AllIncomeRoute> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            IncomeCategory.categoryNames[income.categoryIndex],
-                            style: Theme.of(context).textTheme.bodyText1,
-                            overflow: TextOverflow.ellipsis,
+                          Flexible(
+                            child: Text(
+                              IncomeCategory
+                                  .categoryNames[income.categoryIndex],
+                              style: Theme.of(context).textTheme.bodyText1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Flexible(
                             child: Text(

@@ -73,7 +73,7 @@ class IncomeDao extends DatabaseAccessor<AppDatabase> with _$IncomeDaoMixin {
   // * gets database object
   IncomeDao(this.db) : super(db);
 
-  // * returns income rows
+  // * returns income rows ordered by most recent
   Future<List<Income>> getAllIncome() => select(incomes).get();
   Stream<List<Income>> watchAllIncome() {
     return (select(incomes)
@@ -93,14 +93,14 @@ class IncomeDao extends DatabaseAccessor<AppDatabase> with _$IncomeDaoMixin {
         .watch();
   }
 
-  // * streams income rows filtered by seleted date
+  // * streams income rows filtered by seleted month and year
   Stream<List<Income>> watchMonthIncome(DateTime searchDate) {
     return (select(incomes)
           ..where((row) => row.date.dateYearMonthEquals(searchDate)))
         .watch();
   }
 
-  // * add an income transaction
+  // * adds an income transaction
   Future<int> addIncome(Insertable<Income> entry) =>
       into(incomes).insert(entry);
 
@@ -131,7 +131,7 @@ class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
   // * gets database object
   ExpenseDao(this.db) : super(db);
 
-  // * returns expense rows
+  // * returns expense rows ordered by most recent
   Future<List<Expense>> getAllExpense() => select(expenses).get();
   Stream<List<Expense>> watchAllExpense() {
     return (select(expenses)
@@ -151,14 +151,14 @@ class ExpenseDao extends DatabaseAccessor<AppDatabase> with _$ExpenseDaoMixin {
         .watch();
   }
 
-  // * streams expense rows filtered by seleted month
+  // * streams expense rows filtered by seleted month and year
   Stream<List<Expense>> watchMonthExpense(DateTime searchDate) {
     return (select(expenses)
           ..where((row) => row.date.dateYearMonthEquals(searchDate)))
         .watch();
   }
 
-  // * add an expense transaction
+  // * adds an expense transaction
   Future<int> addExpense(Insertable<Expense> entry) =>
       into(expenses).insert(entry);
 
@@ -190,9 +190,8 @@ class PendingDao extends DatabaseAccessor<AppDatabase> with _$PendingDaoMixin {
   // * gets database object
   PendingDao(this.db) : super(db);
 
-  // * returns pending rows
+  // * returns pending rows ordered by most recent
   Future<List<Pending>> getAllPending() => select(pendings).get();
-
   Stream<List<Pending>> watchAllPending() {
     return (select(pendings)
           ..orderBy([
@@ -216,7 +215,7 @@ class PendingDao extends DatabaseAccessor<AppDatabase> with _$PendingDaoMixin {
     return (select(pendings)..where((row) => row.id.equals(id))).getSingle();
   }
 
-  // * add an pending transaction
+  // * adds an pending transaction
   Future<int> addPending(Insertable<Pending> entry) =>
       into(pendings).insert(entry);
 
@@ -229,6 +228,7 @@ class PendingDao extends DatabaseAccessor<AppDatabase> with _$PendingDaoMixin {
       delete(pendings).delete(entry);
 }
 
+// * converts the datetime in the db from UTC to Local
 extension LocalDateTimeExpressions on Expression<DateTime> {
   Expression<String> get dateLocal {
     return FunctionCallExpression(
@@ -243,10 +243,12 @@ extension LocalDateTimeExpressions on Expression<DateTime> {
 }
 
 extension LocalCompareDateDB on GeneratedDateTimeColumn {
+  // * checks if given date and db local time is equal
   Expression<bool> dateLocalEquals(DateTime value) {
     return this.dateLocal.equals(value.toIso8601String().substring(0, 10));
   }
 
+  // * checks if given date's month and year and db local time is equal
   Expression<bool> dateYearMonthEquals(DateTime value) {
     return this.dateLocal.like('${value.toIso8601String().substring(0, 7)}%');
   }

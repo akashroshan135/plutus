@@ -59,6 +59,9 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
 
   // * renders the input screen
   Widget _getInputScreen() {
+    bool isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+
     return SingleChildScrollView(
       child: Container(
         height: MediaQuery.of(context).size.height,
@@ -66,17 +69,19 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'PLUTUS',
-              style:
-                  Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
+            // Text(
+            //   'PLUTUS',
+            //   style:
+            //       Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
+            // ),
+            Image.asset(
+              isDarkMode
+                  ? 'assets/images/plutus_white.png'
+                  : 'assets/images/plutus_black.png',
+              height: 50,
+              width: 140,
             ),
             SizedBox(height: 10),
-            Text(
-              'Create a profile',
-              style: Theme.of(context).textTheme.headline1,
-            ),
-            SizedBox(height: 20),
             Image.asset(
               'assets/images/app_icon.png',
               fit: BoxFit.fitWidth,
@@ -84,6 +89,11 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               alignment: Alignment.bottomCenter,
             ),
             SizedBox(height: 20),
+            // SizedBox(height: 10),
+            Text(
+              'Create a profile',
+              style: Theme.of(context).textTheme.headline1,
+            ),
             Padding(
               padding: EdgeInsets.all(16),
               child: TextField(

@@ -41,8 +41,6 @@ class _CustomScreenState extends State<CustomScreen> {
   DateTime selectedDate = DateTime.now();
   bool isDateChanged = false;
 
-  // final notificationsPlugin = FlutterLocalNotificationsPlugin();
-
   double xAlign;
   Color toggleColor;
 

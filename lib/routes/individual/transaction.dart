@@ -39,6 +39,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
     );
   }
 
+  // * header data
   Widget _getHeader() {
     return Container(
       decoration: BoxDecoration(
@@ -74,7 +75,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
             SizedBox(height: 25),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
                   widget.isIncome

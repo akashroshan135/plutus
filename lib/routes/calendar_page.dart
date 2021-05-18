@@ -33,6 +33,7 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Widget _getPage() {
+    // * gets calendar view
     final calendar = Column(
       children: [
         _getHeader(),
@@ -42,6 +43,7 @@ class _CalendarPageState extends State<CalendarPage> {
       ],
     );
 
+    // * gets month view
     final month = Column(
       children: [
         _getHeader(),
@@ -133,6 +135,7 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
+  // * renders the calendar
   Widget _getCalendar() {
     final _calendarSytle = CalendarStyle(
       defaultTextStyle: Theme.of(context).textTheme.bodyText1,
@@ -208,6 +211,7 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
+  // * renders the month select calendar
   Widget _getMonthPicker() {
     dp.DatePickerStyles styles = dp.DatePickerStyles(
       displayedPeriodTitle: Theme.of(context).textTheme.headline1,

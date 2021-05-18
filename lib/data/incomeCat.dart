@@ -1,3 +1,5 @@
+// * Contains all categories used for income
+
 class IncomeCategory {
   static const categoryNames = <String>[
     'Salary',
