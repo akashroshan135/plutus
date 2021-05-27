@@ -13,30 +13,20 @@ List myColors = <Color>[
   Colors.orange,
   Colors.pinkAccent,
   Colors.blueAccent,
-  Colors.yellow,
   Colors.greenAccent,
   Colors.purpleAccent,
-  Colors.teal,
-  Colors.orange,
-  Colors.pinkAccent,
-  Colors.blueAccent,
   Colors.cyan,
-  Colors.greenAccent,
-  Colors.purpleAccent,
+  Colors.brown,
+  Colors.deepPurple,
   Colors.teal,
   Colors.orange,
   Colors.pinkAccent,
   Colors.blueAccent,
-  Colors.yellow,
   Colors.greenAccent,
   Colors.purpleAccent,
-  Colors.teal,
-  Colors.orange,
-  Colors.pinkAccent,
-  Colors.blueAccent,
-  Colors.yellow,
-  Colors.greenAccent,
-  Colors.purpleAccent,
+  Colors.cyan,
+  Colors.brown,
+  Colors.deepPurple,
 ];
 
 class PieChartScreen extends StatefulWidget {
@@ -176,10 +166,13 @@ class _PieChartScreenState extends State<PieChartScreen> {
             final double fontSize = isTouched ? 20 : 16;
             final double radius = isTouched ? width / 2.7 + 10 : width / 2.7;
             final double widgetSize = isTouched ? 55 : 40;
+            final name = data.name.length <= 9
+                ? data.name
+                : '${data.name.substring(0, 9)}...';
 
             final value = PieChartSectionData(
               color: data.color,
-              title: data.name,
+              title: name,
               value: data.percent,
               radius: radius,
               titleStyle: TextStyle(

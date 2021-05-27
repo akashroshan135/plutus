@@ -1,5 +1,5 @@
-# Plutus - A budget management app (WIP)
+# Plutus - An income and expense tracker app (WIP)
 
-Plutus is a budget management application made for Android using Flutter.
+Plutus is an income and expense tracker application made for Android using Flutter.
 
-It allows users manage their expenses in one app. It is primarily useful for families to keep track of various financial transactions including rent, bills, groceries, clothes, and other miscellaneous expenses.
+It allows users manage their income and expenses in one app. Think of it as a pocket passbook for keeping track of everyday transactions.

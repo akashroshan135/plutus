@@ -112,6 +112,7 @@ class _AboutScreenState extends State<AboutScreen> {
   Widget _getBody() {
     final _random = new Random();
     var _inkwellColor = myColors[_random.nextInt(myColors.length)];
+
     final iconsCreditList = [
       'Bills Icon by Rizky Mardika (Iconscout)',
       'Tax Icon by Iconscout Freebies',
@@ -132,7 +133,7 @@ class _AboutScreenState extends State<AboutScreen> {
       padding: EdgeInsets.all(20),
       alignment: Alignment.center,
       child: Text(
-        'An open source budget management app that I made for a college project. Even though it started as a college project, I really loved working on this app. So, expect more updates, features and other cool stuff in the future.',
+        'A simple and open source income and expense tracker app that I made for a college project. Even though it started as a college project, I really loved working on this app. So, expect more updates, features and other cool stuff in the future.',
         style: Theme.of(context).textTheme.bodyText1,
       ),
     );
