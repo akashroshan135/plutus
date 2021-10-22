@@ -72,11 +72,6 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            // Text(
-            //   'PLUTUS',
-            //   style:
-            //       Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
-            // ),
             Image.asset(
               isDarkMode
                   ? 'assets/images/plutus_white.png'
@@ -92,7 +87,6 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               alignment: Alignment.bottomCenter,
             ),
             SizedBox(height: 20),
-            // SizedBox(height: 10),
             Text(
               'Create a profile',
               style: Theme.of(context).textTheme.headline1,

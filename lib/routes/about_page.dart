@@ -92,10 +92,6 @@ class _AboutScreenState extends State<AboutScreen> {
                   height: 50,
                   width: 130,
                 ),
-                // Text(
-                //   'Plutus',
-                //   style: Theme.of(context).textTheme.headline2,
-                // ),
                 SizedBox(height: 5),
                 Text(
                   _versionName,
