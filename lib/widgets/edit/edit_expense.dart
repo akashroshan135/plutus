@@ -170,7 +170,7 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
                           msg: 'Transaction has been edited');
                     }
                   }
-                } catch (FormatException) {
+                } on FormatException catch (_) {
                   return _getWarning('Please enter number data for amount');
                 }
               }

@@ -96,7 +96,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               child: TextField(
                 controller: controllerName,
                 maxLength: 50,
-                cursorColor: Theme.of(context).buttonColor,
+                cursorColor: Theme.of(context).primaryColor,
                 style: Theme.of(context).textTheme.bodyText1,
                 decoration: _decoratorInputWidget('Name'),
               ),
@@ -106,7 +106,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
               child: TextField(
                 controller: controllerAmount,
                 keyboardType: TextInputType.number,
-                cursorColor: Theme.of(context).buttonColor,
+                cursorColor: Theme.of(context).primaryColor,
                 style: Theme.of(context).textTheme.bodyText1,
                 decoration: _decoratorInputWidget('Savings'),
               ),
@@ -155,7 +155,7 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
                       builder: (context) => Homepage(),
                     ),
                   );
-                } catch (FormatException) {
+                } on FormatException catch (_) {
                   return _getWarning('Please enter number data for amount');
                 }
               }
@@ -180,14 +180,14 @@ class _NewProfileScreenState extends State<NewProfileScreen> {
       labelText: text,
       counterStyle:
           TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
-      labelStyle: TextStyle(color: Theme.of(context).buttonColor),
+      labelStyle: TextStyle(color: Theme.of(context).primaryColor),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Theme.of(context).buttonColor, width: 1),
+        borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 1),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Theme.of(context).buttonColor, width: 1),
+        borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 1),
       ),
     );
   }

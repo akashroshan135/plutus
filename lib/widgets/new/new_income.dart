@@ -149,7 +149,7 @@ class _NewIncomeScreenState extends State<NewIncomeScreen> {
                     Navigator.pop(context);
                     Fluttertoast.showToast(msg: 'Income Transaction Added');
                   }
-                } catch (FormatException) {
+                } on FormatException catch (_) {
                   return _getWarning('Please enter number data for amount');
                 }
               }

@@ -69,7 +69,7 @@ class _HomepageState extends State<Homepage> {
     return AnimatedBottomNavigationBar(
       backgroundColor: Theme.of(context).secondaryHeaderColor,
       activeColor: Theme.of(context).primaryIconTheme.color,
-      inactiveColor: Theme.of(context).accentIconTheme.color,
+      inactiveColor: Theme.of(context).disabledColor,
       splashColor: Theme.of(context).primaryColor,
       iconSize: Theme.of(context).primaryIconTheme.size,
       icons: iconItems,

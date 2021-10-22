@@ -154,7 +154,7 @@ class _NewExpenseScreenState extends State<NewExpenseScreen> {
                       Fluttertoast.showToast(msg: 'Expense Transaction Added');
                     }
                   }
-                } catch (FormatException) {
+                } on FormatException catch (_) {
                   return _getWarning('Please enter number data for amount');
                 }
               }

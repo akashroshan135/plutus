@@ -33,7 +33,7 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).secondaryHeaderColor,
           borderRadius: BorderRadius.circular(12),
         ),
         padding: EdgeInsets.all(16),

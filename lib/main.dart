@@ -26,21 +26,18 @@ class MyApp extends StatelessWidget {
     // * settings for dark mode theme data
     final _darkTheme = ThemeData(
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      // used for selected or active stuff
+      // used for the headers and unselected or inactive stuff
       primaryColor: Colors.blue,
-      // used for unselected or inactive stuff
-      accentColor: Colors.black,
       // used for the headers
       secondaryHeaderColor: Colors.black,
       // used for scffold backgroud color
       scaffoldBackgroundColor: Color.fromARGB(255, 18, 18, 18),
+      // used for inactive navbar buttons
+      disabledColor: Colors.grey[200],
       // used for icons
       iconTheme: IconThemeData(color: Colors.white, size: 25),
       // used for footer icons
       primaryIconTheme: IconThemeData(color: Colors.blue, size: 25),
-      accentIconTheme: IconThemeData(color: Colors.white, size: 25),
-      // used for buttons
-      buttonColor: Colors.blue,
       textTheme: TextTheme(
         headline1: TextStyle(
           color: Colors.white,
@@ -62,19 +59,16 @@ class MyApp extends StatelessWidget {
       visualDensity: VisualDensity.adaptivePlatformDensity,
       // used for selected or active stuff
       primaryColor: Colors.blue,
-      // used for unselected or inactive stuff
-      accentColor: Colors.white,
-      // used for the headers
+      // used for the headers and unselected or inactive stuff
       secondaryHeaderColor: Colors.white,
       // used for scffold backgroud color
       scaffoldBackgroundColor: Colors.grey[200],
+      // used for inactive navbar buttons
+      disabledColor: Colors.grey[800],
       // used for icons
       iconTheme: IconThemeData(color: Colors.black, size: 25),
       // used for footer icons
       primaryIconTheme: IconThemeData(color: Colors.blue, size: 25),
-      accentIconTheme: IconThemeData(color: Colors.black, size: 25),
-      // used for buttons
-      buttonColor: Colors.blue,
       textTheme: TextTheme(
         headline1: TextStyle(
           color: Colors.black,

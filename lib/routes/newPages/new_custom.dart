@@ -289,7 +289,7 @@ class _CustomScreenState extends State<CustomScreen> {
                       }
                     }
                   }
-                } catch (FormatException) {
+                } on FormatException catch (_) {
                   return _getWarning('Please enter number data for amount');
                 }
               }

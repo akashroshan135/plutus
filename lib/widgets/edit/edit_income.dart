@@ -163,7 +163,7 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
                     Navigator.pop(context);
                     Fluttertoast.showToast(msg: 'Transaction has been edited');
                   }
-                } catch (FormatException) {
+                } on FormatException catch (_) {
                   return _getWarning('Please enter number data for amount');
                 }
               }
