@@ -1,4 +1,4 @@
-# Plutus - An income and expense tracker app (WIP)
+# Plutus - An income and expense tracker app
 
 Plutus is an income and expense tracker application made for Android using Flutter.
 
